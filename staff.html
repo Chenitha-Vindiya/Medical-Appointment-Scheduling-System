@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Staff Directory - Clinic Management System</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <style>
+
+                /* --- CSS VARIABLES & DEFAULTS --- */
+        :root {
+            --primary: #1e40af;
+            --primary-light: #eff6ff;
+            --background: #f8fafc;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+
+            --surface-white: #ffffff;
+            --border-light: #e2e8f0;
+            --bg-clinical: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-500: #64748b;
+            --slate-800: #1e293b;
+
+            /* Status Colors */
+            --ongoing-bg: #dcfce7;
+            --ongoing-text: #15803d;
+            --waiting-bg: #fef3c7;
+            --waiting-text: #b45309;
+        }
+
+        /* @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #101c22;
+                --bg-card: #0f172a;
+                --border: #1e293b;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --ongoing-bg: rgba(21, 128, 61, 0.2);
+                --ongoing-text: #4ade80;
+                --waiting-bg: rgba(180, 83, 9, 0.2);
+                --waiting-text: #fbbf24;
+            }
+        } */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* --- LAYOUT --- */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--surface-white);
+            border-right: 1px solid var(--border-light);
+            position: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 50;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            /* Prevents flex items from overflowing */
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #ffffff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-icon {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-title {
+            font-weight: 800;
+            font-size: 1.125rem;
+            line-height: 1.2;
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .btn-new-apt {
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #cbd5e1;
+        }
+
+        .profile-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+
+        /* --- HEADER --- */
+        /* .header {
+            height: var(--header-height);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 384px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.125rem;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--slate-100);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            font-size: 0.875rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .icon-button {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-light);
+            color: #475569;
+            background: white;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .icon-button:hover {
+            background: #f8fafc;
+        } */
+
+        /* --- CONTENT AREA --- */
+        .content-body {
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        .page-desc {
+            color: var(--slate-500);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .view-switcher {
+            display: flex;
+            gap: 0.5rem;
+            background: white;
+            border: 1px solid var(--border-light);
+            padding: 0.25rem;
+            border-radius: 0.5rem;
+        }
+
+        .view-btn {
+            padding: 0.375rem;
+            border-radius: 0.25rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .view-btn.active {
+            background: var(--slate-100);
+            color: var(--primary);
+        }
+
+        .view-btn:not(.active) {
+            color: #94a3b8;
+        }
+
+        /* --- FILTERS --- */
+        .department-filter {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 4px;
+        }
+
+        .filter-chip {
+            white-space: nowrap;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--border-light);
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* --- STAFF GRID & CARDS --- */
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .staff-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .staff-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .staff-image-container {
+            position: relative;
+            height: 200px;
+            background: #f1f5f9;
+        }
+
+        .staff-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transform: filter 0.4s ease;
+        }
+
+        .staff-card:hover .staff-image {
+            filter: grayscale(0%);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .card-content {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .staff-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        .staff-role {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            margin-top: 0.25rem;
+        }
+
+        .staff-meta {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--slate-500);
+        }
+
+        .meta-item span:first-child {
+            font-size: 1rem;
+        }
+
+        .meta-item span:last-child {
+            font-size: 0.75rem;
+        }
+
+        .profile-link {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .profile-link:hover {
+            text-decoration: underline;
+        }
+
+        /* --- PAGINATION --- */
+        .pagination-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-light);
+            margin-top: 2rem;
+        }
+
+        .pagination-info {
+            font-size: 0.875rem;
+            color: var(--slate-500);
+        }
+
+        .pagination-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .page-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-light);
+            border-radius: 0.5rem;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover:not(.active) {
+            background: var(--slate-100);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            font-weight: 700;
+        }
+
+        .page-btn.disabled {
+            color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            margin-top: auto;
+            padding: 1.5rem 2rem;
+            background: white;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stats-group {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .stat-item-val {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--slate-800);
+        }
+
+        .stat-item-lbl {
+            font-size: 10px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        /* Utility Helpers */
+        .bg-green-500 {
+            background-color: #22c55e;
+        }
+
+        .bg-slate-500 {
+            background-color: #64748b;
+        }
+
+        .bg-amber-500 {
+            background-color: #f59e0b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined">medical_services</span>
+                </div>
+                <div>
+                    <div class="logo-title">MediCenter</div>
+                    <div class="logo-subtitle">Clinic Management</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-item " href="#">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="nav-item" href="appointment.html">
+                    <span class="material-symbols-outlined">calendar_month</span> Appointments
+                </a>
+                <a class="nav-item" href="patient.html">
+                    <span class="material-symbols-outlined">person</span> Patients
+                </a>
+                <a class="nav-item active" href="staff.html">
+                    <span class="material-symbols-outlined">group</span> Staff
+                </a>
+                <a class="nav-item" href="billing.html">
+                    <span class="material-symbols-outlined">receipt_long</span> Billing
+                </a>
+                <a class="nav-item" href="feedback.html">
+                    <span class="material-symbols-outlined">feedback</span> Feedback
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-primary btn-new-apt">
+                    <span class="material-symbols-outlined">add</span> New Appointment
+                </button>
+                <div class="profile-section">
+                    <img alt="Dr. Smith" class="avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWEdvF5s5wiPmmqISChILL2fHUQ_D05K2xo8oObhAB7-g-bIZ9c0rmdPWGoDnT_tBVWiqJKApSSFhpvJVV6ov4pdwXmw56dzReMVTvZEuzfBvHuNxMcNF8dh-SvTuTzmiYUmKukxTK_Wnwy9SCxS7Td7A6J6H34sLNrGMyN69OX5qhEYEL7d7Ey5x2BCBXXcUPyZBHUod8osI48ONdRCQgXKn25h_9dStsJqgiXzGWmh4JgjM90sdREMFRVVGL2nIJIzwV8yPmWIjX" />
+                    <div>
+                        <div class="profile-name">Dr. James Smith</div>
+                        <div class="profile-role">Senior Surgeon</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- <header class="header">
+                <div class="search-container">
+                    <div class="search-wrapper">
+                        <span class="material-symbols-outlined search-icon">search</span>
+                        <input class="search-input" placeholder="Search staff by name, department or ID..."
+                            type="text" />
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary">
+                        <span class="material-symbols-outlined">person_add</span> Add New Staff
+                    </button>
+                    <button class="icon-button">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                </div>
+            </header> -->
+
+            <div class="content-body">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Staff Directory</h1>
+                        <p class="page-desc">Manage and view all medical professionals and clinical staff.</p>
+                    </div>
+                    <div class="view-switcher">
+                        <button class="view-btn active">
+                            <span class="material-symbols-outlined">grid_view</span>
+                        </button>
+                        <button class="view-btn">
+                            <span class="material-symbols-outlined">list</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="department-filter">
+                    <button class="filter-chip active">All Staff</button>
+                    <button class="filter-chip">Cardiology</button>
+                    <button class="filter-chip">Pediatrics</button>
+                    <button class="filter-chip">Neurology</button>
+                    <button class="filter-chip">Radiology</button>
+                    <button class="filter-chip">General Surgery</button>
+                    <button class="filter-chip">Psychiatry</button>
+                    <button class="filter-chip">Internal Medicine</button>
+                </div>
+
+                <div class="staff-grid">
+                    <div class="staff-card">
+                        <div class="staff-image-container">
+                            <img alt="Dr. Alice Smith" class="staff-image"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvS4iu4T_cd0Ls_2JT7YTM3qCxeY8CM3OgxcraTkA9pksfkgp344ZB5MYHbhgPv4lN4z26FLIJzoREDFhepPpVtV6-W94MwwDGK6EfYP8MBetwkpcY0AW4t380FhRTZItoaiwpOMu1xbSAiDfwmbes1D6YK0rdas1dKiV95XDkYtWs_v5FhW5GwkhQ5hu5-zqid0VLAp2kW1UILhySWhyszoZF950q5fUqU0N3rfN_lp30tgQv32sMOURqcFWylhWiU7gYQbv2L7zo" />
+                            <span class="status-badge bg-green-500">Available</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="staff-name">Dr. Alice Smith</h3>
+                            <p class="staff-role">Senior Cardiologist</p>
+                            <div class="staff-meta">
+                                <div class="meta-item">
+                                    <span class="material-symbols-outlined">meeting_room</span>
+                                    <span>Room 302, Floor 3</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="material-symbols-outlined">schedule</span>
+                                    <span>09:00 AM - 05:00 PM</span>
+                                </div>
+                            </div>
+                            <a href="#" class="profile-link">
+                                View Full Profile <span class="material-symbols-outlined"
+                                    style="font-size: 14px;">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="staff-card">
+                        <div class="staff-image-container">
+                            <img alt="Dr. Bob Johnson" class="staff-image"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBktUJ4BcB8b4RqDzxQ0oppY-yeYYoRKmJoU2wqJsDl43bHjfYhOCsvallFOl9Ysq3WiykKytZ3xX5VbKjYnIT23Sp3gNMjqdA2zaLxjezyI8F46Ql8-zB1MeFIDUtnAUvfV8PSxHR_s-gjmwN-i8PLZdGvwzf-AY1IZatG-C4uORgHzq6Wtlu6folgjKKuPKFu2_Uvz3gfczLQ0IMg_xi0Pw3NW2y5J3UmujovO7zCWcKOJwUP_rW8hJJHF0cdLiFgvwzZx_obn8Rd" />
+                            <span class="status-badge bg-slate-500">On Leave</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="staff-name">Dr. Bob Johnson</h3>
+                            <p class="staff-role">ENT Specialist</p>
+                            <div class="staff-meta">
+                                <div class="meta-item">
+                                    <span class="material-symbols-outlined">meeting_room</span>
+                                    <span>Room 105, Floor 1</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="material-symbols-outlined">event_busy</span>
+                                    <span>Returning Nov 15</span>
+                                </div>
+                            </div>
+                            <a href="#" class="profile-link">
+                                View Full Profile <span class="material-symbols-outlined"
+                                    style="font-size: 14px;">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="staff-card">
+                        <div class="staff-image-container">
+                            <img alt="Dr. Carol Williams" class="staff-image"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrtiSC51Ad-WEwO_0dZ8VPBTw4VyTQx0PrtsXyQRueVcTK20IaviBFwcBjkGRruXPHScKEuYZ76oBTFQqFumnCpeXDJVwy2W7hcnzoWspsFl3JGkuHANucBRemAel_MckHFDUDd4WSZzBiVbJg6t94RITAzWs5TmFU1n7tR7zqC8P41CUfMQuZqQU3pdRpF1u1T9QJhoQaGK-HfpFTkvgKNKpt-uBtpn_DjzSufXjCgcJwh-r9Kxp9WD2DtvSpO2gnorhoNKDtBle0" />
+                            <span class="status-badge bg-green-500">Available</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="staff-name">Dr. Carol Williams</h3>
+                            <p class="staff-role">Chief of Pediatrics</p>
+                            <div class="staff-meta">
+                                <div class="meta-item">
+                                    <span class="material-symbols-outlined">meeting_room</span>
+                                    <span>Room 210, Floor 2</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="material-symbols-outlined">schedule</span>
+                                    <span>08:00 AM - 04:00 PM</span>
+                                </div>
+                            </div>
+                            <a href="#" class="profile-link">
+                                View Full Profile <span class="material-symbols-outlined"
+                                    style="font-size: 14px;">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="staff-card">
+                        <div class="staff-image-container">
+                            <img alt="Dr. David Brown" class="staff-image"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6etuOUAwswfiFGY1FnMqd6iaD8AlEal4vi2muMSK24NwWYOWi56IkNjAnkF7aaugiMokh5-REspk9dyWNtYRC9Q54IG6M5cuQtEenJLMBRsBlXfFjekd0FIVBjWloK1pCZ32kRRIhFGQ7HIIrlmGmNx8h9sfRsuZIlQdPMQMlhahZnah_E_r_Asj6RhBLNs3CvjgfOSs_PKmVCn4OIbO83p6lmTnO0nUXnAqAtPjosmqSfYwWqk0Gj7TBpkyMQHbigv41kJLs89iw" />
+                            <span class="status-badge bg-amber-500">In Surgery</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="staff-name">Dr. David Brown</h3>
+                            <p class="staff-role">Neurologist</p>
+                            <div class="staff-meta">
+                                <div class="meta-item">
+                                    <span class="material-symbols-outlined">meeting_room</span>
+                                    <span>Room 405, Floor 4</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="material-symbols-outlined">schedule</span>
+                                    <span>Available at 02:00 PM</span>
+                                </div>
+                            </div>
+                            <a href="#" class="profile-link">
+                                View Full Profile <span class="material-symbols-outlined"
+                                    style="font-size: 14px;">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pagination-container">
+                    <span class="pagination-info">Showing 4 of 124 staff members</span>
+                    <div class="pagination-btns">
+                        <button class="page-btn disabled">
+                            <span class="material-symbols-outlined">chevron_left</span>
+                        </button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="stats-group">
+                        <div>
+                            <div class="stat-item-val">124</div>
+                            <div class="stat-item-lbl">Total Staff</div>
+                        </div>
+                        <div>
+                            <div class="stat-item-val">18</div>
+                            <div class="stat-item-lbl">Departments</div>
+                        </div>
+                        <div>
+                            <div class="stat-item-val">94%</div>
+                            <div class="stat-item-lbl">Attendance</div>
+                        </div>
+                    </div>
+                    <div class="copyright">
+                        © 2024 Medical Systems Admin Portal. v2.4.0
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+</body>
+
+</html>
