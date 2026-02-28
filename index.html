@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Medical System Main Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* --- CSS VARIABLES & DEFAULTS --- */
+        :root {
+            --primary: #1e40af;
+            --primary-light: #eff6ff;
+            --background: #f8fafc;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+         /* @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #101c22;
+                --bg-card: #0f172a;
+                --border: #1e293b;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --ongoing-bg: rgba(21, 128, 61, 0.2);
+                --ongoing-text: #4ade80;
+                --waiting-bg: rgba(180, 83, 9, 0.2);
+                --waiting-text: #fbbf24;
+            }
+        } */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #ffffff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-icon {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-title {
+            font-weight: 800;
+            font-size: 1.125rem;
+            line-height: 1.2;
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .btn-new-apt {
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #cbd5e1;
+        }
+
+        .profile-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* --- HEADER --- */
+        /* .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .header {
+            height: var(--header-height);
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            width: 400px;
+            gap: 0.5rem;
+        }
+
+        .search-bar span {
+            color: var(--text-muted);
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 0.875rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .v-divider {
+            height: 24px;
+            width: 1px;
+            background: var(--border-color);
+        }
+
+        .btn-signout {
+            background: #f1f5f9;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .btn-signout span {
+            font-size: 1.25rem;
+        } */
+
+        /* --- CONTENT AREA --- */
+        .content-area {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .content-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .content-subtitle {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* --- GRIDS --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .dashboard-main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* --- CARDS & STATS --- */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .stat-icon {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .trend-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .trend-up {
+            background: #dcfce7;
+            color: var(--success);
+        }
+
+        .trend-down {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .stat-value {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* --- TABLES --- */
+        .table-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .table-title {
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        .btn-text {
+            color: var(--primary);
+            background: none;
+            border: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.875rem;
+        }
+
+        .patient-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .patient-initials {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .patient-name {
+            font-weight: 600;
+        }
+
+        .status-pill {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .table-action {
+            text-align: right;
+        }
+
+        .table-action span {
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* --- CHARTS --- */
+        .chart-title {
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-subtitle {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 200px;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background-color: var(--primary-light);
+            border-radius: 0.5rem 0.5rem 0 0;
+            position: relative;
+            transition: height 0.3s;
+        }
+
+        .chart-bar.active {
+            background-color: var(--primary);
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 0 0.5rem;
+        }
+
+        .chart-summary {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .summary-value {
+            font-weight: 700;
+        }
+
+        /* --- PERFORMANCE & INSIGHTS --- */
+        .card-performance {
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .perf-content {
+            max-width: 60%;
+        }
+
+        .perf-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .perf-text {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 1.25rem;
+        }
+
+        .btn-download {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .perf-bg-icon {
+            font-size: 5rem;
+            opacity: 0.2;
+        }
+
+        .card-insight {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .insight-icon {
+            background: var(--primary-light);
+            color: var(--primary);
+            width: 64px;
+            height: 64px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .insight-icon span {
+            font-size: 2.5rem;
+        }
+
+        .insight-title {
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        .insight-text {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .insight-link {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <span class="material-symbols-outlined">medical_services</span>
+            </div>
+            <div>
+                <div class="logo-title">MediCenter</div>
+                <div class="logo-subtitle">Clinic Management</div>
+            </div>
+        </div>
+
+        <nav class="nav-links">
+            <a class="nav-item active" href="#">
+                <span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+            <a class="nav-item" href="appointment.html">
+                <span class="material-symbols-outlined">calendar_month</span> Appointments
+            </a>
+            <a class="nav-item" href="patient.html">
+                <span class="material-symbols-outlined">person</span> Patients
+            </a>
+            <a class="nav-item" href="staff.html">
+                <span class="material-symbols-outlined">group</span> Staff
+            </a>
+            <a class="nav-item" href="billing.html">
+                <span class="material-symbols-outlined">receipt_long</span> Billing
+            </a>
+            <a class="nav-item" href="feedback.html">
+                <span class="material-symbols-outlined">feedback</span> Feedback 
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-primary btn-new-apt">
+                <span class="material-symbols-outlined">add</span> New Appointment
+            </button>
+            <div class="profile-section">
+                <img alt="Dr. Smith" class="avatar"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWEdvF5s5wiPmmqISChILL2fHUQ_D05K2xo8oObhAB7-g-bIZ9c0rmdPWGoDnT_tBVWiqJKApSSFhpvJVV6ov4pdwXmw56dzReMVTvZEuzfBvHuNxMcNF8dh-SvTuTzmiYUmKukxTK_Wnwy9SCxS7Td7A6J6H34sLNrGMyN69OX5qhEYEL7d7Ey5x2BCBXXcUPyZBHUod8osI48ONdRCQgXKn25h_9dStsJqgiXzGWmh4JgjM90sdREMFRVVGL2nIJIzwV8yPmWIjX" />
+                <div>
+                    <div class="profile-name">Dr. James Smith</div>
+                    <div class="profile-role">Senior Surgeon</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <!-- <header class="header">
+            <div class="search-bar">
+                <span class="material-symbols-outlined">search</span>
+                <input placeholder="Search patients, results, or schedules..." type="text" />
+            </div>
+            <div class="header-right">
+                <div class="header-icons">
+                    <button class="icon-btn">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <button class="icon-btn">
+                        <span class="material-symbols-outlined">chat_bubble</span>
+                    </button>
+                </div>
+                <div class="v-divider"></div>
+                <button class="btn-signout">
+                    <span class="material-symbols-outlined">logout</span> Sign Out
+                </button>
+            </div>
+        </header> -->
+
+        <main class="content-area">
+            <div>
+                <h1 class="content-title">Clinical Overview</h1>
+                <p class="content-subtitle">Welcome back, Dr. Smith. Here's what requires your attention today.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon"><span class="material-symbols-outlined">event_note</span></div>
+                        <span class="trend-badge trend-up">+12%</span>
+                    </div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Daily Appointments</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon"><span class="material-symbols-outlined">groups</span></div>
+                        <span class="trend-badge trend-up">+5%</span>
+                    </div>
+                    <div class="stat-value">1,284</div>
+                    <div class="stat-label">Total Patients</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon"><span class="material-symbols-outlined">account_balance_wallet</span>
+                        </div>
+                        <span class="trend-badge trend-down">-2%</span>
+                    </div>
+                    <div class="stat-value">$3,420</div>
+                    <div class="stat-label">Pending Billing</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon"><span class="material-symbols-outlined">reviews</span></div>
+                        <span class="trend-badge trend-up">+8%</span>
+                    </div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">New Feedback</div>
+                </div>
+            </div>
+
+            <div class="dashboard-main-grid">
+                <div class="card">
+                    <div class="table-header-row">
+                        <h2 class="table-title">Today's Schedule</h2>
+                        <button class="btn-text">View All</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Time</th>
+                                <th>Condition</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="patient-info">
+                                        <div class="patient-initials">JD</div>
+                                        <span class="patient-name">John Doe</span>
+                                    </div>
+                                </td>
+                                <td>09:00 AM</td>
+                                <td>General Checkup</td>
+                                <td><span class="status-pill"
+                                        style="background: #fef3c7; color: #92400e;">Pending</span></td>
+                                <td class="table-action"><span class="material-symbols-outlined">more_vert</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="patient-info">
+                                        <div class="patient-initials">AS</div>
+                                        <span class="patient-name">Alice Smith</span>
+                                    </div>
+                                </td>
+                                <td>10:30 AM</td>
+                                <td>Cardiology</td>
+                                <td><span class="status-pill"
+                                        style="background: #dcfce7; color: #166534;">Confirmed</span></td>
+                                <td class="table-action"><span class="material-symbols-outlined">more_vert</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="patient-info">
+                                        <div class="patient-initials">MB</div>
+                                        <span class="patient-name">Mark Brown</span>
+                                    </div>
+                                </td>
+                                <td>01:45 PM</td>
+                                <td>Dermatology</td>
+                                <td><span class="status-pill"
+                                        style="background: #dbeafe; color: #1e40af;">Ongoing</span></td>
+                                <td class="table-action"><span class="material-symbols-outlined">more_vert</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="patient-info">
+                                        <div class="patient-initials">SL</div>
+                                        <span class="patient-name">Sarah Lee</span>
+                                    </div>
+                                </td>
+                                <td>03:15 PM</td>
+                                <td>Post-Op Follow-up</td>
+                                <td><span class="status-pill"
+                                        style="background: #fef3c7; color: #92400e;">Pending</span></td>
+                                <td class="table-action"><span class="material-symbols-outlined">more_vert</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2 class="chart-title">Patient Trends</h2>
+                    <p class="chart-subtitle">Weekly admission statistics</p>
+                    <div class="chart-container">
+                        <div class="chart-bar" style="height: 60%;"></div>
+                        <div class="chart-bar" style="height: 45%;"></div>
+                        <div class="chart-bar active" style="height: 90%;"></div>
+                        <div class="chart-bar" style="height: 35%;"></div>
+                        <div class="chart-bar" style="height: 75%;"></div>
+                        <div class="chart-bar" style="height: 50%;"></div>
+                        <div class="chart-bar" style="height: 25%;"></div>
+                    </div>
+                    <div class="chart-labels">
+                        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                    </div>
+                    <div class="chart-summary">
+                        <div>
+                            <div class="summary-label">Peak Day</div>
+                            <div class="summary-value">Wednesday</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="summary-label">Avg Patients</div>
+                            <div class="summary-value">18 / Day</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-grid">
+                <div class="card card-performance">
+                    <div class="perf-content">
+                        <h3 class="perf-title">Performance Report</h3>
+                        <p class="perf-text">Your monthly performance analytics for the Surgery department is now
+                            available.</p>
+                        <button class="btn-download">Download PDF</button>
+                    </div>
+                    <span class="material-symbols-outlined perf-bg-icon">analytics</span>
+                </div>
+
+                <div class="card card-insight">
+                    <div class="insight-icon">
+                        <span class="material-symbols-outlined">monitoring</span>
+                    </div>
+                    <div>
+                        <h3 class="insight-title">Predictive Insights</h3>
+                        <p class="insight-text">New smart forecasting shows a potential 15% increase in cardiology
+                            appointments next week.</p>
+                        <a href="#" class="insight-link">
+                            View Forecast <span class="material-symbols-outlined"
+                                style="font-size: 1rem;">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

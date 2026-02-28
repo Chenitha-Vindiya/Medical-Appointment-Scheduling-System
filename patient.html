@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Patient Directory | ClinicConnect</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* --- CSS VARIABLES & DEFAULTS --- */
+        :root {
+            --primary: #1e40af;
+            --primary-light: #eff6ff;
+            --background: #f8fafc;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+
+            /* Status Colors */
+            --active-bg: #dcfce7;
+            --active-text: #15803d;
+            --inactive-bg: #f1f5f9;
+            --inactive-text: #64748b;
+        }
+
+        /* @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #101c22;
+                --bg-card: #0f172a;
+                --border: #1e293b;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --ongoing-bg: rgba(21, 128, 61, 0.2);
+                --ongoing-text: #4ade80;
+                --waiting-bg: rgba(180, 83, 9, 0.2);
+                --waiting-text: #fbbf24;
+            }
+        } */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        /* --- HEADER --- */
+        header {
+            height: 64px;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            z-index: 30;
+        }
+
+        .search-container {
+            position: relative;
+            width: 320px;
+            margin-left: 2rem;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            background: var(--bg-light);
+            border: none;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            outline: none;
+            color: var(--text-main);
+        }
+
+        .search-container .material-symbols-outlined {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* --- LAYOUT --- */
+        .app-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #ffffff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-icon {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-title {
+            font-weight: 800;
+            font-size: 1.125rem;
+            line-height: 1.2;
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .btn-new-apt {
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #cbd5e1;
+        }
+
+        .profile-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+
+        /* --- MAIN CONTENT --- */
+        main {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: rgba(248, 250, 252, 0.5);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(19, 164, 236, 0.2);
+        }
+
+        /* --- FILTERS --- */
+        .filter-bar {
+            background: var(--bg-white);
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 0.1em;
+        }
+
+        .filter-input {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            outline: none;
+            color: var(--text-main);
+        }
+
+        /* --- TABLE --- */
+        .table-container {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            background: #fafafa;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            th {
+                background: rgba(255, 255, 255, 0.02);
+            }
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: rgba(0, 0, 0, 0.01);
+        }
+
+        .status-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: var(--active-bg);
+            color: var(--active-text);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .status-inactive {
+            background: var(--inactive-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            height: 40px;
+            background: var(--bg-white);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- <header>
+        <div style="display: flex; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--primary);">
+                <span class="material-symbols-outlined"
+                    style="font-size: 1.8rem; font-weight: bold;">medical_services</span>
+                <h1 style="color: var(--text-main); font-size: 1.25rem; font-weight: 900; letter-spacing: -0.02em;">
+                    ClinicConnect</h1>
+            </div>
+            <div class="search-container">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" placeholder="Quick search patients...">
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <button style="background:none; border:none; color:var(--text-light); cursor:pointer;"><span
+                    class="material-symbols-outlined">notifications</span></button>
+            <div style="height: 24px; width: 1px; background: var(--border);"></div>
+            <div style="text-align: right;">
+                <p style="font-size: 0.75rem; font-weight: 800;">Dr. Julianne Moore</p>
+                <p style="font-size: 10px; color: var(--text-light);">Chief Medical Officer</p>
+            </div>
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDEyPMAgqxWs1AsB51QEnnAZpFpURCorfJPzSN_UPNZ-4RkG1LAYNIKRtUYUS5-dPkNcgC9mRlkfJeX58XUfQTRBSSuHOprAoPO6APcEG4Fk-W0lYKqpXgg0YGCBhMOClYQiV2XeDJossNcBjzSgSheGrlqxtg46Uzr3L3ob0biKTEI_cd5cb7u9Hn_fwOscYd8aNNZjwHV4DonqaFf-xR7sPXBJWW5npiyehiwedUuAv60OBxho0bSj4znkDoCmq9OBNRu8IwEuye"
+                style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--bg-light);">
+        </div>
+    </header> -->
+    <div class="app-body">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined">medical_services</span>
+                </div>
+                <div>
+                    <div class="logo-title">MediCenter</div>
+                    <div class="logo-subtitle">Clinic Management</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-item" href="#">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="nav-item" href="appointment.html">
+                    <span class="material-symbols-outlined">calendar_month</span> Appointments
+                </a>
+                <a class="nav-item active" href="patient.html">
+                    <span class="material-symbols-outlined">person</span> Patients
+                </a>
+                <a class="nav-item" href="staff.html">
+                    <span class="material-symbols-outlined">group</span> Staff
+                </a>
+                <a class="nav-item" href="billing.html">
+                    <span class="material-symbols-outlined">receipt_long</span> Billing
+                </a>
+                <a class="nav-item" href="feedback.html">
+                    <span class="material-symbols-outlined">feedback</span> Feedback
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-primary btn-new-apt">
+                    <span class="material-symbols-outlined">add</span> New Appointment
+                </button>
+                <div class="profile-section">
+                    <img alt="Dr. Smith" class="avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWEdvF5s5wiPmmqISChILL2fHUQ_D05K2xo8oObhAB7-g-bIZ9c0rmdPWGoDnT_tBVWiqJKApSSFhpvJVV6ov4pdwXmw56dzReMVTvZEuzfBvHuNxMcNF8dh-SvTuTzmiYUmKukxTK_Wnwy9SCxS7Td7A6J6H34sLNrGMyN69OX5qhEYEL7d7Ey5x2BCBXXcUPyZBHUod8osI48ONdRCQgXKn25h_9dStsJqgiXzGWmh4JgjM90sdREMFRVVGL2nIJIzwV8yPmWIjX" />
+                    <div>
+                        <div class="profile-name">Dr. James Smith</div>
+                        <div class="profile-role">Senior Surgeon</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+
+        <main>
+            <div class="page-header">
+                <div>
+                    <nav style="font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.5rem; font-weight: 600;">
+                        ClinicConnect <span class="material-symbols-outlined"
+                            style="font-size: 12px;">chevron_right</span> Patients
+                    </nav>
+                    <h2 style="font-size: 1.8rem; font-weight: 900; letter-spacing: -0.03em;">Patient Directory</h2>
+                    <p style="color: var(--text-muted); font-size: 0.875rem;">Access and manage medical records for
+                        1,248 patients.</p>
+                </div>
+                <button class="btn-primary"><span class="material-symbols-outlined">person_add</span> Register New
+                    Patient</button>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>Search</label>
+                    <input type="text" class="filter-input" placeholder="Name or ID..." style="width: 180px;">
+                </div>
+                <div class="filter-group">
+                    <label>Status</label>
+                    <select class="filter-input">
+                        <option>All Patients</option>
+                        <option>Active</option>
+                        <option>Inactive</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Date Range</label>
+                    <input type="date" class="filter-input">
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 0.5rem;">
+                    <button class="filter-input" style="background:none; font-weight:700; cursor:pointer;">More
+                        Filters</button>
+                    <button class="filter-input" style="background:none; cursor:pointer;"><span
+                            class="material-symbols-outlined" style="font-size:1.2rem;">download</span></button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Full Name</th>
+                            <th>Age / Gender</th>
+                            <th>Last Visit</th>
+                            <th>Primary Doctor</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span
+                                    style="font-family: monospace; font-weight: 700; background: var(--bg-light); padding: 2px 6px; border-radius: 4px;">88293-AX</span>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvh7bMzzeRJilcC1mEIS-EO_skXVeCx3E3LeikI5wOSkzwK24JMXynMzQzDmcz0OVp7WRQAd1QxedVI3oy-IsjQ8HdL2QZ81wash1SHj5ZAnCUjhmLgkONloa8TsYDMLo56PajoWw6B_I62ndsBNiYk4vEFS0xUdj_c1xXOze1MAztObIWrBbjdfaSAfgs7OAFU3-yGrXAvYHUIik-RUH2nNHCWnvC6EHiWZcrc_BMMHVENA5KLghX6wWVm-H427LEt0B34dVko4qI"
+                                        style="width: 32px; height: 32px; border-radius: 50%;">
+                                    <div>
+                                        <p style="font-weight: 700;">Eleanor Shellstrop</p>
+                                        <p style="font-size: 10px; color: var(--text-light);">shellstrop.e@example.com
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p style="font-weight: 600;">34 Yrs</p>
+                                <p
+                                    style="font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 800;">
+                                    Female</p>
+                            </td>
+                            <td>Oct 12, 2023</td>
+                            <td style="font-weight: 500;">Dr. Michael Arndt</td>
+                            <td><span class="status-badge status-active">Active</span></td>
+                            <td style="text-align: right;">
+                                <span class="material-symbols-outlined"
+                                    style="color: var(--text-light); cursor: pointer; margin-left: 10px;">visibility</span>
+                                <span class="material-symbols-outlined"
+                                    style="color: var(--text-light); cursor: pointer; margin-left: 10px;">edit</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span
+                                    style="font-family: monospace; font-weight: 700; background: var(--bg-light); padding: 2px 6px; border-radius: 4px;">11042-BZ</span>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs8iiaUyxUQ7LLx45OXtwtzNqV5c50E_WNNK98Gmyo8CqM4H48NbE_TOUgxwRx45onPkyUH34gsax5fDuEgQgRvU5m2cCTgxmCYDDmUZhOu1Ra5I2KoXOmmRtDZeq0dlSt1QyjdE6G4bLu4PAx-ugqw7ZIKJmHUiXTWq3QNXrUlvceOUNqn-cvulXzSXcFdtjUuQfLjSbv2g68B0LcNIPl-zJ-WtJo1DqQyBjl5H70gzEfGKb2dIhhCgF-8t3j5lNioy21gNPpKCoc"
+                                        style="width: 32px; height: 32px; border-radius: 50%;">
+                                    <div>
+                                        <p style="font-weight: 700;">Chidi Anagonye</p>
+                                        <p style="font-size: 10px; color: var(--text-light);">c.anagonye@university.edu
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p style="font-weight: 600;">41 Yrs</p>
+                                <p
+                                    style="font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 800;">
+                                    Male</p>
+                            </td>
+                            <td>Aug 05, 2023</td>
+                            <td style="font-weight: 500;">Dr. Simone Garnet</td>
+                            <td><span class="status-badge status-active">Active</span></td>
+                            <td style="text-align: right;">
+                                <span class="material-symbols-outlined"
+                                    style="color: var(--text-light); cursor: pointer; margin-left: 10px;">visibility</span>
+                                <span class="material-symbols-outlined"
+                                    style="color: var(--text-light); cursor: pointer; margin-left: 10px;">edit</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div
+                    style="padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-top: 1px solid var(--border);">
+                    <span style="font-size: 10px; font-weight: 800; color: var(--text-light);">Results: 1 - 2 of 124
+                        Patients</span>
+                    <div style="display: flex; gap: 0.25rem;">
+                        <button class="filter-input" style="padding: 0.25rem 0.5rem; background: white;">1</button>
+                        <button class="filter-input" style="padding: 0.25rem 0.5rem; background: white;">2</button>
+                        <button class="filter-input" style="padding: 0.25rem 0.5rem; background: white;">Next</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="display: flex; align-items: center; gap: 0.4rem;"><span
+                    style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></span> Operational</span>
+            <span>Version 4.2.0-STABLE</span>
+        </div>
+        <div style="display: flex; gap: 1.5rem;">
+            <a href="#" style="color: inherit; text-decoration: none;">Security Policy</a>
+            <a href="#" style="color: inherit; text-decoration: none;">Help Center</a>
+            <span>ClinicConnect © 2023</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>
