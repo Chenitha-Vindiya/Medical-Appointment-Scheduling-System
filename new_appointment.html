@@ -12,20 +12,16 @@
         rel="stylesheet" />
 
     <style>
-        /* --- CSS VARIABLES & DEFAULTS --- */
+        /* --- DESIGN SYSTEM --- */
         :root {
-            --primary: #1e40af;
-            --primary-light: #eff6ff;
-            --background: #f8fafc;
-            --sidebar-width: 260px;
-            --header-height: 70px;
-            --border-color: #e2e8f0;
-            --text-main: #1e293b;
+            --primary: #13a4ec;
+            --primary-soft: rgba(19, 164, 236, 0.1);
+            --bg-body: #f6f7f8;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --card-bg: #ffffff;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
+            --text-light: #94a3b8;
 
             /* Status Colors */
             --ongoing-bg: #dcfce7;
@@ -56,10 +52,9 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--background);
+            background-color: var(--bg-body);
             color: var(--text-main);
             min-height: 100vh;
-            overflow: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -91,104 +86,46 @@
         }
 
         /* --- SIDEBAR --- */
-        .sidebar {
-            width: var(--sidebar-width);
-            background-color: #ffffff;
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
+        .brand {
             padding: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .logo-container {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            margin-bottom: 2.5rem;
         }
 
-        .logo-icon {
-            background-color: var(--primary);
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
             color: white;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .logo-title {
-            font-weight: 800;
-            font-size: 1.125rem;
-            line-height: 1.2;
-        }
-
-        .logo-subtitle {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            flex-grow: 1;
-        }
-
-        .nav-item {
+        .nav-link {
             display: flex;
             align-items: center;
             gap: 0.75rem;
             padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
+            margin: 0 1rem 0.25rem;
             text-decoration: none;
             color: var(--text-muted);
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover,
-        .nav-item.active {
-            background-color: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .sidebar-footer {
-            margin-top: auto;
-        }
-
-        .btn-new-apt {
-            width: 100%;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
-            margin-top: 1.5rem;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: #cbd5e1;
-        }
-
-        .profile-name {
-            font-weight: 700;
             font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: 0.2s;
         }
 
-        .profile-role {
-            font-size: 0.75rem;
-            color: var(--text-muted);
+        .nav-link:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-link.active {
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-weight: 600;
         }
 
         /* --- HEADER & TABS --- */
@@ -369,50 +306,34 @@
 <body>
 
     <div class="dashboard-wrapper">
-        <aside class="sidebar">
-            <div class="logo-container">
-                <div class="logo-icon">
+        <aside>
+            <div class="brand">
+                <div class="brand-icon">
                     <span class="material-symbols-outlined">medical_services</span>
                 </div>
                 <div>
-                    <div class="logo-title">MediCenter</div>
-                    <div class="logo-subtitle">Clinic Management</div>
+                    <h2 style="font-size: 1rem; font-weight: 900; line-height: 1;">HealthCenter</h2>
+                    <p style="font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 800;">
+                        Hospital Admin</p>
                 </div>
             </div>
 
-            <nav class="nav-links">
-                <a class="nav-item" href="index.html">
-                    <span class="material-symbols-outlined">dashboard</span> Dashboard
-                </a>
-                <a class="nav-item active" href="appointment.html">
-                    <span class="material-symbols-outlined">calendar_month</span> Appointments
-                </a>
-                <a class="nav-item" href="patient.html">
-                    <span class="material-symbols-outlined">person</span> Patients
-                </a>
-                <a class="nav-item" href="staff.html">
-                    <span class="material-symbols-outlined">group</span> Staff
-                </a>
-                <a class="nav-item" href="billing.html">
-                    <span class="material-symbols-outlined">receipt_long</span> Billing
-                </a>
-                <a class="nav-item" href="feedback.html">
-                    <span class="material-symbols-outlined">feedback</span> Feedback
-                </a>
+            <nav style="flex: 1; margin-top: 1rem;">
+                <a href="#" class="nav-link"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+                <a href="#" class="nav-link active"><span
+                        class="material-symbols-outlined">calendar_today</span>Appointments</a>
+                <a href="#" class="nav-link"><span class="material-symbols-outlined">group</span>Patients</a>
+                <a href="#" class="nav-link"><span class="material-symbols-outlined">stethoscope</span>Doctors</a>
+                <a href="#" class="nav-link"><span class="material-symbols-outlined">analytics</span>Reports</a>
             </nav>
 
-            <div class="sidebar-footer">
-                <button class="btn-primary btn-new-apt">
-                    <span class="material-symbols-outlined">add</span> New Appointment
+            <div style="padding: 1rem; border-top: 1px solid var(--border);">
+                <a href="#" class="nav-link" style="margin: 0 0 1rem 0;"><span
+                        class="material-symbols-outlined">settings</span>Settings</a>
+                <button
+                    style="width: 100%; background: var(--primary); color: white; border: none; padding: 0.75rem; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer;">
+                    <span class="material-symbols-outlined">add</span> Schedule New
                 </button>
-                <div class="profile-section">
-                    <img alt="Dr. Smith" class="avatar"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWEdvF5s5wiPmmqISChILL2fHUQ_D05K2xo8oObhAB7-g-bIZ9c0rmdPWGoDnT_tBVWiqJKApSSFhpvJVV6ov4pdwXmw56dzReMVTvZEuzfBvHuNxMcNF8dh-SvTuTzmiYUmKukxTK_Wnwy9SCxS7Td7A6J6H34sLNrGMyN69OX5qhEYEL7d7Ey5x2BCBXXcUPyZBHUod8osI48ONdRCQgXKn25h_9dStsJqgiXzGWmh4JgjM90sdREMFRVVGL2nIJIzwV8yPmWIjX" />
-                    <div>
-                        <div class="profile-name">Dr. James Smith</div>
-                        <div class="profile-role">Senior Surgeon</div>
-                    </div>
-                </div>
             </div>
         </aside>
 
@@ -530,6 +451,23 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <div
+                    style="padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border);">
+                    <p style="font-size: 0.875rem; color: var(--text-muted);">Showing <b>2</b> of <b>12</b> ongoing</p>
+                    <div style="display: flex; gap: 0.25rem;">
+                        <button
+                            style="width: 32px; height: 32px; border: 1px solid var(--border); background: white; border-radius: 6px;"><span
+                                class="material-symbols-outlined" style="font-size: 16px;">chevron_left</span></button>
+                        <button
+                            style="width: 32px; height: 32px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 700;">1</button>
+                        <button
+                            style="width: 32px; height: 32px; border: 1px solid var(--border); background: white; border-radius: 6px; font-weight: 700;">2</button>
+                        <button
+                            style="width: 32px; height: 32px; border: 1px solid var(--border); background: white; border-radius: 6px;"><span
+                                class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span></button>
+                    </div>
+                </div>
             </div>
 
             <div class="stats-grid">
