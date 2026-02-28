@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Billing and Payment Dashboard - ClinicFlow</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* --- CSS VARIABLES & DEFAULTS --- */
+        :root {
+            --primary: #1e40af;
+            --primary-light: #eff6ff;
+            --background: #f8fafc;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+
+            /* Status Colors */
+            --ongoing-bg: #dcfce7;
+            --ongoing-text: #15803d;
+            --waiting-bg: #fef3c7;
+            --waiting-text: #b45309;
+        }
+
+
+        /* Dark Mode variables (applied via class or system preference) */
+        /* @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-light: #101c22;
+                --white: #0f172a;
+                --border-color: #1e293b;
+                --text-main: #f1f5f9;
+                --text-muted: #94a3b8;
+            }
+        } */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* --- LAYOUT --- */
+        .app-wrapper {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #ffffff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-icon {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-title {
+            font-weight: 800;
+            font-size: 1.125rem;
+            line-height: 1.2;
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .btn-new-apt {
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #cbd5e1;
+        }
+
+        .profile-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+
+        /* --- HEADER --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 
+        .header {
+            height: 64px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 0 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            border: none;
+            background: transparent;
+            padding: 0.6rem;
+            font-size: 0.875rem;
+            width: 100%;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        } */
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        .icon-btn {
+            padding: 0.5rem;
+            border-radius: 8px;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border: 2px solid var(--white);
+            border-radius: 50%;
+        }
+
+        /* --- DASHBOARD CONTENT --- */
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .page-intro {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.875rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .trend-label {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+
+        /* --- FILTERS & TABLES --- */
+        .filter-bar {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .table-container {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: var(--bg-light);
+            padding: 1rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* --- ACTION CARDS --- */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        .action-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-blue {
+            background: var(--primary-soft);
+            border-color: rgba(19, 164, 236, 0.2);
+        }
+
+        .card-gray {
+            background: var(--bg-light);
+        }
+
+        .icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-wrapper">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined">medical_services</span>
+                </div>
+                <div>
+                    <div class="logo-title">MediCenter</div>
+                    <div class="logo-subtitle">Clinic Management</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-item" href="#">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="nav-item" href="appointment.html">
+                    <span class="material-symbols-outlined">calendar_month</span> Appointments
+                </a>
+                <a class="nav-item" href="patient.html">
+                    <span class="material-symbols-outlined">person</span> Patients
+                </a>
+                <a class="nav-item" href="staff.html">
+                    <span class="material-symbols-outlined">group</span> Staff
+                </a>
+                <a class="nav-item active" href="billing.html">
+                    <span class="material-symbols-outlined">receipt_long</span> Billing
+                </a>
+                <a class="nav-item" href="feedback.html">
+                    <span class="material-symbols-outlined">feedback</span> Feedback
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-primary btn-new-apt">
+                    <span class="material-symbols-outlined">add</span> New Appointment
+                </button>
+                <div class="profile-section">
+                    <img alt="Dr. Smith" class="avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWEdvF5s5wiPmmqISChILL2fHUQ_D05K2xo8oObhAB7-g-bIZ9c0rmdPWGoDnT_tBVWiqJKApSSFhpvJVV6ov4pdwXmw56dzReMVTvZEuzfBvHuNxMcNF8dh-SvTuTzmiYUmKukxTK_Wnwy9SCxS7Td7A6J6H34sLNrGMyN69OX5qhEYEL7d7Ey5x2BCBXXcUPyZBHUod8osI48ONdRCQgXKn25h_9dStsJqgiXzGWmh4JgjM90sdREMFRVVGL2nIJIzwV8yPmWIjX" />
+                    <div>
+                        <div class="profile-name">Dr. James Smith</div>
+                        <div class="profile-role">Senior Surgeon</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- <header class="header">
+            <div class="search-container">
+                <span class="material-symbols-outlined" style="color: var(--text-muted); font-size: 1.25rem;">search</span>
+                <input type="text" class="search-input" placeholder="Search invoices or patients">
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary">
+                    <span class="material-symbols-outlined" style="font-size: 1rem;">add</span> Generate New Invoice
+                </button>
+                <button class="icon-btn">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span class="notif-dot"></span>
+                </button>
+            </div>
+        </header> -->
+
+            <div class="scroll-area">
+                <div class="page-intro">
+                    <div>
+                        <h1 style="font-size: 1.875rem; font-weight: 900;">Billing & Payments</h1>
+                        <p style="color: var(--text-muted); margin-top: 0.25rem;">Manage hospital invoices, track
+                            financial health and process refunds.</p>
+                    </div>
+                    <button class="btn btn-outline">
+                        <span class="material-symbols-outlined" style="font-size: 1.125rem;">download</span> Export CSV
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span style="color: var(--text-muted); font-size: 0.875rem; font-weight: 500;">Total
+                                Revenue</span>
+                            <div
+                                style="padding: 0.5rem; background: var(--primary-soft); color: var(--primary); border-radius: 8px;">
+                                <span class="material-symbols-outlined">payments</span>
+                            </div>
+                        </div>
+                        <div class="stat-value">$128,450.00</div>
+                        <div class="trend-label" style="color: var(--success);">
+                            <span class="material-symbols-outlined" style="font-size: 1rem;">trending_up</span> +12.5%
+                            <span style="color: var(--text-muted); font-weight: 400;">from last month</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span style="color: var(--text-muted); font-size: 0.875rem; font-weight: 500;">Pending
+                                Payments</span>
+                            <div
+                                style="padding: 0.5rem; background: rgba(245, 158, 11, 0.1); color: var(--warning); border-radius: 8px;">
+                                <span class="material-symbols-outlined">schedule</span>
+                            </div>
+                        </div>
+                        <div class="stat-value">$12,300.50</div>
+                        <div class="trend-label" style="color: var(--danger);">
+                            <span class="material-symbols-outlined" style="font-size: 1rem;">trending_down</span> -2.4%
+                            <span style="color: var(--text-muted); font-weight: 400;">than usual</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span style="color: var(--text-muted); font-size: 0.875rem; font-weight: 500;">Refunds
+                                Processed</span>
+                            <div
+                                style="padding: 0.5rem; background: var(--bg-light); color: var(--text-muted); border-radius: 8px;">
+                                <span class="material-symbols-outlined">keyboard_return</span>
+                            </div>
+                        </div>
+                        <div class="stat-value">$1,240.00</div>
+                        <div class="trend-label" style="color: var(--success);">
+                            <span class="material-symbols-outlined" style="font-size: 1rem;">check_circle</span> +0.8%
+                            <span style="color: var(--text-muted); font-weight: 400;">efficiency</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <span
+                        style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 0.5rem;">Filters:</span>
+                    <button class="btn btn-primary" style="height: 40px;">All Invoices <span
+                            class="material-symbols-outlined">expand_more</span></button>
+                    <button class="btn btn-outline" style="height: 40px;"><span
+                            style="width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></span>
+                        Paid <span class="material-symbols-outlined">expand_more</span></button>
+                    <button class="btn btn-outline" style="height: 40px;"><span
+                            style="width: 8px; height: 8px; border-radius: 50%; background: var(--warning);"></span>
+                        Pending <span class="material-symbols-outlined">expand_more</span></button>
+                    <button class="btn btn-outline" style="height: 40px;"><span
+                            style="width: 8px; height: 8px; border-radius: 50%; background: #94a3b8;"></span> Refunded
+                        <span class="material-symbols-outlined">expand_more</span></button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Patient Name</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 700;">#INV-001</td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div
+                                            style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800;">
+                                            JD</div>
+                                        <span style="font-weight: 500;">John Doe</span>
+                                    </div>
+                                </td>
+                                <td style="color: var(--text-muted);">Oct 24, 2023</td>
+                                <td style="font-weight: 700;">$150.00</td>
+                                <td>
+                                    <span class="status-pill"
+                                        style="background: rgba(34, 197, 94, 0.1); color: var(--success);">
+                                        <span
+                                            style="width: 6px; height: 6px; border-radius: 50%; background: var(--success);"></span>
+                                        Paid
+                                    </span>
+                                </td>
+                                <td style="text-align: right;">
+                                    <button class="btn" style="color: var(--primary); padding: 0;">View <span
+                                            class="material-symbols-outlined"
+                                            style="font-size: 1rem;">visibility</span></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700;">#INV-002</td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div
+                                            style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800;">
+                                            JS</div>
+                                        <span style="font-weight: 500;">Jane Smith</span>
+                                    </div>
+                                </td>
+                                <td style="color: var(--text-muted);">Oct 25, 2023</td>
+                                <td style="font-weight: 700;">$2,400.00</td>
+                                <td>
+                                    <span class="status-pill"
+                                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                                        <span
+                                            style="width: 6px; height: 6px; border-radius: 50%; background: var(--warning);"></span>
+                                        Pending
+                                    </span>
+                                </td>
+                                <td style="text-align: right;">
+                                    <button class="btn" style="color: var(--primary); padding: 0;">Edit <span
+                                            class="material-symbols-outlined"
+                                            style="font-size: 1rem;">edit</span></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div
+                        style="padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg-light); border-top: 1px solid var(--border-color);">
+                        <p style="font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Showing 1-5 of 1,248
+                            invoices</p>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="page-btn btn btn-outline" style="padding: 0.25rem 0.5rem;"><span
+                                    class="material-symbols-outlined">chevron_left</span></button>
+                            <button class="btn btn-primary" style="padding: 0.25rem 0.75rem;">1</button>
+                            <button class="btn btn-outline" style="padding: 0.25rem 0.75rem;">2</button>
+                            <button class="page-btn btn btn-outline" style="padding: 0.25rem 0.5rem;"><span
+                                    class="material-symbols-outlined">chevron_right</span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-grid">
+                    <div class="action-card card-blue">
+                        <div class="icon-circle"><span class="material-symbols-outlined">description</span></div>
+                        <div style="flex: 1;">
+                            <h3 style="font-weight: 700;">Upcoming Renewals</h3>
+                            <p style="font-size: 0.875rem; color: var(--text-muted);">12 patients with recurring billing
+                                cycles in 48h.</p>
+                        </div>
+                        <button class="btn btn-primary">Review</button>
+                    </div>
+                    <div class="action-card card-gray">
+                        <div class="icon-circle" style="background: #1e293b;"><span
+                                class="material-symbols-outlined">insights</span></div>
+                        <div style="flex: 1;">
+                            <h3 style="font-weight: 700;">Financial Report</h3>
+                            <p style="font-size: 0.875rem; color: var(--text-muted);">Q3 Hospital Statement available
+                                now.</p>
+                        </div>
+                        <button class="btn btn-outline" style="background: var(--white);">View Report</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>
