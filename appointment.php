@@ -1,3 +1,15 @@
+<?php
+    include 'db_config.php';
+
+    // SQL to fetch appointment details with patient and staff info
+    $sql = "SELECT a.*, p.full_name AS patient_name, s.full_name AS doctor_name, s.role_specialty, s.profile_image_url 
+            FROM appointments a
+            JOIN patients p ON a.patient_id = p.patient_id
+            JOIN staff s ON a.staff_id = s.staff_id
+            ORDER BY a.check_in_time DESC";
+    
+    $result = $conn->query($sql); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -517,17 +529,6 @@
         </thead>
         <tbody>
             <?php
-            include 'db_config.php';
-
-            // SQL to fetch appointment details with patient and staff info
-            $sql = "SELECT a.*, p.full_name AS patient_name, s.full_name AS doctor_name, s.role_specialty, s.profile_image_url 
-                    FROM appointments a
-                    JOIN patients p ON a.patient_id = p.patient_id
-                    JOIN staff s ON a.staff_id = s.staff_id
-                    ORDER BY a.check_in_time DESC";
-            
-            $result = $conn->query($sql);
-
             if ($result && $result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     

@@ -598,6 +598,38 @@
             align-items: center;
             gap: 0.5rem;
         }
+
+        /* --- SIDEBAR TOGGLE CLASSES --- */
+.sidebar {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* Class to hide the sidebar */
+.sidebar.hidden {
+    width: 0;
+    padding: 0;
+    border: none;
+    margin: 0;
+}
+
+/* Adjust main wrapper when sidebar is hidden */
+.main-wrapper {
+    flex-grow: 1;
+    transition: margin 0.3s ease;
+}
+
+/* Toggle button styling */
+.toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    z-index: 100;
+}
     </style>
 </head>
 
@@ -617,6 +649,10 @@
                 <div class="logo-subtitle">Clinic Management</div>
             </div>
         </div>
+
+        <button class="toggle-btn" id="sidebarToggle">
+    <span class="material-symbols-outlined">menu</span>
+</button>
 
         <nav class="nav-links">
             <a class="nav-item active" href="index.php">
@@ -675,6 +711,15 @@
             </div>
         </div>
     </aside>
+
+    <script>
+    const sidebar = document.querySelector('.sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+    });
+</script>
 
     <div class="main-wrapper">
         <!-- <header class="header">

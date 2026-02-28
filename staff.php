@@ -1,3 +1,18 @@
+<?php
+    include 'db_config.php';
+
+// Fetch staff data
+$sql = "SELECT * FROM staff";
+$result = $conn->query($sql);
+
+$staffMembers = [];
+if ($result->num_rows > 0) {
+    // Fill the array with data from the database
+    while($row = $result->fetch_assoc()) {
+        $staffMembers[] = $row;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,7 +89,6 @@
             color: var(--text-main);
             min-height: 100vh;
             overflow: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
         .material-symbols-outlined {
@@ -722,111 +736,50 @@
                     <button class="filter-chip">Internal Medicine</button>
                 </div>
 
-                <div class="staff-grid">
-                    <div class="staff-card">
-                        <div class="staff-image-container">
-                            <img alt="Dr. Alice Smith" class="staff-image"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvS4iu4T_cd0Ls_2JT7YTM3qCxeY8CM3OgxcraTkA9pksfkgp344ZB5MYHbhgPv4lN4z26FLIJzoREDFhepPpVtV6-W94MwwDGK6EfYP8MBetwkpcY0AW4t380FhRTZItoaiwpOMu1xbSAiDfwmbes1D6YK0rdas1dKiV95XDkYtWs_v5FhW5GwkhQ5hu5-zqid0VLAp2kW1UILhySWhyszoZF950q5fUqU0N3rfN_lp30tgQv32sMOURqcFWylhWiU7gYQbv2L7zo" />
-                            <span class="status-badge bg-green-500">Available</span>
-                        </div>
-                        <div class="card-content">
-                            <h3 class="staff-name">Dr. Alice Smith</h3>
-                            <p class="staff-role">Senior Cardiologist</p>
-                            <div class="staff-meta">
-                                <div class="meta-item">
-                                    <span class="material-symbols-outlined">meeting_room</span>
-                                    <span>Room 302, Floor 3</span>
-                                </div>
-                                <div class="meta-item">
-                                    <span class="material-symbols-outlined">schedule</span>
-                                    <span>09:00 AM - 05:00 PM</span>
-                                </div>
-                            </div>
-                            <a href="#" class="profile-link">
-                                View Full Profile <span class="material-symbols-outlined"
-                                    style="font-size: 14px;">arrow_forward</span>
-                            </a>
-                        </div>
-                    </div>
+<div class="staff-grid">
+    <?php
+    // Assume $staffMembers is the result of: SELECT * FROM staff
+    foreach ($staffMembers as $row): 
+        // Logic to determine badge color based on status
+        $badgeClass = 'bg-slate-500'; // Default
+        if ($row['availability_status'] == 'Available') $badgeClass = 'bg-green-500';
+        if ($row['availability_status'] == 'In Surgery') $badgeClass = 'bg-amber-500';
+    ?>
+    
+    <div class="staff-card">
+        <div class="staff-image-container">
+            <img alt="<?php echo $row['full_name']; ?>" class="staff-image"
+                 src="<?php echo $row['profile_image_url']; ?>" />
+            
+            <span class="status-badge <?php echo $badgeClass; ?>">
+                <?php echo $row['availability_status']; ?>
+            </span>
+        </div>
 
-                    <div class="staff-card">
-                        <div class="staff-image-container">
-                            <img alt="Dr. Bob Johnson" class="staff-image"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBktUJ4BcB8b4RqDzxQ0oppY-yeYYoRKmJoU2wqJsDl43bHjfYhOCsvallFOl9Ysq3WiykKytZ3xX5VbKjYnIT23Sp3gNMjqdA2zaLxjezyI8F46Ql8-zB1MeFIDUtnAUvfV8PSxHR_s-gjmwN-i8PLZdGvwzf-AY1IZatG-C4uORgHzq6Wtlu6folgjKKuPKFu2_Uvz3gfczLQ0IMg_xi0Pw3NW2y5J3UmujovO7zCWcKOJwUP_rW8hJJHF0cdLiFgvwzZx_obn8Rd" />
-                            <span class="status-badge bg-slate-500">On Leave</span>
-                        </div>
-                        <div class="card-content">
-                            <h3 class="staff-name">Dr. Bob Johnson</h3>
-                            <p class="staff-role">ENT Specialist</p>
-                            <div class="staff-meta">
-                                <div class="meta-item">
-                                    <span class="material-symbols-outlined">meeting_room</span>
-                                    <span>Room 105, Floor 1</span>
-                                </div>
-                                <div class="meta-item">
-                                    <span class="material-symbols-outlined">event_busy</span>
-                                    <span>Returning Nov 15</span>
-                                </div>
-                            </div>
-                            <a href="#" class="profile-link">
-                                View Full Profile <span class="material-symbols-outlined"
-                                    style="font-size: 14px;">arrow_forward</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="staff-card">
-                        <div class="staff-image-container">
-                            <img alt="Dr. Carol Williams" class="staff-image"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrtiSC51Ad-WEwO_0dZ8VPBTw4VyTQx0PrtsXyQRueVcTK20IaviBFwcBjkGRruXPHScKEuYZ76oBTFQqFumnCpeXDJVwy2W7hcnzoWspsFl3JGkuHANucBRemAel_MckHFDUDd4WSZzBiVbJg6t94RITAzWs5TmFU1n7tR7zqC8P41CUfMQuZqQU3pdRpF1u1T9QJhoQaGK-HfpFTkvgKNKpt-uBtpn_DjzSufXjCgcJwh-r9Kxp9WD2DtvSpO2gnorhoNKDtBle0" />
-                            <span class="status-badge bg-green-500">Available</span>
-                        </div>
-                        <div class="card-content">
-                            <h3 class="staff-name">Dr. Carol Williams</h3>
-                            <p class="staff-role">Chief of Pediatrics</p>
-                            <div class="staff-meta">
-                                <div class="meta-item">
-                                    <span class="material-symbols-outlined">meeting_room</span>
-                                    <span>Room 210, Floor 2</span>
-                                </div>
-                                <div class="meta-item">
-                                    <span class="material-symbols-outlined">schedule</span>
-                                    <span>08:00 AM - 04:00 PM</span>
-                                </div>
-                            </div>
-                            <a href="#" class="profile-link">
-                                View Full Profile <span class="material-symbols-outlined"
-                                    style="font-size: 14px;">arrow_forward</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="staff-card">
-                        <div class="staff-image-container">
-                            <img alt="Dr. David Brown" class="staff-image"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6etuOUAwswfiFGY1FnMqd6iaD8AlEal4vi2muMSK24NwWYOWi56IkNjAnkF7aaugiMokh5-REspk9dyWNtYRC9Q54IG6M5cuQtEenJLMBRsBlXfFjekd0FIVBjWloK1pCZ32kRRIhFGQ7HIIrlmGmNx8h9sfRsuZIlQdPMQMlhahZnah_E_r_Asj6RhBLNs3CvjgfOSs_PKmVCn4OIbO83p6lmTnO0nUXnAqAtPjosmqSfYwWqk0Gj7TBpkyMQHbigv41kJLs89iw" />
-                            <span class="status-badge bg-amber-500">In Surgery</span>
-                        </div>
-                        <div class="card-content">
-                            <h3 class="staff-name">Dr. David Brown</h3>
-                            <p class="staff-role">Neurologist</p>
-                            <div class="staff-meta">
-                                <div class="meta-item">
-                                    <span class="material-symbols-outlined">meeting_room</span>
-                                    <span>Room 405, Floor 4</span>
-                                </div>
-                                <div class="meta-item">
-                                    <span class="material-symbols-outlined">schedule</span>
-                                    <span>Available at 02:00 PM</span>
-                                </div>
-                            </div>
-                            <a href="#" class="profile-link">
-                                View Full Profile <span class="material-symbols-outlined"
-                                    style="font-size: 14px;">arrow_forward</span>
-                            </a>
-                        </div>
-                    </div>
+        <div class="card-content">
+            <h3 class="staff-name"><?php echo $row['full_name']; ?></h3>
+            <p class="staff-role"><?php echo $row['role_specialty']; ?></p>
+            
+            <div class="staff-meta">
+                <div class="meta-item">
+                    <span class="material-symbols-outlined">meeting_room</span>
+                    <span><?php echo $row['department']; ?></span>
                 </div>
+                <div class="meta-item">
+                    <span class="material-symbols-outlined">schedule</span>
+                    <span>09:00 AM - 05:00 PM</span>
+                </div>
+            </div>
+            
+            <a href="profile.php?id=<?php echo $row['staff_id']; ?>" class="profile-link">
+                View Full Profile 
+                <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span>
+            </a>
+        </div>
+    </div>
+
+    <?php endforeach; ?>
+</div>
             </div>
 
             <footer class="footer">
