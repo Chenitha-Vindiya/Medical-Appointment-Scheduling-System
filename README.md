@@ -22,7 +22,7 @@ getters/setters.
 ```
 UI Pages: Patient Registration, Search Patient, Patient Profile.
 ```
-## Component 0 2 : Doctor & Staff Management
+## Component 02 : Doctor & Staff Management
 
 ```
 Description: Manages the directory of medical professionals and their specialties.
@@ -44,7 +44,7 @@ from a base Staff class.
 UI Pages: Add Staff Form, Doctor Directory, Edit Staff Details.
 ```
 
-## Component 0 3 : Appointment Scheduling
+## Component 03 : Appointment Scheduling
 
 ```
 Description: The core module for managing the time slots between patients and
@@ -65,7 +65,7 @@ based on the check-up type (e.g., General vs. Specialist).
 ```
 UI Pages: Appointment Booking Form, Daily Schedule View, Cancellation Page.
 ```
-## Component 0 4 : Medical Record & History Management
+## Component 04 : Medical Record & History Management
 
 ```
 Description: Tracks the medical history, previous diagnoses, and prescriptions.
@@ -88,7 +88,7 @@ Prescription objects.
 UI Pages: New Diagnosis Entry, Patient History Viewer, Record Modification Page.
 ```
 
-## Component 0 5 : Billing and Payment Management
+## Component 05 : Billing and Payment Management
 
 ```
 Description: Handles the financial transactions, insurance claims, and receipts.
@@ -109,7 +109,7 @@ cardNum) for cards).
 ```
 UI Pages: Generate Invoice, Billing Dashboard, Payment Status Update.
 ```
-## Component 0 6 : Feedback & Inquiry Management
+## Component 06 : Feedback & Inquiry Management
 
 ```
 Description: A simple module for patients to leave reviews or ask questions regarding
@@ -131,4 +131,5 @@ views (Patient sees "Submit," Admin sees "Moderate").
 UI Pages: Feedback Submission Form, Contact Support Page, Admin Feedback
 Dashboard.
 ```
+
 
