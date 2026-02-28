@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin Feedback Dashboard - MediCenter</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* --- CSS VARIABLES & DEFAULTS --- */
+        :root {
+            --primary: #1e40af;
+            --primary-light: #eff6ff;
+            --background: #f8fafc;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+
+            /* Status Colors */
+            --ongoing-bg: #dcfce7;
+            --ongoing-text: #15803d;
+            --waiting-bg: #fef3c7;
+            --waiting-text: #b45309;
+        }
+
+        /* Dark Mode Preferences */
+        /* @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-light: #101c22;
+                --white: #0f172a;
+                --border-color: #1e293b;
+                --text-main: #f1f5f9;
+                --text-muted: #94a3b8;
+            }
+        } */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* --- LAYOUT --- */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #ffffff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-icon {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-title {
+            font-weight: 800;
+            font-size: 1.125rem;
+            line-height: 1.2;
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .btn-new-apt {
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #cbd5e1;
+        }
+
+        .profile-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* --- TOP HEADER --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* .top-header {
+            height: 64px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 10;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            height: 40px;
+            padding-left: 2.5rem;
+            background: var(--bg-light);
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            color: var(--text-main);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        } */
+
+        /* --- DASHBOARD ELEMENTS --- */
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .icon-box {
+            display: inline-flex;
+            padding: 0.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        /* --- TABLE --- */
+        .table-wrap {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: var(--bg-light);
+            padding: 1rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+
+        tr:hover {
+            background: var(--bg-light);
+        }
+
+        /* --- COMPONENTS --- */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(19, 164, 236, 0.2);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding-bottom: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined">medical_services</span>
+                </div>
+                <div>
+                    <div class="logo-title">MediCenter</div>
+                    <div class="logo-subtitle">Clinic Management</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-item" href="#">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="nav-item" href="appointment.html">
+                    <span class="material-symbols-outlined">calendar_month</span> Appointments
+                </a>
+                <a class="nav-item" href="patient.html">
+                    <span class="material-symbols-outlined">person</span> Patients
+                </a>
+                <a class="nav-item" href="staff.html">
+                    <span class="material-symbols-outlined">group</span> Staff
+                </a>
+                <a class="nav-item" href="billing.html">
+                    <span class="material-symbols-outlined">receipt_long</span> Billing
+                </a>
+                <a class="nav-item active" href="feedback.html">
+                    <span class="material-symbols-outlined">feedback</span> Feedback
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-primary btn-new-apt">
+                    <span class="material-symbols-outlined">add</span> New Appointment
+                </button>
+                <div class="profile-section">
+                    <img alt="Dr. Smith" class="avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWEdvF5s5wiPmmqISChILL2fHUQ_D05K2xo8oObhAB7-g-bIZ9c0rmdPWGoDnT_tBVWiqJKApSSFhpvJVV6ov4pdwXmw56dzReMVTvZEuzfBvHuNxMcNF8dh-SvTuTzmiYUmKukxTK_Wnwy9SCxS7Td7A6J6H34sLNrGMyN69OX5qhEYEL7d7Ey5x2BCBXXcUPyZBHUod8osI48ONdRCQgXKn25h_9dStsJqgiXzGWmh4JgjM90sdREMFRVVGL2nIJIzwV8yPmWIjX" />
+                    <div>
+                        <div class="profile-name">Dr. James Smith</div>
+                        <div class="profile-role">Senior Surgeon</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- <header class="top-header">
+                <div class="search-bar">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" placeholder="Search tickets, patients, or staff...">
+                </div>
+                <div style="display: flex; gap: 1rem; color: var(--text-muted);">
+                    <span class="material-symbols-outlined" style="cursor: pointer;">notifications</span>
+                    <span class="material-symbols-outlined" style="cursor: pointer;">settings</span>
+                </div>
+            </header> -->
+
+            <div class="scroll-area">
+                <div class="page-header">
+                    <div>
+                        <h1 style="font-size: 1.875rem; font-weight: 900; letter-spacing: -0.025em;">Feedback &
+                            Inquiries</h1>
+                        <p style="color: var(--text-muted); margin-top: 0.25rem;">Manage, prioritize and resolve patient
+                            concerns in real-time.</p>
+                    </div>
+                    <button class="btn-primary"><span class="material-symbols-outlined">add</span> Create
+                        Ticket</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div class="icon-box" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                                <span class="material-symbols-outlined">mark_email_unread</span>
+                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--success);">+12% vs
+                                yesterday</span>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; font-weight: 500;">New Feedback</p>
+                        <h3 style="font-size: 1.5rem; font-weight: 900; margin-top: 0.25rem;">24</h3>
+                    </div>
+
+                    <div class="stat-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div class="icon-box" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                                <span class="material-symbols-outlined">pending_actions</span>
+                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--warning);">8 High
+                                Priority</span>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; font-weight: 500;">Pending Resolution
+                        </p>
+                        <h3 style="font-size: 1.5rem; font-weight: 900; margin-top: 0.25rem;">14</h3>
+                    </div>
+
+                    <div class="stat-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div class="icon-box" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                                <span class="material-symbols-outlined">check_circle</span>
+                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--success);">98%
+                                Satisfied</span>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; font-weight: 500;">Resolved (7 Days)
+                        </p>
+                        <h3 style="font-size: 1.5rem; font-weight: 900; margin-top: 0.25rem;">142</h3>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active">All Tickets (56)</button>
+                    <button class="tab-btn">New (24)</button>
+                    <button class="tab-btn">Pending (14)</button>
+                    <button class="tab-btn">Resolved (18)</button>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Submitted</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div
+                                            style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem;">
+                                            JD</div>
+                                        <div>
+                                            <p style="font-weight: 700;">John Doe</p>
+                                            <p style="font-size: 0.75rem; color: var(--text-muted);">#45102</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge"
+                                        style="background: var(--bg-light); color: var(--text-muted);">Appointment
+                                        Delay</span></td>
+                                <td><span class="badge"
+                                        style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">New</span></td>
+                                <td><span class="badge"
+                                        style="background: rgba(244, 63, 94, 0.1); color: var(--danger);">High</span>
+                                </td>
+                                <td style="color: var(--text-muted);">Oct 12, 10:45 AM</td>
+                                <td style="text-align: right;"><a href="#"
+                                        style="color: var(--primary); font-weight: 700; text-decoration: none;">View
+                                        Details</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div
+                                            style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem;">
+                                            JS</div>
+                                        <div>
+                                            <p style="font-weight: 700;">Jane Smith</p>
+                                            <p style="font-size: 0.75rem; color: var(--text-muted);">#45108</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge"
+                                        style="background: var(--bg-light); color: var(--text-muted);">Billing
+                                        Inquiry</span></td>
+                                <td><span class="badge"
+                                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">Pending</span>
+                                </td>
+                                <td><span class="badge"
+                                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">Medium</span>
+                                </td>
+                                <td style="color: var(--text-muted);">Oct 11, 04:20 PM</td>
+                                <td style="text-align: right;"><a href="#"
+                                        style="color: var(--primary); font-weight: 700; text-decoration: none;">Respond</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div
+                        style="padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg-light);">
+                        <p style="font-size: 0.8125rem; color: var(--text-muted); font-weight: 500;">Showing 2 of 56
+                            entries</p>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button
+                                style="padding: 0.4rem 0.75rem; border: 1px solid var(--border-color); background: var(--white); border-radius: 6px; font-weight: 600; font-size: 0.75rem; cursor: pointer;">Prev</button>
+                            <button
+                                style="padding: 0.4rem 0.75rem; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 0.75rem; cursor: pointer;">1</button>
+                            <button
+                                style="padding: 0.4rem 0.75rem; border: 1px solid var(--border-color); background: var(--white); border-radius: 6px; font-weight: 600; font-size: 0.75rem; cursor: pointer;">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>
