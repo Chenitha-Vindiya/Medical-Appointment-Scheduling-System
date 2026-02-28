@@ -1,3 +1,14 @@
+<?php
+include 'db_config.php';
+
+// Query to fetch patient data and join with the staff table for the doctor's name
+$sql = "SELECT p.*, s.full_name AS doctor_name 
+        FROM patients p 
+        LEFT JOIN staff s ON p.assigned_doctor_id = s.staff_id";
+
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -514,85 +525,64 @@
                 </div>
             </div>
 
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Patient ID</th>
-                            <th>Full Name</th>
-                            <th>Age / Gender</th>
-                            <th>Last Visit</th>
-                            <th>Primary Doctor</th>
-                            <th>Status</th>
-                            <th style="text-align: right;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span
-                                    style="font-family: monospace; font-weight: 700; background: var(--bg-light); padding: 2px 6px; border-radius: 4px;">88293-AX</span>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Patient ID</th>
+                <th>Full Name</th>
+                <th>Age / Gender</th>
+                <th>Registration Date</th>
+                <th>Primary Doctor</th>
+                <th>Status</th>
+                <th style="text-align: right;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if ($result && $result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    // Logic for status badge colors
+                    $statusClass = (strtolower($row['status']) == 'active') ? 'status-active' : 'status-inactive';
+                    
+                    // Logic for profile image (fallback to a placeholder if empty)
+                    $imgUrl = !empty($row['profile_image']) ? $row['profile_image'] : "https://ui-avatars.com/api/?name=" . urlencode($row['full_name']) . "&background=random";
+
+                    echo "<tr>
+                            <td>
+                                <span style='font-family: monospace; font-weight: 700; background: var(--bg-light); padding: 2px 6px; border-radius: 4px;'>" 
+                                . htmlspecialchars($row['patient_id']) . "</span>
                             </td>
                             <td>
-                                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvh7bMzzeRJilcC1mEIS-EO_skXVeCx3E3LeikI5wOSkzwK24JMXynMzQzDmcz0OVp7WRQAd1QxedVI3oy-IsjQ8HdL2QZ81wash1SHj5ZAnCUjhmLgkONloa8TsYDMLo56PajoWw6B_I62ndsBNiYk4vEFS0xUdj_c1xXOze1MAztObIWrBbjdfaSAfgs7OAFU3-yGrXAvYHUIik-RUH2nNHCWnvC6EHiWZcrc_BMMHVENA5KLghX6wWVm-H427LEt0B34dVko4qI"
-                                        style="width: 32px; height: 32px; border-radius: 50%;">
+                                <div style='display: flex; align-items: center; gap: 0.75rem;'>
+                                    <img src='" . $imgUrl . "' style='width: 32px; height: 32px; border-radius: 50%;'>
                                     <div>
-                                        <p style="font-weight: 700;">Eleanor Shellstrop</p>
-                                        <p style="font-size: 10px; color: var(--text-light);">shellstrop.e@example.com
-                                        </p>
+                                        <p style='font-weight: 700;'>" . htmlspecialchars($row['full_name']) . "</p>
+                                        <p style='font-size: 10px; color: var(--text-light);'>" . htmlspecialchars($row['email']) . "</p>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p style="font-weight: 600;">34 Yrs</p>
-                                <p
-                                    style="font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 800;">
-                                    Female</p>
+                                <p style='font-weight: 600;'>" . $row['age'] . " Yrs</p>
+                                <p style='font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 800;'>" . htmlspecialchars($row['gender']) . "</p>
                             </td>
-                            <td>Oct 12, 2023</td>
-                            <td style="font-weight: 500;">Dr. Michael Arndt</td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td style="text-align: right;">
-                                <span class="material-symbols-outlined"
-                                    style="color: var(--text-light); cursor: pointer; margin-left: 10px;">visibility</span>
-                                <span class="material-symbols-outlined"
-                                    style="color: var(--text-light); cursor: pointer; margin-left: 10px;">edit</span>
+                            <td>" . date('M d, Y', strtotime($row['registration_date'])) . "</td>
+                            <td style='font-weight: 500;'>" . htmlspecialchars($row['doctor_name'] ?? 'Unassigned') . "</td>
+                            <td><span class='status-badge $statusClass'>" . htmlspecialchars($row['status']) . "</span></td>
+                            <td style='text-align: right;'>
+                                <span class='material-symbols-outlined' style='color: var(--text-light); cursor: pointer; margin-left: 10px;'>visibility</span>
+                                <span class='material-symbols-outlined' style='color: var(--text-light); cursor: pointer; margin-left: 10px;'>edit</span>
                             </td>
-                        </tr>
-                        <tr>
-                            <td><span
-                                    style="font-family: monospace; font-weight: 700; background: var(--bg-light); padding: 2px 6px; border-radius: 4px;">11042-BZ</span>
-                            </td>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs8iiaUyxUQ7LLx45OXtwtzNqV5c50E_WNNK98Gmyo8CqM4H48NbE_TOUgxwRx45onPkyUH34gsax5fDuEgQgRvU5m2cCTgxmCYDDmUZhOu1Ra5I2KoXOmmRtDZeq0dlSt1QyjdE6G4bLu4PAx-ugqw7ZIKJmHUiXTWq3QNXrUlvceOUNqn-cvulXzSXcFdtjUuQfLjSbv2g68B0LcNIPl-zJ-WtJo1DqQyBjl5H70gzEfGKb2dIhhCgF-8t3j5lNioy21gNPpKCoc"
-                                        style="width: 32px; height: 32px; border-radius: 50%;">
-                                    <div>
-                                        <p style="font-weight: 700;">Chidi Anagonye</p>
-                                        <p style="font-size: 10px; color: var(--text-light);">c.anagonye@university.edu
-                                        </p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p style="font-weight: 600;">41 Yrs</p>
-                                <p
-                                    style="font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 800;">
-                                    Male</p>
-                            </td>
-                            <td>Aug 05, 2023</td>
-                            <td style="font-weight: 500;">Dr. Simone Garnet</td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td style="text-align: right;">
-                                <span class="material-symbols-outlined"
-                                    style="color: var(--text-light); cursor: pointer; margin-left: 10px;">visibility</span>
-                                <span class="material-symbols-outlined"
-                                    style="color: var(--text-light); cursor: pointer; margin-left: 10px;">edit</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                        </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='7' style='text-align:center; padding: 20px;'>No patients found in the database.</td></tr>";
+            }
+            $conn->close();
+            ?>
+        </tbody>
+    </table>
+</div>
         </main>
     </div>
 

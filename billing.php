@@ -1,3 +1,14 @@
+<?php
+    include 'db_config.php';
+
+    // Query to fetch billing data and join with patients table to get names
+    $sql = "SELECT b.*, p.full_name 
+            FROM billing b 
+            JOIN patients p ON b.patient_id = p.patient_id 
+            ORDER BY b.transaction_date DESC";
+
+    $result = $conn->query($sql); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -581,73 +592,86 @@
                 </div>
 
                 <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Invoice ID</th>
-                                <th>Patient Name</th>
-                                <th>Date</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th style="text-align: right;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="font-weight: 700;">#INV-001</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                        <div
-                                            style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800;">
-                                            JD</div>
-                                        <span style="font-weight: 500;">John Doe</span>
+    <table>
+        <thead>
+            <tr>
+                <th>Invoice ID</th>
+                <th>Patient Name</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th style="text-align: right;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            include 'db_config.php';
+
+            // Query to fetch billing data and join with patients table to get names
+            $sql = "SELECT b.*, p.full_name 
+                    FROM billing b 
+                    JOIN patients p ON b.patient_id = p.patient_id 
+                    ORDER BY b.transaction_date DESC";
+            
+            $result = $conn->query($sql);
+
+            if ($result && $result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    // Logic for status colors and icons based on your database ENUM
+                    $status = $row['payment_status']; // 'Paid', 'Pending', 'Overdue'
+                    $statusColor = "var(--text-muted)";
+                    $statusBg = "rgba(100, 116, 139, 0.1)";
+
+                    if ($status == 'Paid') {
+                        $statusColor = "var(--success)";
+                        $statusBg = "rgba(34, 197, 94, 0.1)";
+                    } elseif ($status == 'Pending') {
+                        $statusColor = "var(--warning)";
+                        $statusBg = "rgba(245, 158, 11, 0.1)";
+                    } elseif ($status == 'Overdue') {
+                        $statusColor = "var(--danger)";
+                        $statusBg = "rgba(239, 68, 68, 0.1)";
+                    }
+
+                    // Get initials for the avatar
+                    $initials = "";
+                    $names = explode(" ", $row['full_name']);
+                    foreach ($names as $n) { $initials .= $n[0]; }
+                    $initials = strtoupper(substr($initials, 0, 2));
+
+                    echo "<tr>
+                            <td style='font-weight: 700;'>" . htmlspecialchars($row['invoice_number']) . "</td>
+                            <td>
+                                <div style='display: flex; align-items: center; gap: 0.75rem;'>
+                                    <div style='width: 32px; height: 32px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800;'>
+                                        " . $initials . "
                                     </div>
-                                </td>
-                                <td style="color: var(--text-muted);">Oct 24, 2023</td>
-                                <td style="font-weight: 700;">$150.00</td>
-                                <td>
-                                    <span class="status-pill"
-                                        style="background: rgba(34, 197, 94, 0.1); color: var(--success);">
-                                        <span
-                                            style="width: 6px; height: 6px; border-radius: 50%; background: var(--success);"></span>
-                                        Paid
-                                    </span>
-                                </td>
-                                <td style="text-align: right;">
-                                    <button class="btn" style="color: var(--primary); padding: 0;">View <span
-                                            class="material-symbols-outlined"
-                                            style="font-size: 1rem;">visibility</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 700;">#INV-002</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                        <div
-                                            style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800;">
-                                            JS</div>
-                                        <span style="font-weight: 500;">Jane Smith</span>
-                                    </div>
-                                </td>
-                                <td style="color: var(--text-muted);">Oct 25, 2023</td>
-                                <td style="font-weight: 700;">$2,400.00</td>
-                                <td>
-                                    <span class="status-pill"
-                                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
-                                        <span
-                                            style="width: 6px; height: 6px; border-radius: 50%; background: var(--warning);"></span>
-                                        Pending
-                                    </span>
-                                </td>
-                                <td style="text-align: right;">
-                                    <button class="btn" style="color: var(--primary); padding: 0;">Edit <span
-                                            class="material-symbols-outlined"
-                                            style="font-size: 1rem;">edit</span></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                    <span style='font-weight: 500;'>" . htmlspecialchars($row['full_name']) . "</span>
+                                </div>
+                            </td>
+                            <td style='color: var(--text-muted);'>" . date('M d, Y', strtotime($row['transaction_date'])) . "</td>
+                            <td style='font-weight: 700;'>$" . number_format($row['amount'], 2) . "</td>
+                            <td>
+                                <span class='status-pill' style='background: " . $statusBg . "; color: " . $statusColor . "; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600;'>
+                                    <span style='width: 6px; height: 6px; border-radius: 50%; background: " . $statusColor . ";'></span>
+                                    " . $status . "
+                                </span>
+                            </td>
+                            <td style='text-align: right;'>
+                                <button class='btn' style='color: var(--primary); padding: 0; background: none; border: none; cursor: pointer; font-weight: 600;'>
+                                    Edit <span class='material-symbols-outlined' style='font-size: 1rem; vertical-align: middle;'>edit</span>
+                                </button>
+                            </td>
+                        </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='6' style='text-align:center; padding: 20px;'>No billing records found.</td></tr>";
+            }
+            $conn->close();
+            ?>
+        </tbody>
+    </table>
+</div>
 
                 <div class="action-grid">
                     <div class="action-card card-blue">
