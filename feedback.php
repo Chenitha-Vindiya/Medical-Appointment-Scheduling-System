@@ -1,3 +1,14 @@
+<?php
+include 'db_config.php';
+
+// Fetch feedback joined with patient info for IDs and Names
+$sql = "SELECT f.*, p.full_name, p.patient_id as patient_num
+        FROM feedback f
+        JOIN patients p ON f.patient_id = p.patient_id
+        ORDER BY f.submitted_at DESC";
+
+$result = $conn->query($sql); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -362,7 +373,7 @@
             </div>
 
             <nav class="nav-links">
-                <a class="nav-item" href="index.html">
+                <a class="nav-item" href="index.php">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                         fill="var(--text-muted)">
                         <path
@@ -370,35 +381,35 @@
                     </svg>
                     Dashboard
                 </a>
-                <a class="nav-item" href="appointment.html">
+                <a class="nav-item" href="appointment.php">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                         fill="var(--text-muted)">
                         <path
                             d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-188.5-11.5Q280-423 280-440t11.5-28.5Q303-480 320-480t28.5 11.5Q360-457 360-440t-11.5 28.5Q337-400 320-400t-28.5-11.5ZM640-400q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-188.5-11.5Q280-263 280-280t11.5-28.5Q303-320 320-320t28.5 11.5Q360-297 360-280t-11.5 28.5Q337-240 320-240t-28.5-11.5ZM640-240q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z" />
                     </svg> Appointments
                 </a>
-                <a class="nav-item" href="patient.html">
+                <a class="nav-item" href="patient.php">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                         fill="var(--text-muted)">
                         <path
                             d="M367-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q560-607 560-640t-23.5-56.5Q513-720 480-720t-56.5 23.5Q400-673 400-640t23.5 56.5Q447-560 480-560t56.5-23.5ZM480-640Zm0 400Z" />
                     </svg> Patients
                 </a>
-                <a class="nav-item" href="staff.html">
+                <a class="nav-item" href="staff.php">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                         fill="var(--text-muted)">
                         <path
                             d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM247-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm466 0q-47 47-113 47-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113q0 66-47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q440-607 440-640t-23.5-56.5Q393-720 360-720t-56.5 23.5Q280-673 280-640t23.5 56.5Q327-560 360-560t56.5-23.5ZM360-240Zm0-400Z" />
                     </svg> Staff
                 </a>
-                <a class="nav-item" href="billing.html">
+                <a class="nav-item" href="billing.php">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                         fill="var(--text-muted)">
                         <path
                             d="M240-80q-50 0-85-35t-35-85v-120h120v-560l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v680q0 50-35 85t-85 35H240Zm480-80q17 0 28.5-11.5T760-200v-560H320v440h360v120q0 17 11.5 28.5T720-160ZM360-600v-80h240v80H360Zm0 120v-80h240v80H360Zm320-120q-17 0-28.5-11.5T640-640q0-17 11.5-28.5T680-680q17 0 28.5 11.5T720-640q0 17-11.5 28.5T680-600Zm0 120q-17 0-28.5-11.5T640-520q0-17 11.5-28.5T680-560q17 0 28.5 11.5T720-520q0 17-11.5 28.5T680-480ZM240-160h360v-80H200v40q0 17 11.5 28.5T240-160Zm-40 0v-80 80Z" />
                     </svg> Billing
                 </a>
-                <a class="nav-item active" href="feedback.html">
+                <a class="nav-item active" href="feedback.php">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                         fill="var(--text-muted)">
                         <path
@@ -491,72 +502,78 @@
                 </div>
 
                 <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Patient</th>
-                                <th>Category</th>
-                                <th>Status</th>
-                                <th>Priority</th>
-                                <th>Submitted</th>
-                                <th style="text-align: right;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                        <div
-                                            style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem;">
-                                            JD</div>
-                                        <div>
-                                            <p style="font-weight: 700;">John Doe</p>
-                                            <p style="font-size: 0.75rem; color: var(--text-muted);">#45102</p>
-                                        </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Submitted</th>
+                <th style="text-align: right;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+
+            if ($result && $result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    
+                    // 1. Logic for Status Badges
+                    $status = $row['status'];
+                    $statusStyle = "background: rgba(100, 116, 139, 0.1); color: var(--text-muted);"; // Default
+                    if ($status == 'New') {
+                        $statusStyle = "background: rgba(59, 130, 246, 0.1); color: #3b82f6;";
+                    } elseif ($status == 'Pending' || $status == 'In Review') {
+                        $statusStyle = "background: rgba(245, 158, 11, 0.1); color: var(--warning);";
+                    } elseif ($status == 'Resolved') {
+                        $statusStyle = "background: rgba(16, 185, 129, 0.1); color: var(--success);";
+                    }
+
+                    // 2. Logic for Priority Badges
+                    $priority = $row['priority'];
+                    $priorityStyle = "background: var(--bg-light); color: var(--text-muted);";
+                    if ($priority == 'High') {
+                        $priorityStyle = "background: rgba(244, 63, 94, 0.1); color: var(--danger);";
+                    } elseif ($priority == 'Medium') {
+                        $priorityStyle = "background: rgba(245, 158, 11, 0.1); color: var(--warning);";
+                    }
+
+                    // 3. Generate Initials for Avatar
+                    $words = explode(" ", $row['full_name']);
+                    $initials = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ""));
+
+                    echo "<tr>
+                            <td>
+                                <div style='display: flex; align-items: center; gap: 0.75rem;'>
+                                    <div style='width: 36px; height: 36px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem;'>
+                                        $initials
                                     </div>
-                                </td>
-                                <td><span class="badge"
-                                        style="background: var(--bg-light); color: var(--text-muted);">Appointment
-                                        Delay</span></td>
-                                <td><span class="badge"
-                                        style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">New</span></td>
-                                <td><span class="badge"
-                                        style="background: rgba(244, 63, 94, 0.1); color: var(--danger);">High</span>
-                                </td>
-                                <td style="color: var(--text-muted);">Oct 12, 10:45 AM</td>
-                                <td style="text-align: right;"><a href="#"
-                                        style="color: var(--primary); font-weight: 700; text-decoration: none;">View
-                                        Details</a></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                        <div
-                                            style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem;">
-                                            JS</div>
-                                        <div>
-                                            <p style="font-weight: 700;">Jane Smith</p>
-                                            <p style="font-size: 0.75rem; color: var(--text-muted);">#45108</p>
-                                        </div>
+                                    <div>
+                                        <p style='font-weight: 700;'>" . htmlspecialchars($row['full_name']) . "</p>
+                                        <p style='font-size: 0.75rem; color: var(--text-muted);'>#" . $row['patient_num'] . "</p>
                                     </div>
-                                </td>
-                                <td><span class="badge"
-                                        style="background: var(--bg-light); color: var(--text-muted);">Billing
-                                        Inquiry</span></td>
-                                <td><span class="badge"
-                                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">Pending</span>
-                                </td>
-                                <td><span class="badge"
-                                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">Medium</span>
-                                </td>
-                                <td style="color: var(--text-muted);">Oct 11, 04:20 PM</td>
-                                <td style="text-align: right;"><a href="#"
-                                        style="color: var(--primary); font-weight: 700; text-decoration: none;">Respond</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                </div>
+                            </td>
+                            <td><span class='badge' style='background: var(--bg-light); color: var(--text-muted);'>" . htmlspecialchars($row['category']) . "</span></td>
+                            <td><span class='badge' style='$statusStyle'>$status</span></td>
+                            <td><span class='badge' style='$priorityStyle'>$priority</span></td>
+                            <td style='color: var(--text-muted);'>" . date('M d, h:i A', strtotime($row['submitted_at'])) . "</td>
+                            <td style='text-align: right;'>
+                                <a href='respond.php?id=" . $row['feedback_id'] . "' style='color: var(--primary); font-weight: 700; text-decoration: none;'>
+                                    " . ($status == 'Resolved' ? 'View' : 'Respond') . "
+                                </a>
+                            </td>
+                        </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='6' style='text-align:center; padding: 2rem; color: var(--text-muted);'>No feedback entries found.</td></tr>";
+            }
+            $conn->close();
+            ?>
+        </tbody>
+    </table>
+</div>
             </div>
         </main>
     </div>
