@@ -28,7 +28,7 @@
             --danger: #ef4444;
         }
 
-         /* @media (prefers-color-scheme: dark) {
+        /* @media (prefers-color-scheme: dark) {
             :root {
                 --bg-body: #101c22;
                 --bg-card: #0f172a;
@@ -54,7 +54,10 @@
             color: var(--text-main);
             display: flex;
             height: 100vh;
-            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
         }
 
         /* --- SIDEBAR --- */
@@ -625,7 +628,7 @@
                 <span class="material-symbols-outlined">receipt_long</span> Billing
             </a>
             <a class="nav-item" href="feedback.html">
-                <span class="material-symbols-outlined">feedback</span> Feedback 
+                <span class="material-symbols-outlined">feedback</span> Feedback
             </a>
         </nav>
 
