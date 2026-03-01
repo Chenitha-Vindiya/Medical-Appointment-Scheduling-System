@@ -1,14 +1,14 @@
 <?php
-    include 'db_config.php';
+include 'db_config.php';
 
-    // SQL to fetch appointment details with patient and staff info
-    $sql = "SELECT a.*, p.full_name AS patient_name, s.full_name AS doctor_name, s.role_specialty, s.profile_image_url 
+// SQL to fetch appointment details with patient and staff info
+$sql = "SELECT a.*, p.full_name AS patient_name, s.full_name AS doctor_name, s.role_specialty, s.profile_image_url 
             FROM appointments a
             JOIN patients p ON a.patient_id = p.patient_id
             JOIN staff s ON a.staff_id = s.staff_id
             ORDER BY a.check_in_time DESC";
-    
-    $result = $conn->query($sql); 
+
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +32,7 @@
             --sidebar-width: 260px;
             --header-height: 70px;
             --border-color: #e2e8f0;
-            --border:#B6E0F5;
+            --border: #B6E0F5;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --card-bg: #ffffff;
@@ -72,12 +72,14 @@
         }
 
         body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--background);
-    color: var(--text-main);
-    min-height: 100vh; /* Changed from height to min-height */
-    overflow-y: hidden;  /* Keep hidden to avoid scrollbars */
-}
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            min-height: 100vh;
+            /* Changed from height to min-height */
+            overflow-y: hidden;
+            /* Keep hidden to avoid scrollbars */
+        }
 
         ::-webkit-scrollbar {
             display: none;
@@ -105,11 +107,12 @@
         }
 
         main {
-    flex: 1;
-    margin-left: 256px;
-    padding: 2rem;
-    min-height: 100vh; /* Ensures background extends to bottom */
-}
+            flex: 1;
+            margin-left: 256px;
+            padding: 2rem;
+            min-height: 100vh;
+            /* Ensures background extends to bottom */
+        }
 
         /* --- SIDEBAR --- */
         .sidebar {
@@ -288,15 +291,15 @@
 
         /* --- DATA TABLE --- */
         .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    
-    /* Add these to make ONLY the table scrollable if it's too long */
-    max-height: calc(100vh - 350px); 
-    overflow-y: auto;
-}
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+            /* Add these to make ONLY the table scrollable if it's too long */
+            max-height: calc(100vh - 350px);
+            overflow-y: auto;
+        }
 
         table {
             width: 100%;
@@ -412,10 +415,10 @@
             <div class="logo-container">
                 <div class="logo-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="#ffffff">
-                    <path
-                        d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
-                </svg>
+                        fill="#ffffff">
+                        <path
+                            d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
+                    </svg>
                 </div>
                 <div>
                     <div class="logo-title">MediCenter</div>
@@ -514,48 +517,48 @@
                 <a href="#" class="tab-item">Emergency</a>
             </div>
 
-<div class="card">
-    <table>
-        <thead>
-            <tr>
-                <th>Patient Name</th>
-                <th>Assigned Doctor</th>
-                <th>Specialty</th>
-                <th>Room #</th>
-                <th>Status</th>
-                <th>Duration</th>
-                <th style="text-align: right;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if ($result && $result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    
-                    // 1. Calculate Duration (Time since check-in)
-                    $checkIn = new DateTime($row['check_in_time']);
-                    $now = new DateTime();
-                    $diff = $checkIn->diff($now);
-                    $duration = $diff->format('%hh %im');
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Assigned Doctor</th>
+                            <th>Specialty</th>
+                            <th>Room #</th>
+                            <th>Status</th>
+                            <th>Duration</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result && $result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
 
-                    // 2. Status Badge Logic
-                    $status = $row['queue_status']; // 'Ongoing', 'Waiting', 'Completed'
-                    $dotColor = "#64748b"; // Default
-                    $statusClass = "waiting";
+                                // 1. Calculate Duration (Time since check-in)
+                                $checkIn = new DateTime($row['check_in_time']);
+                                $now = new DateTime();
+                                $diff = $checkIn->diff($now);
+                                $duration = $diff->format('%hh %im');
 
-                    if ($status == 'Ongoing' || $status == 'In Progress') {
-                        $dotColor = "#22c55e";
-                        $statusClass = "ongoing";
-                    } elseif ($status == 'Waiting') {
-                        $dotColor = "#f59e0b";
-                        $statusClass = "waiting";
-                    }
+                                // 2. Status Badge Logic
+                                $status = $row['queue_status']; // 'Ongoing', 'Waiting', 'Completed'
+                                $dotColor = "#64748b"; // Default
+                                $statusClass = "waiting";
 
-                    // 3. Generate Patient Initials
-                    $names = explode(" ", $row['patient_name']);
-                    $initials = strtoupper(substr($names[0], 0, 1) . (isset($names[1]) ? substr($names[1], 0, 1) : ""));
+                                if ($status == 'Ongoing' || $status == 'In Progress') {
+                                    $dotColor = "#22c55e";
+                                    $statusClass = "ongoing";
+                                } elseif ($status == 'Waiting') {
+                                    $dotColor = "#f59e0b";
+                                    $statusClass = "waiting";
+                                }
 
-                    echo "<tr>
+                                // 3. Generate Patient Initials
+                                $names = explode(" ", $row['patient_name']);
+                                $initials = strtoupper(substr($names[0], 0, 1) . (isset($names[1]) ? substr($names[1], 0, 1) : ""));
+
+                                echo "<tr>
                             <td>
                                 <div style='display: flex; align-items: center; gap: 0.75rem;'>
                                     <div class='patient-avatar'>$initials</div>
@@ -589,15 +592,15 @@
                                 <span class='material-symbols-outlined' style='color: var(--text-light); cursor: pointer; vertical-align: middle;'>check_circle</span>
                             </td>
                         </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='7' style='text-align:center; padding: 2rem;'>No active appointments found.</td></tr>";
-            }
-            $conn->close();
-            ?>
-        </tbody>
-    </table>
-</div>
+                            }
+                        } else {
+                            echo "<tr><td colspan='7' style='text-align:center; padding: 2rem;'>No active appointments found.</td></tr>";
+                        }
+                        $conn->close();
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
             <div class="stats-grid">
                 <div class="stat-card" style="background: var(--primary-soft); border-color: rgba(19, 164, 236, 0.2);">

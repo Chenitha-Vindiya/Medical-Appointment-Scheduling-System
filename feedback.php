@@ -7,7 +7,7 @@ $sql = "SELECT f.*, p.full_name, p.patient_id as patient_num
         JOIN patients p ON f.patient_id = p.patient_id
         ORDER BY f.submitted_at DESC";
 
-$result = $conn->query($sql); 
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -361,10 +361,10 @@ $result = $conn->query($sql);
             <div class="logo-container">
                 <div class="logo-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="#ffffff">
-                    <path
-                        d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
-                </svg>
+                        fill="#ffffff">
+                        <path
+                            d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
+                    </svg>
                 </div>
                 <div>
                     <div class="logo-title">MediCenter</div>
@@ -502,48 +502,48 @@ $result = $conn->query($sql);
                 </div>
 
                 <div class="table-wrap">
-    <table>
-        <thead>
-            <tr>
-                <th>Patient</th>
-                <th>Category</th>
-                <th>Status</th>
-                <th>Priority</th>
-                <th>Submitted</th>
-                <th style="text-align: right;">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Submitted</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
 
-            if ($result && $result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    
-                    // 1. Logic for Status Badges
-                    $status = $row['status'];
-                    $statusStyle = "background: rgba(100, 116, 139, 0.1); color: var(--text-muted);"; // Default
-                    if ($status == 'New') {
-                        $statusStyle = "background: rgba(59, 130, 246, 0.1); color: #3b82f6;";
-                    } elseif ($status == 'Pending' || $status == 'In Review') {
-                        $statusStyle = "background: rgba(245, 158, 11, 0.1); color: var(--warning);";
-                    } elseif ($status == 'Resolved') {
-                        $statusStyle = "background: rgba(16, 185, 129, 0.1); color: var(--success);";
-                    }
+                            if ($result && $result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
 
-                    // 2. Logic for Priority Badges
-                    $priority = $row['priority'];
-                    $priorityStyle = "background: var(--bg-light); color: var(--text-muted);";
-                    if ($priority == 'High') {
-                        $priorityStyle = "background: rgba(244, 63, 94, 0.1); color: var(--danger);";
-                    } elseif ($priority == 'Medium') {
-                        $priorityStyle = "background: rgba(245, 158, 11, 0.1); color: var(--warning);";
-                    }
+                                    // 1. Logic for Status Badges
+                                    $status = $row['status'];
+                                    $statusStyle = "background: rgba(100, 116, 139, 0.1); color: var(--text-muted);"; // Default
+                                    if ($status == 'New') {
+                                        $statusStyle = "background: rgba(59, 130, 246, 0.1); color: #3b82f6;";
+                                    } elseif ($status == 'Pending' || $status == 'In Review') {
+                                        $statusStyle = "background: rgba(245, 158, 11, 0.1); color: var(--warning);";
+                                    } elseif ($status == 'Resolved') {
+                                        $statusStyle = "background: rgba(16, 185, 129, 0.1); color: var(--success);";
+                                    }
 
-                    // 3. Generate Initials for Avatar
-                    $words = explode(" ", $row['full_name']);
-                    $initials = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ""));
+                                    // 2. Logic for Priority Badges
+                                    $priority = $row['priority'];
+                                    $priorityStyle = "background: var(--bg-light); color: var(--text-muted);";
+                                    if ($priority == 'High') {
+                                        $priorityStyle = "background: rgba(244, 63, 94, 0.1); color: var(--danger);";
+                                    } elseif ($priority == 'Medium') {
+                                        $priorityStyle = "background: rgba(245, 158, 11, 0.1); color: var(--warning);";
+                                    }
 
-                    echo "<tr>
+                                    // 3. Generate Initials for Avatar
+                                    $words = explode(" ", $row['full_name']);
+                                    $initials = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ""));
+
+                                    echo "<tr>
                             <td>
                                 <div style='display: flex; align-items: center; gap: 0.75rem;'>
                                     <div style='width: 36px; height: 36px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem;'>
@@ -565,15 +565,15 @@ $result = $conn->query($sql);
                                 </a>
                             </td>
                         </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='6' style='text-align:center; padding: 2rem; color: var(--text-muted);'>No feedback entries found.</td></tr>";
-            }
-            $conn->close();
-            ?>
-        </tbody>
-    </table>
-</div>
+                                }
+                            } else {
+                                echo "<tr><td colspan='6' style='text-align:center; padding: 2rem; color: var(--text-muted);'>No feedback entries found.</td></tr>";
+                            }
+                            $conn->close();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>

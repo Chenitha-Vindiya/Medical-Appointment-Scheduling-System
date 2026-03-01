@@ -1,13 +1,13 @@
 <?php
-    include 'db_config.php';
+include 'db_config.php';
 
-    // Query to fetch billing data and join with patients table to get names
-    $sql = "SELECT b.*, p.full_name 
+// Query to fetch billing data and join with patients table to get names
+$sql = "SELECT b.*, p.full_name 
             FROM billing b 
             JOIN patients p ON b.patient_id = p.patient_id 
             ORDER BY b.transaction_date DESC";
 
-    $result = $conn->query($sql); 
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -427,10 +427,10 @@
             <div class="logo-container">
                 <div class="logo-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="#ffffff">
-                    <path
-                        d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
-                </svg>
+                        fill="#ffffff">
+                        <path
+                            d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
+                    </svg>
                 </div>
                 <div>
                     <div class="logo-title">MediCenter</div>
@@ -592,45 +592,47 @@
                 </div>
 
                 <div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th>Invoice ID</th>
-                <th>Patient Name</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th style="text-align: right;">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Patient Name</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
 
-            if ($result && $result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    // Logic for status colors and icons based on your database ENUM
-                    $status = $row['payment_status']; // 'Paid', 'Pending', 'Overdue'
-                    $statusColor = "var(--text-muted)";
-                    $statusBg = "rgba(100, 116, 139, 0.1)";
+                            if ($result && $result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    // Logic for status colors and icons based on your database ENUM
+                                    $status = $row['payment_status']; // 'Paid', 'Pending', 'Overdue'
+                                    $statusColor = "var(--text-muted)";
+                                    $statusBg = "rgba(100, 116, 139, 0.1)";
 
-                    if ($status == 'Paid') {
-                        $statusColor = "var(--success)";
-                        $statusBg = "rgba(34, 197, 94, 0.1)";
-                    } elseif ($status == 'Pending') {
-                        $statusColor = "var(--warning)";
-                        $statusBg = "rgba(245, 158, 11, 0.1)";
-                    } elseif ($status == 'Overdue') {
-                        $statusColor = "var(--danger)";
-                        $statusBg = "rgba(239, 68, 68, 0.1)";
-                    }
+                                    if ($status == 'Paid') {
+                                        $statusColor = "var(--success)";
+                                        $statusBg = "rgba(34, 197, 94, 0.1)";
+                                    } elseif ($status == 'Pending') {
+                                        $statusColor = "var(--warning)";
+                                        $statusBg = "rgba(245, 158, 11, 0.1)";
+                                    } elseif ($status == 'Overdue') {
+                                        $statusColor = "var(--danger)";
+                                        $statusBg = "rgba(239, 68, 68, 0.1)";
+                                    }
 
-                    // Get initials for the avatar
-                    $initials = "";
-                    $names = explode(" ", $row['full_name']);
-                    foreach ($names as $n) { $initials .= $n[0]; }
-                    $initials = strtoupper(substr($initials, 0, 2));
+                                    // Get initials for the avatar
+                                    $initials = "";
+                                    $names = explode(" ", $row['full_name']);
+                                    foreach ($names as $n) {
+                                        $initials .= $n[0];
+                                    }
+                                    $initials = strtoupper(substr($initials, 0, 2));
 
-                    echo "<tr>
+                                    echo "<tr>
                             <td style='font-weight: 700;'>" . htmlspecialchars($row['invoice_number']) . "</td>
                             <td>
                                 <div style='display: flex; align-items: center; gap: 0.75rem;'>
@@ -654,15 +656,15 @@
                                 </button>
                             </td>
                         </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='6' style='text-align:center; padding: 20px;'>No billing records found.</td></tr>";
-            }
-            $conn->close();
-            ?>
-        </tbody>
-    </table>
-</div>
+                                }
+                            } else {
+                                echo "<tr><td colspan='6' style='text-align:center; padding: 20px;'>No billing records found.</td></tr>";
+                            }
+                            $conn->close();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div class="action-grid">
                     <div class="action-card card-blue">

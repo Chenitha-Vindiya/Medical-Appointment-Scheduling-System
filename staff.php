@@ -1,5 +1,5 @@
 <?php
-    include 'db_config.php';
+include 'db_config.php';
 
 // Fetch staff data
 $sql = "SELECT * FROM staff";
@@ -8,7 +8,7 @@ $result = $conn->query($sql);
 $staffMembers = [];
 if ($result->num_rows > 0) {
     // Fill the array with data from the database
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $staffMembers[] = $row;
     }
 }
@@ -621,10 +621,10 @@ if ($result->num_rows > 0) {
             <div class="logo-container">
                 <div class="logo-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="#ffffff">
-                    <path
-                        d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
-                </svg>
+                        fill="#ffffff">
+                        <path
+                            d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
+                    </svg>
                 </div>
                 <div>
                     <div class="logo-title">MediCenter</div>
@@ -736,50 +736,50 @@ if ($result->num_rows > 0) {
                     <button class="filter-chip">Internal Medicine</button>
                 </div>
 
-<div class="staff-grid">
-    <?php
-    // Assume $staffMembers is the result of: SELECT * FROM staff
-    foreach ($staffMembers as $row): 
-        // Logic to determine badge color based on status
-        $badgeClass = 'bg-slate-500'; // Default
-        if ($row['availability_status'] == 'Available') $badgeClass = 'bg-green-500';
-        if ($row['availability_status'] == 'In Surgery') $badgeClass = 'bg-amber-500';
-    ?>
-    
-    <div class="staff-card">
-        <div class="staff-image-container">
-            <img alt="<?php echo $row['full_name']; ?>" class="staff-image"
-                 src="<?php echo $row['profile_image_url']; ?>" />
-            
-            <span class="status-badge <?php echo $badgeClass; ?>">
-                <?php echo $row['availability_status']; ?>
-            </span>
-        </div>
+                <div class="staff-grid">
+                    <?php
+                    // Assume $staffMembers is the result of: SELECT * FROM staff
+                    foreach ($staffMembers as $row):
+                        // Logic to determine badge color based on status
+                        $badgeClass = 'bg-slate-500'; // Default
+                        if ($row['availability_status'] == 'Available') $badgeClass = 'bg-green-500';
+                        if ($row['availability_status'] == 'In Surgery') $badgeClass = 'bg-amber-500';
+                    ?>
 
-        <div class="card-content">
-            <h3 class="staff-name"><?php echo $row['full_name']; ?></h3>
-            <p class="staff-role"><?php echo $row['role_specialty']; ?></p>
-            
-            <div class="staff-meta">
-                <div class="meta-item">
-                    <span class="material-symbols-outlined">meeting_room</span>
-                    <span><?php echo $row['department']; ?></span>
-                </div>
-                <div class="meta-item">
-                    <span class="material-symbols-outlined">schedule</span>
-                    <span>09:00 AM - 05:00 PM</span>
-                </div>
-            </div>
-            
-            <a href="profile.php?id=<?php echo $row['staff_id']; ?>" class="profile-link">
-                View Full Profile 
-                <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span>
-            </a>
-        </div>
-    </div>
+                        <div class="staff-card">
+                            <div class="staff-image-container">
+                                <img alt="<?php echo $row['full_name']; ?>" class="staff-image"
+                                    src="<?php echo $row['profile_image_url']; ?>" />
 
-    <?php endforeach; ?>
-</div>
+                                <span class="status-badge <?php echo $badgeClass; ?>">
+                                    <?php echo $row['availability_status']; ?>
+                                </span>
+                            </div>
+
+                            <div class="card-content">
+                                <h3 class="staff-name"><?php echo $row['full_name']; ?></h3>
+                                <p class="staff-role"><?php echo $row['role_specialty']; ?></p>
+
+                                <div class="staff-meta">
+                                    <div class="meta-item">
+                                        <span class="material-symbols-outlined">meeting_room</span>
+                                        <span><?php echo $row['department']; ?></span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="material-symbols-outlined">schedule</span>
+                                        <span>09:00 AM - 05:00 PM</span>
+                                    </div>
+                                </div>
+
+                                <a href="profile.php?id=<?php echo $row['staff_id']; ?>" class="profile-link">
+                                    View Full Profile
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span>
+                                </a>
+                            </div>
+                        </div>
+
+                    <?php endforeach; ?>
+                </div>
             </div>
 
             <footer class="footer">

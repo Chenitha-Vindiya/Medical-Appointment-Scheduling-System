@@ -415,10 +415,10 @@ $result = $conn->query($sql);
             <div class="logo-container">
                 <div class="logo-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="#ffffff">
-                    <path
-                        d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
-                </svg>
+                        fill="#ffffff">
+                        <path
+                            d="M160-80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Zm240-560h160v-80H400v80ZM160-160v-480 480Zm280-200v120h80v-120h120v-80H520v-120h-80v120H320v80h120Z" />
+                    </svg>
                 </div>
                 <div>
                     <div class="logo-title">MediCenter</div>
@@ -525,33 +525,33 @@ $result = $conn->query($sql);
                 </div>
             </div>
 
-<div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th>Patient ID</th>
-                <th>Full Name</th>
-                <th>Age / Gender</th>
-                <th>Registration Date</th>
-                <th>Primary Doctor</th>
-                <th>Status</th>
-                <th style="text-align: right;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if ($result && $result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    // Logic for status badge colors
-                    $statusClass = (strtolower($row['status']) == 'active') ? 'status-active' : 'status-inactive';
-                    
-                    // Logic for profile image (fallback to a placeholder if empty)
-                    $imgUrl = !empty($row['profile_image']) ? $row['profile_image'] : "https://ui-avatars.com/api/?name=" . urlencode($row['full_name']) . "&background=random";
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Full Name</th>
+                            <th>Age / Gender</th>
+                            <th>Registration Date</th>
+                            <th>Primary Doctor</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result && $result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                // Logic for status badge colors
+                                $statusClass = (strtolower($row['status']) == 'active') ? 'status-active' : 'status-inactive';
 
-                    echo "<tr>
+                                // Logic for profile image (fallback to a placeholder if empty)
+                                $imgUrl = !empty($row['profile_image']) ? $row['profile_image'] : "https://ui-avatars.com/api/?name=" . urlencode($row['full_name']) . "&background=random";
+
+                                echo "<tr>
                             <td>
-                                <span style='font-family: monospace; font-weight: 700; background: var(--bg-light); padding: 2px 6px; border-radius: 4px;'>" 
-                                . htmlspecialchars($row['patient_id']) . "</span>
+                                <span style='font-family: monospace; font-weight: 700; background: var(--bg-light); padding: 2px 6px; border-radius: 4px;'>"
+                                    . htmlspecialchars($row['patient_id']) . "</span>
                             </td>
                             <td>
                                 <div style='display: flex; align-items: center; gap: 0.75rem;'>
@@ -574,15 +574,15 @@ $result = $conn->query($sql);
                                 <span class='material-symbols-outlined' style='color: var(--text-light); cursor: pointer; margin-left: 10px;'>edit</span>
                             </td>
                         </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='7' style='text-align:center; padding: 20px;'>No patients found in the database.</td></tr>";
-            }
-            $conn->close();
-            ?>
-        </tbody>
-    </table>
-</div>
+                            }
+                        } else {
+                            echo "<tr><td colspan='7' style='text-align:center; padding: 20px;'>No patients found in the database.</td></tr>";
+                        }
+                        $conn->close();
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </main>
     </div>
 
