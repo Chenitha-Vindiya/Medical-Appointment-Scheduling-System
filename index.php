@@ -267,7 +267,7 @@
             padding: 2rem;
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 1rem;
         }
 
         .content-title {
@@ -630,14 +630,161 @@
             padding: 10px;
             z-index: 100;
         }
+
+        /* --- COLLAPSIBLE SIDEBAR STYLES --- */
+
+        /* 1. Shrink the sidebar width */
+        .sidebar.collapsed {
+            width: 80px;
+            padding: 1.5rem 0.5rem;
+        }
+
+        /* 2. Hide all text elements when collapsed */
+        .sidebar.collapsed .nav-text,
+        .sidebar.collapsed .logo-title,
+        .sidebar.collapsed .logo-subtitle,
+        .sidebar.collapsed .profile-name,
+        .sidebar.collapsed .profile-role,
+        .sidebar.collapsed .profile-section div {
+            display: none;
+        }
+
+        /* 3. Center the icons and avatar when the bar is small */
+        .sidebar.collapsed .nav-item,
+        .sidebar.collapsed .logo-container,
+        .sidebar.collapsed .profile-section {
+            justify-content: center;
+            padding: 0.8rem;
+        }
+
+        /* 4. Ensure the main content expands when sidebar shrinks */
+        .sidebar.collapsed~.main-content {
+            margin-left: 80px;
+            width: calc(100% - 80px);
+        }
+
+        /* 5. Smooth transition animation */
+        .sidebar,
+        .main-content {
+            transition: all 0.3s ease;
+        }
+
+        /* --- MOBILE RESPONSIVE STYLES --- */
+
+        /* For Tablets (approx 1024px and below) */
+        @media (max-width: 1024px) {
+            .dashboard-main-grid {
+                grid-template-columns: 1fr;
+                /* Stack table and chart */
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                /* 2x2 grid for stats */
+            }
+        }
+
+        /* For Phones (approx 768px and below) */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                /* Move sidebar to top or make it an overlay */
+            }
+
+            /* Sidebar behavior for mobile */
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                /* Hide off-screen by default */
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+                width: 80%;
+                /* Take up most of the screen when open */
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar.active {
+                left: 0;
+                /* Slide in when active */
+            }
+
+            /* Main Content adjustments */
+            .main-wrapper {
+                width: 100%;
+            }
+
+            .content-area {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                /* Stack stats cards */
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+                /* Stack performance and insights */
+            }
+
+            /* Handle Data Table scrolling */
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                /* Allow horizontal scroll for the table */
+                white-space: nowrap;
+            }
+
+            /* Mobile Header/Menu Button - shown only on mobile */
+            .mobile-nav-toggle {
+                display: flex;
+                align-items: center;
+                padding: 1rem;
+                background: white;
+                border-bottom: 1px solid var(--border-color);
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+        }
+
+        /* Base style additions for your toggle logic */
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        /* Overlay for when sidebar is open on mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
     </style>
 </head>
 
 <body>
+    <div class="mobile-nav-toggle" style="display: none;">
+        <button id="mobileMenuOpen" style="background:none; border:none; cursor:pointer;">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div style="margin-left: 1rem; font-weight: 800;">MediCenter</div>
+    </div>
+
+    <div class="sidebar-overlay" id="overlay"></div>
 
     <aside class="sidebar">
         <div class="logo-container">
-            <div class="logo-icon">
+            <div class="logo-icon" id="sidebarToggle" style="cursor:pointer;">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                     fill="#ffffff">
                     <path
@@ -648,56 +795,49 @@
                 <div class="logo-title">MediCenter</div>
                 <div class="logo-subtitle">Clinic Management</div>
             </div>
+            <!-- <button id="sidebarToggle" >
+                <span class="material-symbols-outlined">menu</span>
+            </button> -->
         </div>
 
-        <button class="toggle-btn" id="sidebarToggle">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+
 
         <nav class="nav-links">
             <a class="nav-item active" href="index.php">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="var(--text-muted)">
-                    <path
-                        d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--text-muted)">
+                    <path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
                 </svg>
-                Dashboard
-            </a>
+                <span class="nav-text">Dashboard</span> </a>
+
             <a class="nav-item" href="appointment.php">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="var(--text-muted)">
-                    <path
-                        d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-188.5-11.5Q280-423 280-440t11.5-28.5Q303-480 320-480t28.5 11.5Q360-457 360-440t-11.5 28.5Q337-400 320-400t-28.5-11.5ZM640-400q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-188.5-11.5Q280-263 280-280t11.5-28.5Q303-320 320-320t28.5 11.5Q360-297 360-280t-11.5 28.5Q337-240 320-240t-28.5-11.5ZM640-240q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z" />
-                </svg> Appointments
-            </a>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--text-muted)">
+                    <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-188.5-11.5Q280-423 280-440t11.5-28.5Q303-480 320-480t28.5 11.5Q360-457 360-440t-11.5 28.5Q337-400 320-400t-28.5-11.5ZM640-400q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-188.5-11.5Q280-263 280-280t11.5-28.5Q303-320 320-320t28.5 11.5Q360-297 360-280t-11.5 28.5Q337-240 320-240t-28.5-11.5ZM640-240q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z" />
+                </svg>
+                <span class="nav-text">Appointments</span> </a>
+
             <a class="nav-item" href="patient.php">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="var(--text-muted)">
-                    <path
-                        d="M367-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q560-607 560-640t-23.5-56.5Q513-720 480-720t-56.5 23.5Q400-673 400-640t23.5 56.5Q447-560 480-560t56.5-23.5ZM480-640Zm0 400Z" />
-                </svg> Patients
-            </a>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--text-muted)">
+                    <path d="M367-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q560-607 560-640t-23.5-56.5Q513-720 480-720t-56.5 23.5Q400-673 400-640t23.5 56.5Q447-560 480-560t56.5-23.5ZM480-640Zm0 400Z" />
+                </svg>
+                <span class="nav-text">Patients</span> </a>
+
             <a class="nav-item" href="staff.php">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="var(--text-muted)">
-                    <path
-                        d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM247-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm466 0q-47 47-113 47-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113q0 66-47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q440-607 440-640t-23.5-56.5Q393-720 360-720t-56.5 23.5Q280-673 280-640t23.5 56.5Q327-560 360-560t56.5-23.5ZM360-240Zm0-400Z" />
-                </svg> Staff
-            </a>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--text-muted)">
+                    <path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM247-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm466 0q-47 47-113 47-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113q0 66-47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q440-607 440-640t-23.5-56.5Q393-720 360-720t-56.5 23.5Q280-673 280-640t23.5 56.5Q327-560 360-560t56.5-23.5ZM360-240Zm0-400Z" />
+                </svg>
+                <span class="nav-text">Staff</span> </a>
+
             <a class="nav-item" href="billing.php">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="var(--text-muted)">
-                    <path
-                        d="M240-80q-50 0-85-35t-35-85v-120h120v-560l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v680q0 50-35 85t-85 35H240Zm480-80q17 0 28.5-11.5T760-200v-560H320v440h360v120q0 17 11.5 28.5T720-160ZM360-600v-80h240v80H360Zm0 120v-80h240v80H360Zm320-120q-17 0-28.5-11.5T640-640q0-17 11.5-28.5T680-680q17 0 28.5 11.5T720-640q0 17-11.5 28.5T680-600Zm0 120q-17 0-28.5-11.5T640-520q0-17 11.5-28.5T680-560q17 0 28.5 11.5T720-520q0 17-11.5 28.5T680-480ZM240-160h360v-80H200v40q0 17 11.5 28.5T240-160Zm-40 0v-80 80Z" />
-                </svg> Billing
-            </a>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--text-muted)">
+                    <path d="M240-80q-50 0-85-35t-35-85v-120h120v-560l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v680q0 50-35 85t-85 35H240Zm480-80q17 0 28.5-11.5T760-200v-560H320v440h360v120q0 17 11.5 28.5T720-160ZM360-600v-80h240v80H360Zm0 120v-80h240v80H360Zm320-120q-17 0-28.5-11.5T640-640q0-17 11.5-28.5T680-680q17 0 28.5 11.5T720-640q0 17-11.5 28.5T680-600Zm0 120q-17 0-28.5-11.5T640-520q0-17 11.5-28.5T680-560q17 0 28.5 11.5T720-520q0 17-11.5 28.5T680-480ZM240-160h360v-80H200v40q0 17 11.5 28.5T240-160Zm-40 0v-80 80Z" />
+                </svg>
+                <span class="nav-text">Billing</span> </a>
+
             <a class="nav-item" href="feedback.php">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="var(--text-muted)">
-                    <path
-                        d="M480-360q17 0 28.5-11.5T520-400q0-17-11.5-28.5T480-440q-17 0-28.5 11.5T440-400q0 17 11.5 28.5T480-360Zm-40-160h80v-240h-80v240ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z" />
-                </svg> Feedback
-            </a>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--text-muted)">
+                    <path d="M480-360q17 0 28.5-11.5T520-400q0-17-11.5-28.5T480-440q-17 0-28.5 11.5T440-400q0 17 11.5 28.5T480-360Zm-40-160h80v-240h-80v240ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z" />
+                </svg>
+                <span class="nav-text">Feedback</span> </a>
         </nav>
 
         <div class="sidebar-footer">
@@ -714,10 +854,25 @@
 
     <script>
         const sidebar = document.querySelector('.sidebar');
-        const toggleBtn = document.getElementById('sidebarToggle');
+        const toggleBtn = document.getElementById('sidebarToggle'); // Desktop
+        const mobileBtn = document.getElementById('mobileMenuOpen'); // Mobile
+        const overlay = document.getElementById('overlay');
 
+        // Function for Desktop Collapse
         toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('collapsed');
+        });
+
+        // Function for Mobile Slide-in
+        mobileBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        // Close when clicking overlay
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
         });
     </script>
 
@@ -887,7 +1042,7 @@
                 </div>
             </div>
 
-            <div class="bottom-grid">
+            <!-- <div class="bottom-grid">
                 <div class="card card-performance">
                     <div class="perf-content">
                         <h3 class="perf-title">Performance Report</h3>
@@ -912,7 +1067,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </main>
     </div>
 
