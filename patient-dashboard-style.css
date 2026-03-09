@@ -258,10 +258,22 @@ body::-webkit-scrollbar {
 .card-header h3 { font-size: 1.1rem; font-weight: 800; }
 .link-primary { color: var(--primary); font-size: 0.875rem; font-weight: 700; text-decoration: none; }
 
-.table-responsive { overflow-x: auto; }
+.table-responsive { 
+    width: 100%;
+    overflow-x: auto; /* Keeps horizontal scroll for mobile */
+    max-height: 320px; /* Limits height to roughly 4 rows */
+    overflow-y: auto;  /* Enables vertical scrolling */
+    scrollbar-width: thin;
+}
 .data-table { width: 100%; border-collapse: collapse; text-align: left;}
 
-.data-table thead { background-color: var(--slate-100);  }
+.data-table thead { 
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--slate-100);  
+}
+
 .data-table th {
   padding: 1rem 2rem;
   font-size: 0.75rem;
