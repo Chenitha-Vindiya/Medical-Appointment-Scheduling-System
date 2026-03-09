@@ -44,6 +44,38 @@ body::-webkit-scrollbar { display: none; }
   padding: 0 2rem;
 }
 
+/* Scroll to Top Button ---------------------------------*/
+#scrollTopBtn {
+    position: fixed;
+    bottom: 35px;
+    right: 35px;
+    background-color: var(--primary);
+    font-weight: bolder;
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.3s ease;
+    z-index: 1001;
+}
+
+#scrollTopBtn:hover {
+    transform: scale(1.07);
+    background-color: var(--primary-hover);
+}
+
+/* When visible */
+#scrollTopBtn.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 /* =====================
    HEADER / NAVBAR
    ===================== */

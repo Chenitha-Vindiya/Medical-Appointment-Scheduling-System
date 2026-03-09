@@ -14,6 +14,30 @@
 
 <body>
 
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" title="Go to top">▲</button>
+
+
+  <script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 75) {
+        scrollTopBtn.classList.add('show');
+      } else {
+        scrollTopBtn.classList.remove('show');
+      }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
+
   <!-- HEADER -->
   <header class="header-wrapper">
     <nav class="navbar">
