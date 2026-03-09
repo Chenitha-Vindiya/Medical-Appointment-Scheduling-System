@@ -47,11 +47,11 @@
             </button>
 
             <ul class="nav-links" id="navLinks">
-                <li><a href="index2.html">Dashboard</a></li>
+                <li><a href="patient-dashboard.html">Dashboard</a></li>
                 <li><a href="#features">Appointments</a></li>
                 <li><a href="#features">Billing</a></li>
                 <li><a href="#features">Feedback</a></li>
-                <li><a href="#features">Profile</a></li>
+                <li><a href="patient-profile.html">Profile</a></li>
                 <!-- <li><a href="#portals">Portals</a></li>
         <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
                 <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
@@ -61,112 +61,97 @@
         </nav>
     </header>
 
-    <div class="dashboard-grid">
-        <main class="main-content">
-
-            <div class="content-area">
-                <!-- <section class="welcome-card">
-                    <div class="welcome-text">
-                        <h2>Welcome back, John!</h2>
-                        <p>You have a scheduled check-up tomorrow at 10:00 AM. Remember to bring your latest lab results.</p>
-                        <button class="btn-white">View Preparation Guide</button>
-                    </div>
-                    <span class="material-symbols-outlined bg-icon-decoration">vaccines</span>
-                </section> -->
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon icon-blue">
-                            <span class="material-symbols-outlined">event</span>
-                        </div>
-                        <div>
-                            <p class="stat-label">Next Appointment</p>
-                            <p class="stat-value">Oct 24, 2023</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon icon-green">
-                            <span class="material-symbols-outlined">assignment_turned_in</span>
-                        </div>
-                        <div>
-                            <p class="stat-label">Total Visits</p>
-                            <p class="stat-value">12 Visits</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon icon-orange">
-                            <span class="material-symbols-outlined">pending_actions</span>
-                        </div>
-                        <div>
-                            <p class="stat-label">Pending Invoices</p>
-                            <p class="stat-value">2 Invoices</p>
-                        </div>
-                    </div>
+    <main class="dashboard-grid">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon icon-blue">
+                    <span class="material-symbols-outlined">event</span>
                 </div>
-
-                <section class="appointments-card">
-                    <div class="card-header">
-                        <h3>Upcoming Appointments</h3>
-                        <a href="#" class="link-primary">View All</a>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Doctor</th>
-                                    <th>Specialty</th>
-                                    <th>Date & Time</th>
-                                    <th>Status</th>
-                                    <th class="text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="doctor-info">
-                                            <img alt="Doctor"
-                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEULt1N5NeTmikbvvvIBTwXic6LwKRZnjZY_UGPqg4qZ5dlhhrx8MQvwr9G3tqkSZdhbSgvxtTZinYOAwL1AM-iISy3AOdKBWaxM4w4r5sudSCztGL4FswntX_fo70S1EEcShuqnPg6OW3ZGIorUxNTMn1qbjd-dGkwO33s89SKHOUycbf_qVxosJ2DnQfULtxTPC5QAh-gPXTd1_Xb9n-JAK4stklkcK3mXMZXNwVaDi_ihA3X1eYO4Qz_56iDqKCKSbjnI7h_QdK" />
-                                            <span class="doctor-name">Dr. Sarah Wilson</span>
-                                        </div>
-                                    </td>
-                                    <td class="specialty-cell">Cardiologist</td>
-                                    <td class="datetime-cell">
-                                        <div class="date">Oct 24, 2023</div>
-                                        <div class="time">10:00 AM</div>
-                                    </td>
-                                    <td><span class="status-badge confirmed">Confirmed</span></td>
-                                    <td class="text-right">
-                                        <button class="action-btn"><span
-                                                class="material-symbols-outlined">more_vert</span></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="doctor-info">
-                                            <img alt="Doctor"
-                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
-                                            <span class="doctor-name">Dr. Michael Chen</span>
-                                        </div>
-                                    </td>
-                                    <td class="specialty-cell">General Dentist</td>
-                                    <td class="datetime-cell">
-                                        <div class="date">Nov 02, 2023</div>
-                                        <div class="time">02:30 PM</div>
-                                    </td>
-                                    <td><span class="status-badge pending">Pending</span></td>
-                                    <td class="text-right">
-                                        <button class="action-btn"><span
-                                                class="material-symbols-outlined">more_vert</span></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-
+                <div>
+                    <p class="stat-label">Next Appointment</p>
+                    <p class="stat-value">Oct 24, 2023</p>
+                </div>
             </div>
-        </main>
-    </div>
+            <div class="stat-card">
+                <div class="stat-icon icon-green">
+                    <span class="material-symbols-outlined">assignment_turned_in</span>
+                </div>
+                <div>
+                    <p class="stat-label">Total Visits</p>
+                    <p class="stat-value">12 Visits</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon icon-orange">
+                    <span class="material-symbols-outlined">pending_actions</span>
+                </div>
+                <div>
+                    <p class="stat-label">Pending Invoices</p>
+                    <p class="stat-value">2 Invoices</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="appointments-card">
+            <div class="card-header">
+                <h3>Upcoming Appointments</h3>
+                <a href="#" class="link-primary">View All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Specialty</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="doctor-info">
+                                    <img alt="Doctor"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEULt1N5NeTmikbvvvIBTwXic6LwKRZnjZY_UGPqg4qZ5dlhhrx8MQvwr9G3tqkSZdhbSgvxtTZinYOAwL1AM-iISy3AOdKBWaxM4w4r5sudSCztGL4FswntX_fo70S1EEcShuqnPg6OW3ZGIorUxNTMn1qbjd-dGkwO33s89SKHOUycbf_qVxosJ2DnQfULtxTPC5QAh-gPXTd1_Xb9n-JAK4stklkcK3mXMZXNwVaDi_ihA3X1eYO4Qz_56iDqKCKSbjnI7h_QdK" />
+                                    <span class="doctor-name">Dr. Sarah Wilson</span>
+                                </div>
+                            </td>
+                            <td class="specialty-cell">Cardiologist</td>
+                            <td class="datetime-cell">
+                                <div class="date">Oct 24, 2023</div>
+                                <div class="time">10:00 AM</div>
+                            </td>
+                            <td><span class="status-badge confirmed">Confirmed</span></td>
+                            <td class="text-right">
+                                <button class="action-btn"><span
+                                        class="material-symbols-outlined">more_vert</span></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="doctor-info">
+                                    <img alt="Doctor"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
+                                    <span class="doctor-name">Dr. Michael Chen</span>
+                                </div>
+                            </td>
+                            <td class="specialty-cell">General Dentist</td>
+                            <td class="datetime-cell">
+                                <div class="date">Nov 02, 2023</div>
+                                <div class="time">02:30 PM</div>
+                            </td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td class="text-right">
+                                <button class="action-btn"><span
+                                        class="material-symbols-outlined">more_vert</span></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
     <!-- FOOTER -->
     <footer class="footer-main">
         <div class="container-custom">
