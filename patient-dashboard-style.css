@@ -260,10 +260,10 @@ body::-webkit-scrollbar {
 
 .table-responsive { 
     width: 100%;
-    overflow-x: auto; /* Keeps horizontal scroll for mobile */
-    max-height: 320px; /* Limits height to roughly 4 rows */
-    overflow-y: auto;  /* Enables vertical scrolling */
-    scrollbar-width: thin;
+    overflow-x: auto;
+    max-height: 320px;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 .data-table { width: 100%; border-collapse: collapse; text-align: left;}
 
