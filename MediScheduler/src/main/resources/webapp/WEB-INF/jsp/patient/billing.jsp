@@ -1,0 +1,155 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>My Billing &amp; Payments - MediScheduler</title>
+    <link href="${pageContext.request.contextPath}/css/patient/billing.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" title="Go to top">▲</button>
+
+    <script>
+        //Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 75) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+    <!-- HEADER -->
+    <header class="header-wrapper">
+        <nav class="navbar">
+            <div class="user-profile">
+                <span class="material-symbols-outlined logo-icon">patient_list</span>
+                <span class="logo-text">Patient Billing</span>
+            </div>
+
+            <!-- Hamburger (mobile) -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="dashboard.jsp">Dashboard</a></li>
+                <li><a href="appointment.jsp">Appointments</a></li>
+                <li><a href="history.jsp">History</a></li>
+                <li><a href="billing.jsp">Billing</a></li>
+                <li><a href="feedback.jsp">Feedback</a></li>
+                <li><a href="profile.jsp">Profile</a></li>
+                <!-- <li><a href="#portals">Portals</a></li>
+        <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
+                <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
+                <li><button class="btn-primary">Logout</button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- <div class="page-header">
+            <h1>Billing & Payments</h1>
+            <p>View your history and manage outstanding balances.</p>
+        </div> -->
+
+        <!-- <section class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-label">Total Outstanding</div>
+                <div class="summary-value highlight">$145.00</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Last Payment</div>
+                <div class="summary-value">$80.00</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Next Due Date</div>
+                <div class="summary-value">Oct 25, 2023</div>
+            </div>
+        </section> -->
+
+        <section class="table-container">
+            <div class="table-header">
+                <h2>Invoice History</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Invoice ID</th>
+                        <th>Date</th>
+                        <th>Service</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="invoice-id">#INV-9821</td>
+                        <td>Oct 15, 2023</td>
+                        <td>Routine Check-up</td>
+                        <td>$65.00</td>
+                        <td><a class="action-link" href="#">View Details</a></td>
+                    </tr>
+                    <tr>
+                        <td class="invoice-id">#INV-9744</td>
+                        <td>Oct 12, 2023</td>
+                        <td>Blood Test Panel</td>
+                        <td>$80.00</td>
+                        <td><a class="action-link" href="#">View Details</a></td>
+                    </tr>
+                    <tr>
+                        <td class="invoice-id">#INV-9610</td>
+                        <td>Sep 28, 2023</td>
+                        <td>General Consultation</td>
+                        <td>$65.00</td>
+                        <td><a class="action-link" href="#">View Details</a></td>
+                    </tr>
+                    <tr>
+                        <td class="invoice-id">#INV-9520</td>
+                        <td>Sep 15, 2023</td>
+                        <td>Lab Analysis (Delayed)</td>
+                        <td>$25.00</td>
+                        <td><a class="action-link" href="#">View Details</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        // Mobile hamburger menu
+        const btn = document.getElementById('hamburgerBtn');
+        const nav = document.getElementById('navLinks');
+        btn.addEventListener('click', () => {
+            nav.classList.toggle('open');
+            btn.classList.toggle('active');
+        });
+
+        // Close menu on link click
+        nav.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', () => {
+                nav.classList.remove('open');
+                btn.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
