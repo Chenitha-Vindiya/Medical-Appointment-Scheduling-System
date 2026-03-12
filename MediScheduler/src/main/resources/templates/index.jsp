@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!doctype html>
 <html lang="en">
 
@@ -9,7 +11,7 @@
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="index-style.css" />
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index-style.css" />
 </head>
 
 <body>
@@ -55,8 +57,8 @@
         <li><a href="#features">Features</a></li>
         <!-- <li><a href="#portals">Portals</a></li>
         <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
-        <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li>
-        <li><button class="btn-primary" onclick="window.location.href='login.html?tab=register'">Get Started</button>
+        <li><button class="btn-login" onclick="window.location.href='login.jsp'">Login</button></li>
+        <li><button class="btn-primary" onclick="window.location.href='login.jsp?tab=register'">Get Started</button>
         </li>
       </ul>
     </nav>
@@ -79,10 +81,10 @@
               </p>
             </div>
             <div class="hero-btns">
-              <button class="hero-btn-book" onclick="window.location.href='login.html?type=patient'">
+              <button class="hero-btn-book" onclick="window.location.href='login.jsp?type=patient'">
                 <span class="material-symbols-outlined">patient_list</span>Patient Login
               </button>
-              <button class="hero-btn-book hero-btn-secondary" onclick="window.location.href='login.html?type=doctor'">
+              <button class="hero-btn-book hero-btn-secondary" onclick="window.location.href='login.jsp?type=doctor'">
                 <span class="material-symbols-outlined">stethoscope</span>Doctor Login
               </button>
             </div>
@@ -138,9 +140,9 @@
             <p>Manage your health history, book new appointments, and contact your doctors.</p>
             <div class="portal-btn-group">
               <button class="btn-primary" style="padding:.75rem"
-                onclick="window.location.href='login.html?type=patient'">Login</button>
+                onclick="window.location.href='login.jsp?type=patient'">Login</button>
               <button class="hero-btn-outline" style="padding:.75rem;font-size:.875rem;border-width:1px"
-                onclick="window.location.href='login.html?tab=register&type=patient'">Register</button>
+                onclick="window.location.href='login.jsp?tab=register&type=patient'">Register</button>
             </div>
           </div>
           <div class="portal-card">
@@ -151,9 +153,9 @@
             <p>Access patient schedules, manage clinic availability, and review medical records.</p>
             <div class="portal-btn-group">
               <button class="btn-primary" style="padding:.75rem"
-                onclick="window.location.href='login.html?type=doctor'">Login</button>
+                onclick="window.location.href='login.jsp?type=doctor'">Login</button>
               <button class="hero-btn-outline" style="padding:.75rem;font-size:.875rem;border-width:1px"
-                onclick="window.location.href='login.html?tab=register&type=doctor'">Register</button>
+                onclick="window.location.href='login.jsp?tab=register&type=doctor'">Register</button>
             </div>
           </div>
         </div>
@@ -203,7 +205,7 @@
         </p>
         <div class="hero-btns" style="justify-content:center; flex-wrap:wrap;">
           <button class="hero-btn-outline" style="background:white;color:var(--primary);border:none"
-            onclick="window.location.href='login.html?tab=register'">Start Free Trial</button>
+            onclick="window.location.href='login.jsp?tab=register'">Start Free Trial</button>
           <button class="hero-btn-outline" style="color:white;border-color:rgba(255,255,255,0.3)">Schedule Demo</button>
         </div>
       </div>

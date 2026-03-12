@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>My Billing &amp; Payments - MediScheduler</title>
-    <link href="patient-billing-style.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/css/patient/billing.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -47,12 +49,12 @@
             </button>
 
             <ul class="nav-links" id="navLinks">
-                <li><a href="patient-dashboard.html">Dashboard</a></li>
-                <li><a href="patient-appointment.html">Appointments</a></li>
-                <li><a href="patient-history.html">History</a></li>
-                <li><a href="patient-billing.html">Billing</a></li>
-                <li><a href="patient-feedback.html">Feedback</a></li>
-                <li><a href="patient-profile.html">Profile</a></li>
+                <li><a href="dashboard.jsp">Dashboard</a></li>
+                <li><a href="appointment.jsp">Appointments</a></li>
+                <li><a href="history.jsp">History</a></li>
+                <li><a href="billing.jsp">Billing</a></li>
+                <li><a href="feedback.jsp">Feedback</a></li>
+                <li><a href="profile.jsp">Profile</a></li>
                 <!-- <li><a href="#portals">Portals</a></li>
         <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
                 <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->

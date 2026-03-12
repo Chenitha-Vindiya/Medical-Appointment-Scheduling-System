@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!doctype html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Login & Register | MediScheduler</title>
-    <link rel="stylesheet" href="login-style.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login-style.css" />
 </head>
 
 <body>
@@ -46,8 +48,8 @@
             </button>
 
             <ul class="nav-links" id="navLinks">
-                <!-- <li><a href="index.html">Home</a></li> -->
-                <li><button class="btn-primary" onclick="window.location.href='index.html'">Back to Home</button></li>
+                <!-- <li><a href="index.jsp">Home</a></li> -->
+                <li><button class="btn-primary" onclick="window.location.href='index.jsp'">Back to Home</button></li>
             </ul>
         </nav>
     </header>
