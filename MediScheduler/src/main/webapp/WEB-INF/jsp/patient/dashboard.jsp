@@ -1,0 +1,553 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initiaal-scale=1.0" name="viewport" />
+    <title>Patient Dashboard - MediScheduler</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/patient/dashboard.css">
+</head>
+
+<body>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">patient_list</span>
+            <span class="logo-text">Patient Dashboard</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="dashboard.jsp">Dashboard</a></li>
+            <li><a href="appointment.jsp">Appointments</a></li>
+            <li><a href="history.jsp">History</a></li>
+            <li><a href="billing.jsp">Billing</a></li>
+            <li><a href="feedback.jsp">Feedback</a></li>
+            <li><a href="profile.jsp">Profile</a></li>
+            <!-- <li><a href="#portals">Portals</a></li>
+    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
+            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
+            <li><button class="btn-primary">Logout</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="dashboard-grid">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon icon-blue">
+                <span class="material-symbols-outlined">event</span>
+            </div>
+            <div>
+                <p class="stat-label">Next Appointment</p>
+                <p class="stat-value">Oct 24, 2023</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon icon-green">
+                <span class="material-symbols-outlined">assignment_turned_in</span>
+            </div>
+            <div>
+                <p class="stat-label">Total Visits</p>
+                <p class="stat-value">12 Visits</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon icon-orange">
+                <span class="material-symbols-outlined">pending_actions</span>
+            </div>
+            <div>
+                <p class="stat-label">Pending Invoices</p>
+                <p class="stat-value">2 Invoices</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="appointments-card">
+        <div class="card-header">
+            <h3>Upcoming Appointments</h3>
+            <a href="#" class="link-primary">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Specialty</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEULt1N5NeTmikbvvvIBTwXic6LwKRZnjZY_UGPqg4qZ5dlhhrx8MQvwr9G3tqkSZdhbSgvxtTZinYOAwL1AM-iISy3AOdKBWaxM4w4r5sudSCztGL4FswntX_fo70S1EEcShuqnPg6OW3ZGIorUxNTMn1qbjd-dGkwO33s89SKHOUycbf_qVxosJ2DnQfULtxTPC5QAh-gPXTd1_Xb9n-JAK4stklkcK3mXMZXNwVaDi_ihA3X1eYO4Qz_56iDqKCKSbjnI7h_QdK" />
+                            <span class="doctor-name">Dr. Sarah Wilson</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">Cardiologist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Oct 24, 2023</div>
+                        <div class="time">10:00 AM</div>
+                    </td>
+                    <td><span class="status-badge confirmed">Confirmed</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
+                            <span class="doctor-name">Dr. Michael Chen</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">General Dentist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Nov 02, 2023</div>
+                        <div class="time">02:30 PM</div>
+                    </td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
+                            <span class="doctor-name">Dr. Michael Chen</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">General Dentist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Nov 02, 2023</div>
+                        <div class="time">02:30 PM</div>
+                    </td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
+                            <span class="doctor-name">Dr. Michael Chen</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">General Dentist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Nov 02, 2023</div>
+                        <div class="time">02:30 PM</div>
+                    </td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
+                            <span class="doctor-name">Dr. Michael Chen</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">General Dentist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Nov 02, 2023</div>
+                        <div class="time">02:30 PM</div>
+                    </td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<!-- FOOTER -->
+<footer class="footer-main">
+    <div class="container-custom">
+        <div class="footer-grid">
+            <div>
+                <div class="logo-area footer-logo-block">
+                    <span class="material-symbols-outlined" style="color:var(--primary)">medical_services</span>
+                    <span class="logo-text" style="color:white">MediScheduler</span>
+                </div>
+                <p style="font-size:.875rem">Modernizing healthcare scheduling for a better world. Secure, fast, and
+                    easy.</p>
+            </div>
+            <div>
+                <h5 class="footer-heading">Product</h5>
+                <ul class="footer-list">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="footer-heading">Company</h5>
+                <ul class="footer-list">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="footer-heading">Legal</h5>
+                <ul class="footer-list">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 MediScheduler Systems Inc. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+</script>
+</body>
+
+</html><%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initiaal-scale=1.0" name="viewport" />
+    <title>Patient Dashboard - MediScheduler</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/patient/dashboard.css">
+</head>
+
+<body>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">patient_list</span>
+            <span class="logo-text">Patient Dashboard</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="dashboard.jsp">Dashboard</a></li>
+            <li><a href="appointment.jsp">Appointments</a></li>
+            <li><a href="history.jsp">History</a></li>
+            <li><a href="billing.jsp">Billing</a></li>
+            <li><a href="feedback.jsp">Feedback</a></li>
+            <li><a href="profile.jsp">Profile</a></li>
+            <!-- <li><a href="#portals">Portals</a></li>
+    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
+            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
+            <li><button class="btn-primary">Logout</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="dashboard-grid">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon icon-blue">
+                <span class="material-symbols-outlined">event</span>
+            </div>
+            <div>
+                <p class="stat-label">Next Appointment</p>
+                <p class="stat-value">Oct 24, 2023</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon icon-green">
+                <span class="material-symbols-outlined">assignment_turned_in</span>
+            </div>
+            <div>
+                <p class="stat-label">Total Visits</p>
+                <p class="stat-value">12 Visits</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon icon-orange">
+                <span class="material-symbols-outlined">pending_actions</span>
+            </div>
+            <div>
+                <p class="stat-label">Pending Invoices</p>
+                <p class="stat-value">2 Invoices</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="appointments-card">
+        <div class="card-header">
+            <h3>Upcoming Appointments</h3>
+            <a href="#" class="link-primary">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Specialty</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEULt1N5NeTmikbvvvIBTwXic6LwKRZnjZY_UGPqg4qZ5dlhhrx8MQvwr9G3tqkSZdhbSgvxtTZinYOAwL1AM-iISy3AOdKBWaxM4w4r5sudSCztGL4FswntX_fo70S1EEcShuqnPg6OW3ZGIorUxNTMn1qbjd-dGkwO33s89SKHOUycbf_qVxosJ2DnQfULtxTPC5QAh-gPXTd1_Xb9n-JAK4stklkcK3mXMZXNwVaDi_ihA3X1eYO4Qz_56iDqKCKSbjnI7h_QdK" />
+                            <span class="doctor-name">Dr. Sarah Wilson</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">Cardiologist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Oct 24, 2023</div>
+                        <div class="time">10:00 AM</div>
+                    </td>
+                    <td><span class="status-badge confirmed">Confirmed</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
+                            <span class="doctor-name">Dr. Michael Chen</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">General Dentist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Nov 02, 2023</div>
+                        <div class="time">02:30 PM</div>
+                    </td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
+                            <span class="doctor-name">Dr. Michael Chen</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">General Dentist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Nov 02, 2023</div>
+                        <div class="time">02:30 PM</div>
+                    </td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
+                            <span class="doctor-name">Dr. Michael Chen</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">General Dentist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Nov 02, 2023</div>
+                        <div class="time">02:30 PM</div>
+                    </td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="doctor-info">
+                            <img alt="Doctor"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc" />
+                            <span class="doctor-name">Dr. Michael Chen</span>
+                        </div>
+                    </td>
+                    <td class="specialty-cell">General Dentist</td>
+                    <td class="datetime-cell">
+                        <div class="date">Nov 02, 2023</div>
+                        <div class="time">02:30 PM</div>
+                    </td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td class="text-right">
+                        <button class="action-btn"><span
+                                class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<!-- FOOTER -->
+<footer class="footer-main">
+    <div class="container-custom">
+        <div class="footer-grid">
+            <div>
+                <div class="logo-area footer-logo-block">
+                    <span class="material-symbols-outlined" style="color:var(--primary)">medical_services</span>
+                    <span class="logo-text" style="color:white">MediScheduler</span>
+                </div>
+                <p style="font-size:.875rem">Modernizing healthcare scheduling for a better world. Secure, fast, and
+                    easy.</p>
+            </div>
+            <div>
+                <h5 class="footer-heading">Product</h5>
+                <ul class="footer-list">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="footer-heading">Company</h5>
+                <ul class="footer-list">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="footer-heading">Legal</h5>
+                <ul class="footer-list">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 MediScheduler Systems Inc. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+</script>
+</body>
+
+</html>

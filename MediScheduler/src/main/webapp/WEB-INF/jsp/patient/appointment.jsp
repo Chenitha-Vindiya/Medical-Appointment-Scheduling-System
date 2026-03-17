@@ -1,0 +1,488 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>My Appointments | MediScheduler</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/patient/appointment.css">
+</head>
+
+<body class="page-body">
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">patient_list</span>
+            <span class="logo-text">Patient Appointments</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="dashboard.jsp">Dashboard</a></li>
+            <li><a href="appointment.jsp">Appointments</a></li>
+            <li><a href="history.jsp">History</a></li>
+            <li><a href="billing.jsp">Billing</a></li>
+            <li><a href="feedback.jsp">Feedback</a></li>
+            <li><a href="profile.jsp">Profile</a></li>
+            <!-- <li><a href="#portals">Portals</a></li>
+    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
+            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
+            <li><button class="btn-primary">Logout</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="main-content">
+    <div class="dashboard-container">
+
+        <section class="appointments-section">
+            <!-- <div class="section-header">
+                <h2 class="section-title">
+                    <span class="material-symbols-outlined icon-primary">event_upcoming</span>
+                    Upcoming Appointments
+                </h2>
+            </div> -->
+
+            <div class="cards-grid">
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box blue-bg">
+                                <span class="material-symbols-outlined">stethoscope</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Sarah Johnson</h3>
+                                <p class="specialty-text">Cardiology Checkup</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-success">Confirmed</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Monday, Oct 24, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>10:30 AM - 11:15 AM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <span>Central Medical Plaza, Suite 402</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box purple-bg">
+                                <span class="material-symbols-outlined">dentistry</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Robert Chen</h3>
+                                <p class="specialty-text">Dental Cleaning</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-pending">Pending</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Wednesday, Nov 02, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>02:00 PM - 03:00 PM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">videocam</span>
+                            <span>Virtual Consultation</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box purple-bg">
+                                <span class="material-symbols-outlined">dentistry</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Robert Chen</h3>
+                                <p class="specialty-text">Dental Cleaning</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-pending">Pending</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Wednesday, Nov 02, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>02:00 PM - 03:00 PM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">videocam</span>
+                            <span>Virtual Consultation</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box blue-bg">
+                                <span class="material-symbols-outlined">stethoscope</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Sarah Johnson</h3>
+                                <p class="specialty-text">Cardiology Checkup</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-success">Confirmed</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Monday, Oct 24, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>10:30 AM - 11:15 AM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <span>Central Medical Plaza, Suite 402</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box purple-bg">
+                                <span class="material-symbols-outlined">dentistry</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Robert Chen</h3>
+                                <p class="specialty-text">Dental Cleaning</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-pending">Pending</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Wednesday, Nov 02, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>02:00 PM - 03:00 PM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">videocam</span>
+                            <span>Virtual Consultation</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box blue-bg">
+                                <span class="material-symbols-outlined">stethoscope</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Sarah Johnson</h3>
+                                <p class="specialty-text">Cardiology Checkup</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-success">Confirmed</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Monday, Oct 24, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>10:30 AM - 11:15 AM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <span>Central Medical Plaza, Suite 402</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box blue-bg">
+                                <span class="material-symbols-outlined">stethoscope</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Sarah Johnson</h3>
+                                <p class="specialty-text">Cardiology Checkup</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-success">Confirmed</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Monday, Oct 24, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>10:30 AM - 11:15 AM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <span>Central Medical Plaza, Suite 402</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box purple-bg">
+                                <span class="material-symbols-outlined">dentistry</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Robert Chen</h3>
+                                <p class="specialty-text">Dental Cleaning</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-pending">Pending</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Wednesday, Nov 02, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>02:00 PM - 03:00 PM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">videocam</span>
+                            <span>Virtual Consultation</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box purple-bg">
+                                <span class="material-symbols-outlined">dentistry</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Robert Chen</h3>
+                                <p class="specialty-text">Dental Cleaning</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-pending">Pending</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Wednesday, Nov 02, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>02:00 PM - 03:00 PM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">videocam</span>
+                            <span>Virtual Consultation</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box blue-bg">
+                                <span class="material-symbols-outlined">stethoscope</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Sarah Johnson</h3>
+                                <p class="specialty-text">Cardiology Checkup</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-success">Confirmed</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Monday, Oct 24, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>10:30 AM - 11:15 AM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <span>Central Medical Plaza, Suite 402</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-header">
+                        <div class="doctor-info">
+                            <div class="icon-box purple-bg">
+                                <span class="material-symbols-outlined">dentistry</span>
+                            </div>
+                            <div>
+                                <h3 class="doctor-name">Dr. Robert Chen</h3>
+                                <p class="specialty-text">Dental Cleaning</p>
+                            </div>
+                        </div>
+                        <span class="status-badge badge-pending">Pending</span>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                            <span>Wednesday, Nov 02, 2024</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>02:00 PM - 03:00 PM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="material-symbols-outlined">videocam</span>
+                            <span>Virtual Consultation</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
+                            Reschedule</button>
+                        <button class="btn btn-danger"><span class="material-symbols-outlined">cancel</span>
+                            Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -17,8 +17,7 @@
 <body>
 
   <!-- Scroll to Top Button -->
-  <button id="scrollTopBtn" title="Go to top">▲</button>
-
+  <button id="scrollTopBtn" title="Go to top">T</button>
 
   <script>
     //Scroll to Top Button

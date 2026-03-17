@@ -1,0 +1,195 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Patient Profile Settings - MediScheduler</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/patient/profile.css">
+</head>
+
+<body class="page-body">
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">patient_list</span>
+            <span class="logo-text">Patient Profile</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="dashboard.jsp">Dashboard</a></li>
+            <li><a href="appointment.jsp">Appointments</a></li>
+            <li><a href="history.jsp">History</a></li>
+            <li><a href="billing.jsp">Billing</a></li>
+            <li><a href="feedback.jsp">Feedback</a></li>
+            <li><a href="profile.jsp">Profile</a></li>
+            <!-- <li><a href="#portals">Portals</a></li>
+    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
+            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
+            <li><button class="btn-primary">Logout</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="main-content" data-purpose="main-content">
+    <form class="profile-form">
+        <section class="form-card" data-purpose="personal-info">
+            <h3 class="section-title">Personal Information</h3>
+            <div class="personal-info-container">
+                <div class="profile-pic-section">
+                    <div class="avatar-container group">
+                        <img alt="Profile avatar" class="avatar-image"
+                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqaYjdEhET8sXxvpjdkhjU3R1yxYDgebclNKNg7Agexdt_rfFyTGPHljIYDSNum0SEmQWqOqh0K4WCwbWOwxk8aKRzZefPJMFdyfRBW6nJJ1bIoZWul33WEF4L0Mu9FONBeXJ9j_Nt5weFrMqCrfTFrWtut87WOS2DFw8gyTz5akzleySl8wGKv8_7kvPOQIgXGg0TxlvtIsEKfwXFgiZhSa56tuqHhxkTvkEFNy-Ub0kHhvh5PPIKeRNdA0Q9OJuCeqMkOFUL9rla" />
+                        <div class="avatar-overlay">
+                            <svg class="camera-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"
+                                      stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <button class="change-photo-btn" type="button">Change Photo</button>
+                </div>
+                <div class="fields-grid">
+                    <div class="input-group">
+                        <label class="input-label">Full Name</label>
+                        <input class="form-input" type="text" value="Chenitha Vindiya" />
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Date of Birth</label>
+                        <input class="form-input" type="date" value="2005-06-30" />
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Gender</label>
+                        <select class="form-input">
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                            <option>Prefer not to say</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">National ID</label>
+                        <input class="form-input" type="text" value="200518201810" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-card" data-purpose="contact-details">
+            <h3 class="section-title">Contact Details</h3>
+            <div class="contact-grid">
+                <div class="input-group">
+                    <label class="input-label">Email Address</label>
+                    <input class="form-input" type="email" value="chenithavindiya@gmail.com" />
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <input class="form-input" type="tel" value="+94785464118" />
+                </div>
+                <div class="input-group full-width">
+                    <label class="input-label">Home Address</label>
+                    <textarea class="form-input"
+                              rows="3">219/37, Alsewana, Walpita, Batawala, Padukka</textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-card" data-purpose="emergency-contact">
+            <h3 class="section-title">Emergency Contact</h3>
+            <div class="emergency-grid">
+                <div class="input-group">
+                    <label class="input-label">Contact Name</label>
+                    <input class="form-input" type="text" value="Cheni" />
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Relationship</label>
+                    <input class="form-input" type="text" value="Brother" />
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <input class="form-input" type="tel" value="+94785464118" />
+                </div>
+            </div>
+        </section>
+
+        <section class="form-card" data-purpose="security-settings">
+            <h3 class="section-title">Security</h3>
+            <div class="security-grid">
+                <div class="input-group">
+                    <label class="input-label">New Password</label>
+                    <input class="form-input" placeholder="••••••••" type="password" />
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Confirm Password</label>
+                    <input class="form-input" placeholder="••••••••" type="password" />
+                </div>
+            </div>
+            <p class="security-note">Passwords must be at least 8 characters long and contain at least one number.
+            </p>
+        </section>
+
+        <footer class="form-actions" data-purpose="form-actions">
+            <button class="btn btn-cancel" type="button">Cancel</button>
+            <button class="btn btn-save" type="submit">Save Changes</button>
+        </footer>
+    </form>
+</main>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+</script>
+</body>
+
+</html>

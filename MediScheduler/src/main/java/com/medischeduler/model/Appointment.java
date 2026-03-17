@@ -1,11 +1,11 @@
 package com.medischeduler.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+
 @Table(name = "appointments")
 public class Appointment {
     @Id
