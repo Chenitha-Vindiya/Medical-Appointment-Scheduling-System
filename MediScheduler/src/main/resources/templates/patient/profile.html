@@ -104,8 +104,12 @@
                     </div>
                     <div class="fields-grid">
                         <div class="input-group">
-                            <label class="input-label">Full Name</label>
-                            <input class="form-input" name="fullName" type="text" th:value="${patient.fullName}" />
+                            <label class="input-label">First Name</label>
+                            <input class="form-input" name="firstName" type="text" th:value="${patient.firstName}" />
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Last Name</label>
+                            <input class="form-input" name="lastName" type="text" th:value="${patient.lastName}" />
                         </div>
                         <div class="input-group">
                             <label class="input-label">Date of Birth</label>
@@ -170,10 +174,15 @@
                         <label class="input-label">New Password</label>
                         <input class="form-input" name="password" type="password" />
                     </div>
+                    <div class="input-group">
+                        <label class="input-label">Confirm Password</label>
+                        <input class="form-input" name="password" type="password" />
+                    </div>
                 </div>
             </section>
 
             <footer class="form-actions">
+
                 <button class="btn btn-cancel" type="button">Cancel</button>
                 <button class="btn btn-save" type="submit">Save Changes</button>
             </footer>
