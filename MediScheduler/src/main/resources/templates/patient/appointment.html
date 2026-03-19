@@ -1,13 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>My Appointments | MediScheduler</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/patient/appointment.css">
+    <link rel="stylesheet" th:href="@{/css/patient/appointment.css}">
 </head>
 
 <body class="page-body">
@@ -49,12 +47,12 @@
             </button>
 
             <ul class="nav-links" id="navLinks">
-                <li><a href="dashboard.jsp">Dashboard</a></li>
-                <li><a href="appointment.jsp">Appointments</a></li>
-                <li><a href="history.jsp">History</a></li>
-                <li><a href="billing.jsp">Billing</a></li>
-                <li><a href="feedback.jsp">Feedback</a></li>
-                <li><a href="profile.jsp">Profile</a></li>
+                <li><a th:href="@{/dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/appointment}">Appointments</a></li>
+                <li><a th:href="@{/history}">History</a></li>
+                <li><a th:href="@{/billing}">Billing</a></li>
+                <li><a th:href="@{/feedback}">Feedback</a></li>
+                <li><a th:href="@{/profile}">Profile</a></li>
                 <!-- <li><a href="#portals">Portals</a></li>
         <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
                 <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
