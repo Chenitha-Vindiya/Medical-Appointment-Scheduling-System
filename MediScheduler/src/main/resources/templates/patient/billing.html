@@ -47,17 +47,16 @@
             </button>
 
             <ul class="nav-links" id="navLinks">
-                <li><a th:href="@{/dashboard}">Dashboard</a></li>
-                <li><a th:href="@{/appointment}">Appointments</a></li>
-                <li><a th:href="@{/history}">History</a></li>
-                <li><a th:href="@{/billing}">Billing</a></li>
-                <li><a th:href="@{/feedback}">Feedback</a></li>
-                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/patient/appointment}">Appointments</a></li>
+                <li><a th:href="@{/patient/history}">History</a></li>
+                <li><a th:href="@{/patient/billing}">Billing</a></li>
+                <li><a th:href="@{/patient/feedback}">Feedback</a></li>
+                <li><a th:href="@{/patient/profile}">Profile</a></li>
                 <!-- <li><a href="#portals">Portals</a></li>
         <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
                 <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
-                <li><button class="btn-primary">Logout</button>
-                </li>
+                <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
             </ul>
         </nav>
     </header>

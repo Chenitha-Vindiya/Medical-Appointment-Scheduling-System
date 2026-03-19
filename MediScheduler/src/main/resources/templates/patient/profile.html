@@ -6,6 +6,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Patient Profile Settings - MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/profile.css}">
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+
 </head>
 
 <body class="page-body">
@@ -47,23 +50,38 @@
             </button>
 
             <ul class="nav-links" id="navLinks">
-                <li><a th:href="@{/dashboard}">Dashboard</a></li>
-                <li><a th:href="@{/appointment}">Appointments</a></li>
-                <li><a th:href="@{/history}">History</a></li>
-                <li><a th:href="@{/billing}">Billing</a></li>
-                <li><a th:href="@{/feedback}">Feedback</a></li>
-                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/patient/appointment}">Appointments</a></li>
+                <li><a th:href="@{/patient/history}">History</a></li>
+                <li><a th:href="@{/patient/billing}">Billing</a></li>
+                <li><a th:href="@{/patient/feedback}">Feedback</a></li>
+                <li><a th:href="@{/patient/profile}">Profile</a></li>
                 <!-- <li><a href="#portals">Portals</a></li>
         <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
                 <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
-                <li><button class="btn-primary">Logout</button>
-                </li>
+                <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
             </ul>
         </nav>
     </header>
 
+    <div id="successToast" th:if="${param.updated}" class="toast-notification">
+        <div class="toast-content">
+            <span class="material-symbols-outlined toast-icon">check_circle</span>
+            <div class="toast-message">
+                <span class="toast-title">Success</span>
+                <p>Your profile has been updated successfully.</p>
+            </div>
+        </div>
+        <button class="toast-close" onclick="closeToast()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <div class="toast-progress"></div>
+    </div>
+
     <main class="main-content" data-purpose="main-content">
-        <form class="profile-form">
+        <form class="profile-form" th:action="@{/patient/update-profile}" method="post">
+            <input type="hidden" name="id" th:value="${patient.id}" />
+
             <section class="form-card" data-purpose="personal-info">
                 <h3 class="section-title">Personal Information</h3>
                 <div class="personal-info-container">
@@ -87,24 +105,23 @@
                     <div class="fields-grid">
                         <div class="input-group">
                             <label class="input-label">Full Name</label>
-                            <input class="form-input" type="text" value="Chenitha Vindiya" />
+                            <input class="form-input" name="fullName" type="text" th:value="${patient.fullName}" />
                         </div>
                         <div class="input-group">
                             <label class="input-label">Date of Birth</label>
-                            <input class="form-input" type="date" value="2005-06-30" />
+                            <input class="form-input" name="dateOfBirth" type="date" th:value="${patient.dateOfBirth}" />
                         </div>
                         <div class="input-group">
                             <label class="input-label">Gender</label>
-                            <select class="form-input">
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Other</option>
-                                <option>Prefer not to say</option>
+                            <select class="form-input" name="gender">
+                                <option th:selected="${patient.gender == 'Male'}">Male</option>
+                                <option th:selected="${patient.gender == 'Female'}">Female</option>
+                                <option th:selected="${patient.gender == 'Other'}">Other</option>
                             </select>
                         </div>
                         <div class="input-group">
                             <label class="input-label">National ID</label>
-                            <input class="form-input" type="text" value="200518201810" />
+                            <input class="form-input" name="nationalId" type="text" th:value="${patient.nationalId}" />
                         </div>
                     </div>
                 </div>
@@ -115,16 +132,15 @@
                 <div class="contact-grid">
                     <div class="input-group">
                         <label class="input-label">Email Address</label>
-                        <input class="form-input" type="email" value="chenithavindiya@gmail.com" />
+                        <input class="form-input" name="email" type="email" th:value="${patient.email}" />
                     </div>
                     <div class="input-group">
                         <label class="input-label">Phone Number</label>
-                        <input class="form-input" type="tel" value="+94785464118" />
+                        <input class="form-input" name="phoneNumber" type="tel" th:value="${patient.phoneNumber}" />
                     </div>
                     <div class="input-group full-width">
                         <label class="input-label">Home Address</label>
-                        <textarea class="form-input"
-                            rows="3">219/37, Alsewana, Walpita, Batawala, Padukka</textarea>
+                        <textarea class="form-input" name="homeAddress" rows="3" th:text="${patient.homeAddress}"></textarea>
                     </div>
                 </div>
             </section>
@@ -134,15 +150,15 @@
                 <div class="emergency-grid">
                     <div class="input-group">
                         <label class="input-label">Contact Name</label>
-                        <input class="form-input" type="text" value="Cheni" />
+                        <input class="form-input" name="emergencyContactName" type="text" th:value="${patient.emergencyContactName}" />
                     </div>
                     <div class="input-group">
                         <label class="input-label">Relationship</label>
-                        <input class="form-input" type="text" value="Brother" />
+                        <input class="form-input" name="relationship" type="text" th:value="${patient.relationship}" />
                     </div>
                     <div class="input-group">
                         <label class="input-label">Phone Number</label>
-                        <input class="form-input" type="tel" value="+94785464118" />
+                        <input class="form-input" name="emergencyPhone" type="tel" th:value="${patient.emergencyPhone}" />
                     </div>
                 </div>
             </section>
@@ -152,18 +168,12 @@
                 <div class="security-grid">
                     <div class="input-group">
                         <label class="input-label">New Password</label>
-                        <input class="form-input" placeholder="••••••••" type="password" />
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Confirm Password</label>
-                        <input class="form-input" placeholder="••••••••" type="password" />
+                        <input class="form-input" name="password" type="password" />
                     </div>
                 </div>
-                <p class="security-note">Passwords must be at least 8 characters long and contain at least one number.
-                </p>
             </section>
 
-            <footer class="form-actions" data-purpose="form-actions">
+            <footer class="form-actions">
                 <button class="btn btn-cancel" type="button">Cancel</button>
                 <button class="btn btn-save" type="submit">Save Changes</button>
             </footer>
@@ -186,6 +196,21 @@
                 btn.classList.remove('active');
             });
         });
+
+        function closeToast() {
+            const toast = document.getElementById('successToast');
+            if (toast) {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            }
+        }
+
+        // Auto-close after 4 seconds
+        if (document.getElementById('successToast')) {
+            setTimeout(closeToast, 4000);
+        }
     </script>
 </body>
 
