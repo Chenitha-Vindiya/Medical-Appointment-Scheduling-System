@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Medical Records | MediScheduler</title>
+    <link rel="stylesheet" th:href="@{/css/patient/history.css}">
+</head>
+
+<body>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" title="Go to top">▲</button>
+
+    <script>
+        //Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 75) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+    <!-- HEADER -->
+    <header class="header-wrapper">
+        <nav class="navbar">
+            <div class="user-profile">
+                <span class="material-symbols-outlined logo-icon">patient_list</span>
+                <span class="logo-text">Patient Dashboard</span>
+            </div>
+
+            <!-- Hamburger (mobile) -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a th:href="@{/dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/appointment}">Appointments</a></li>
+                <li><a th:href="@{/history}">History</a></li>
+                <li><a th:href="@{/billing}">Billing</a></li>
+                <li><a th:href="@{/feedback}">Feedback</a></li>
+                <li><a th:href="@{/profile}">Profile</a></li>
+                <!-- <li><a href="#portals">Portals</a></li>
+        <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
+                <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
+                <li><button class="btn-primary">Logout</button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="filter-bar">
+            <div class="search-wrapper">
+                <span class="material-symbols-outlined">search</span>
+                <input placeholder="Search by doctor name, record type or facility..." type="text" />
+            </div>
+            <!-- <div class="filter-actions">
+                <select>
+                    <option>All Types</option>
+                    <option>Consultations</option>
+                    <option>Lab Results</option>
+                    <option>Prescriptions</option>
+                </select>
+                <select>
+                    <option>Last 6 Months</option>
+                    <option>Last Year</option>
+                </select> -->
+            </div>
+        </section>
+
+        <section class="records-container">
+            <div class="timeline-line"></div>
+
+            <div class="record-entry">
+                <div class="timeline-dot"></div>
+                <div class="record-card">
+                    <div class="record-header">
+                        <div class="record-icon-box blue-bg">
+                            <span class="material-symbols-outlined">stethoscope</span>
+                        </div>
+                        <div>
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                <span class="record-type-badge badge-consultation">Consultation</span>
+                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-9022</span>
+                            </div>
+                            <h3 class="record-title">General Checkup - Annual Review</h3>
+                            <p class="record-subtitle">Dr. Sarah Mitchell • City General Hospital</p>
+                            <div class="record-meta">
+                                <span><span class="material-symbols-outlined"
+                                        style="font-size:14px">calendar_today</span> Oct 12, 2023</span>
+                                <span><span class="material-symbols-outlined" style="font-size:14px">schedule</span>
+                                    10:30 AM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        <button class="btn-action btn-view">
+                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="record-entry">
+                <div class="timeline-dot"></div>
+                <div class="record-card">
+                    <div class="record-header">
+                        <div class="record-icon-box amber-bg">
+                            <span class="material-symbols-outlined">biotech</span>
+                        </div>
+                        <div>
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                <span class="record-type-badge badge-lab">Lab Results</span>
+                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-8841</span>
+                            </div>
+                            <h3 class="record-title">Full Blood Count (CBC)</h3>
+                            <p class="record-subtitle">Pathology Lab Dept • Healthcare Central</p>
+                            <div class="record-meta">
+                                <span><span class="material-symbols-outlined"
+                                        style="font-size:14px">calendar_today</span> Sep 28, 2023</span>
+                                <span style="color: #166534; font-weight:700;"><span class="material-symbols-outlined"
+                                        style="font-size:14px">check_circle</span> All Normal</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        <button class="btn-action btn-view">
+                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="record-entry">
+                <div class="timeline-dot"></div>
+                <div class="record-card">
+                    <div class="record-header">
+                        <div class="record-icon-box slate-bg">
+                            <span class="material-symbols-outlined">radiology</span>
+                        </div>
+                        <div>
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                <span class="record-type-badge badge-radiology">Radiology</span>
+                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-7129</span>
+                            </div>
+                            <h3 class="record-title">Left Ankle X-Ray</h3>
+                            <p class="record-subtitle">Radiology Dept • Healthcare Central</p>
+                            <div class="record-meta">
+                                <span><span class="material-symbols-outlined"
+                                        style="font-size:14px">calendar_today</span> May 03, 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        <button class="btn-action btn-view">
+                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="record-entry">
+                <div class="timeline-dot"></div>
+                <div class="record-card">
+                    <div class="record-header">
+                        <div class="record-icon-box amber-bg">
+                            <span class="material-symbols-outlined">biotech</span>
+                        </div>
+                        <div>
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                <span class="record-type-badge badge-lab">Lab Results</span>
+                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-8841</span>
+                            </div>
+                            <h3 class="record-title">Full Blood Count (CBC)</h3>
+                            <p class="record-subtitle">Pathology Lab Dept • Healthcare Central</p>
+                            <div class="record-meta">
+                                <span><span class="material-symbols-outlined"
+                                        style="font-size:14px">calendar_today</span> Sep 28, 2023</span>
+                                <span style="color: #166534; font-weight:700;"><span class="material-symbols-outlined"
+                                        style="font-size:14px">check_circle</span> All Normal</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        <button class="btn-action btn-view">
+                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="record-entry record-entry-older">
+                <div class="timeline-dot"></div>
+                <div class="record-card">
+                    <div class="record-header">
+                        <div class="record-icon-box slate-bg">
+                            <span class="material-symbols-outlined">radiology</span>
+                        </div>
+                        <div>
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                <span class="record-type-badge badge-radiology">Radiology</span>
+                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-7129</span>
+                            </div>
+                            <h3 class="record-title">Left Ankle X-Ray</h3>
+                            <p class="record-subtitle">Radiology Dept • Healthcare Central</p>
+                            <div class="record-meta">
+                                <span><span class="material-symbols-outlined"
+                                        style="font-size:14px">calendar_today</span> May 03, 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        <button class="btn-action btn-view">
+                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <button class="load-more-btn">
+            Show Older Records
+            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+        </button>
+    </main>
+
+</body>
+
+</html>

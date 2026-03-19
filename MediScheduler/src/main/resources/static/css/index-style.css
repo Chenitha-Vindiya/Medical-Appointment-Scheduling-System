@@ -15,13 +15,14 @@
   --slate-800: #1e293b;
   --slate-900: #0f172a;
   --green-500: #22c55e;
-  --nav-bg: #ffffffcc;
+  --nav-bg: rgba(255, 255, 255, 0.95);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 body {

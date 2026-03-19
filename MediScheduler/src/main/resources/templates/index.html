@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="utf-8" />
@@ -9,7 +9,7 @@
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="index-style.css" />
+  <link rel="stylesheet" th:href="@{/css/index-style.css}">
 </head>
 
 <body>
@@ -52,12 +52,9 @@
       </button>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="#features">Features</a></li>
-        <!-- <li><a href="#portals">Portals</a></li>
-        <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
-        <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li>
-        <li><button class="btn-primary" onclick="window.location.href='login.html?tab=register'">Get Started</button>
-        </li>
+        <li><a th:href="@{/dashboard}">Dashboard</a></li>
+        <li><button class="btn-login" onclick="window.location.href='/login'">Login</button></li>
+        <li><button class="btn-primary" onclick="window.location.href='/login?tab=register'">Get Started</button></li>
       </ul>
     </nav>
   </header>
@@ -79,13 +76,14 @@
               </p>
             </div>
             <div class="hero-btns">
-              <button class="hero-btn-book" onclick="window.location.href='login.html?type=patient'">
+              <button class="hero-btn-book" onclick="window.location.href='/login?type=patient'">
                 <span class="material-symbols-outlined">patient_list</span>Patient Login
               </button>
-              <button class="hero-btn-book hero-btn-secondary" onclick="window.location.href='login.html?type=doctor'">
+              <button class="hero-btn-book hero-btn-secondary" onclick="window.location.href='/login?type=doctor'">
                 <span class="material-symbols-outlined">stethoscope</span>Doctor Login
               </button>
             </div>
+
             <!-- <div class="hero-stats-row">
               <div class="hero-stat-item">
                 <span class="material-symbols-outlined hero-stat-icon">verified</span>
