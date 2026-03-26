@@ -55,6 +55,9 @@
       </button>
 
       <ul class="nav-links" id="navLinks">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+          <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+        </button>
         <li><a th:href="@{/dashboard}">Dashboard</a></li>
         <li><button class="btn-login" onclick="window.location.href='/login'">Login</button></li>
         <li><button class="btn-primary" onclick="window.location.href='/login?tab=register'">Get Started</button></li>
@@ -267,6 +270,30 @@
         nav.classList.remove('open');
         btn.classList.remove('active');
       });
+    });
+
+    //mode icon toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const body = document.body;
+
+    // Check for saved user preference
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark-mode');
+      themeIcon.innerText = 'dark_mode';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+
+      // Toggle the icon text and save preference
+      if (body.classList.contains('dark-mode')) {
+        themeIcon.innerText = 'dark_mode';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeIcon.innerText = 'light_mode';
+        localStorage.setItem('theme', 'light');
+      }
     });
   </script>
 </body>

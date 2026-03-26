@@ -13,8 +13,6 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     // Personal Info
     private String firstName;
     private String lastName;

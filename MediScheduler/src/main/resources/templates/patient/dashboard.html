@@ -51,6 +51,9 @@
 
         <ul class="nav-links" id="navLinks">
             <ul class="nav-links">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
                 <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
                 <li><a th:href="@{/patient/appointment}">Appointments</a></li>
                 <li><a th:href="@{/patient/history}">History</a></li>
@@ -271,6 +274,30 @@
             nav.classList.remove('open');
             btn.classList.remove('active');
         });
+    });
+
+    //mode icon toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const body = document.body;
+
+    // Check for saved user preference
+    if (localStorage.getItem('theme') === 'dark') {
+        body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+
+        // Toggle the icon text and save preference
+        if (body.classList.contains('dark-mode')) {
+            themeIcon.innerText = 'dark_mode';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            themeIcon.innerText = 'light_mode';
+            localStorage.setItem('theme', 'light');
+        }
     });
 </script>
 </body>

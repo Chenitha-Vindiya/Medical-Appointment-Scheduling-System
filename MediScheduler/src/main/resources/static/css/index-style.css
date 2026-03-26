@@ -480,7 +480,7 @@ body::-webkit-scrollbar { display: none; }
    FOOTER
    ===================== */
 .footer-main {
-  background: var(--slate-900);
+  background: var(--slate-700);
   color: var(--slate-400);
   padding: 3rem 0;
 }
@@ -591,4 +591,89 @@ body::-webkit-scrollbar { display: none; }
   .hero-stats-row { flex-direction: column; gap: 0.6rem; }
 
   .footer-grid { grid-template-columns: 1fr; }
+}
+
+/* =====================
+   DARK MODE OVERRIDES
+   ===================== */
+
+/* This triggers when .dark-mode is added to <body> */
+body.dark-mode {
+  --bg-light: #0f172a;        /* Deep slate background */
+  --nav-bg: rgba(15, 23, 42, 0.9);
+  --slate-900: #f8fafc;       /* Invert main text */
+  --slate-600: #cbd5e1;       /* Invert secondary text */
+  --slate-500: #94a3b8;
+  --slate-200: #334155;       /* Darker borders */
+  --slate-100: #1e293b;       /* Darker card accents */
+  --white: #1e293b;           /* Card backgrounds */
+}
+
+/* Specific component tweaks for dark mode */
+body.dark-mode .portal-card,
+body.dark-mode .feature-card {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .hero-floating-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid #475569;
+}
+
+body.dark-mode .hero-btn-outline {
+  color: var(--slate-900);
+}
+
+body.dark-mode .logo-text {
+  color: #ffffff;
+}
+
+/* Dark Mode Toggle Button Styling */
+.theme-toggle {
+  background: var(--slate-100);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--slate-200);
+}
+
+/* Dark Mode Toggle Button Styling */
+.theme-toggle {
+  background: var(--slate-100);
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle:hover {
+  background: var(--slate-200);
+  transform: scale(1.05);
+}
+
+.theme-toggle .material-symbols-outlined {
+  font-size: 1.4rem;
+  transition: transform 0.3s ease;
+}
+
+/* Rotate icon slightly on click */
+.theme-toggle:active .material-symbols-outlined {
+  transform: rotate(45deg);
 }

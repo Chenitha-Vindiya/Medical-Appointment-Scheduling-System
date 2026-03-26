@@ -16,6 +16,8 @@
   --slate-700: #334155;
   --slate-800: #1e293b;
   --slate-900: #0f172a;
+  --footer-bg: #0f172a;
+  --footer-border-bottom: #1e293b;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -314,7 +316,7 @@ body::-webkit-scrollbar {
    FOOTER
    ===================== */
 .footer-main {
-  background: var(--slate-900);
+  background: var(--footer-bg);
   color: var(--slate-400);
   padding: 4rem 2rem 2rem 2rem;
 }
@@ -326,7 +328,7 @@ body::-webkit-scrollbar {
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 3rem;
   padding-bottom: 3rem;
-  border-bottom: 1px solid var(--slate-800);
+  border-bottom: 1px solid var(--footer-border-bottom);
 }
 
 .footer-logo-block { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
@@ -421,4 +423,120 @@ body::-webkit-scrollbar {
   .card-header { padding: 1.25rem; }
   .data-table th, .data-table td { padding: 1rem; }
   .specialty-cell { display: none; } /* Hide specialty to fit mobile */
+}
+
+/* =====================
+   DARK MODE OVERRIDES
+   ===================== */
+
+body.dark-mode {
+  --bg-light: #0f172a;        /* Deep slate background */
+  --white: #1e293b;           /* Card & Navbar backgrounds */
+  --slate-900: #f8fafc;       /* Main text */
+  --slate-800: #f1f5f9;
+  --slate-700: #e2e8f0;
+  --slate-600: #cbd5e1;       /* Secondary text */
+  --slate-500: #94a3b8;       /* Muted text */
+  --slate-200: #334155;       /* Dark borders */
+  --slate-100: #1e293b;       /* Subtle accents */
+  --slate-50: #0f172a;        /* Table headers/dividers */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* Specific Dashboard Tweaks */
+body.dark-mode .navbar {
+  background-color: rgba(30, 41, 59, 0.9);
+  border: 1px solid var(--slate-200);
+}
+
+body.dark-mode .stat-card,
+body.dark-mode .appointments-card {
+  background-color: var(--white);
+  border-color: var(--slate-200);
+}
+
+body.dark-mode .stat-value,
+body.dark-mode .doctor-name,
+body.dark-mode .datetime-cell .date {
+  color: var(--slate-900);
+}
+
+body.dark-mode .data-table thead {
+  background-color: #1a2436; /* Distinct header for table */
+}
+
+body.dark-mode .data-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+body.dark-mode .logo-text {
+  color: #ffffff;
+}
+
+body.dark-mode .nav-links a {
+  color: var(--slate-600);
+}
+
+body.dark-mode .nav-links a:hover {
+  color: var(--primary);
+}
+
+/* Icon box adjustments for visibility */
+body.dark-mode .icon-blue { background-color: rgba(43, 173, 238, 0.15); }
+body.dark-mode .icon-green { background-color: rgba(34, 197, 94, 0.15); }
+body.dark-mode .icon-orange { background-color: rgba(249, 115, 22, 0.15); }
+
+/* Scroll to top button contrast */
+body.dark-mode #scrollTopBtn {
+  color: #101c22;
+}
+
+/* Dark Mode Toggle Button Styling */
+.theme-toggle {
+  background: var(--slate-100);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--slate-200);
+}
+
+/* Dark Mode Toggle Button Styling */
+.theme-toggle {
+  background: var(--slate-100);
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle:hover {
+  background: var(--slate-200);
+  transform: scale(1.05);
+}
+
+.theme-toggle .material-symbols-outlined {
+  font-size: 1.4rem;
+  transition: transform 0.3s ease;
+}
+
+/* Rotate icon slightly on click */
+.theme-toggle:active .material-symbols-outlined {
+  transform: rotate(45deg);
 }
