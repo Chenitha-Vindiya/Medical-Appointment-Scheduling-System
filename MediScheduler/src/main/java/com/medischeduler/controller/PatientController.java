@@ -29,13 +29,9 @@ public class PatientController {
                 model.addAttribute("registerError", "Email is already in use.");
                 return "login"; // Returns to login page to show error
             }
-
             // Save the new patient to medischeduler_db in XAMPP
             patientRepository.save(patient);
-
-            // Redirect to login with a success message in the URL
-            return "redirect:/login?success=true";
-
+            return "redirect:/login?success=true"; // Redirect to login with a success message in the URL
         } catch (Exception e) {
             model.addAttribute("registerError", "An error occurred during registration.");
             return "login";
@@ -70,5 +66,11 @@ public class PatientController {
         // JPA .save() will update the existing record based on the ID
         patientRepository.save(patient);
         return "redirect:/patient/profile?updated=true";
+    }
+
+    @PostMapping("/delete-patient")
+    public String deletePatient(@ModelAttribute Patient patient) {
+        patientRepository.delete(patient);
+        return "redirect:/patient/profile?logout=true";
     }
 }
