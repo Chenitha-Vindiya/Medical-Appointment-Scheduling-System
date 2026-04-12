@@ -74,11 +74,25 @@ public class PatientController {
     }
 
     @PostMapping("/update-profile")
-    public String updateProfile(@ModelAttribute Patient patient, HttpSession session) {
-        // Ensure you aren't overwriting the password with a blank value if the user didn't change it
-        // Or re-hash if they did. For now, simple save:
-        patientRepository.save(patient);
-        session.setAttribute("loggedInPatient", patient); // Update session with new data
+    public String updateProfile(@ModelAttribute Patient updatedPatient, HttpSession session) {
+        // 1. Get the existing patient from the database using the ID
+        Patient existingPatient = patientRepository.findById(updatedPatient.getId()).orElse(null);
+
+        if (existingPatient != null) {
+            // 2. Update only the fields that should change
+            existingPatient.setFirstName(updatedPatient.getFirstName());
+            existingPatient.setLastName(updatedPatient.getLastName());
+            existingPatient.setPhoneNumber(updatedPatient.getPhoneNumber());
+            existingPatient.setHomeAddress(updatedPatient.getHomeAddress());
+            // Do NOT update the password here unless you have a specific password-change form
+
+            // 3. Save the merged object
+            patientRepository.save(existingPatient);
+
+            // 4. Refresh the session so the UI shows the new data
+            session.setAttribute("loggedInPatient", existingPatient);
+        }
+
         return "redirect:/patient/profile?updated=true";
     }
 }
