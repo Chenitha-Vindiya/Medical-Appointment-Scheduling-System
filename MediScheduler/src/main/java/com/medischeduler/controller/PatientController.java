@@ -67,10 +67,4 @@ public class PatientController {
         patientRepository.save(patient);
         return "redirect:/patient/profile?updated=true";
     }
-
-    @PostMapping("/delete-patient")
-    public String deletePatient(@ModelAttribute Patient patient) {
-        patientRepository.delete(patient);
-        return "redirect:/patient/profile?logout=true";
-    }
 }

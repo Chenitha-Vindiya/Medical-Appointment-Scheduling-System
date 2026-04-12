@@ -1,12 +1,20 @@
 package com.medischeduler.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "patients")
-@Data // Use Lombok to generate Getters/Setters automatically
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Patient {
 
     @Id
@@ -14,18 +22,29 @@ public class Patient {
     private Long id;
 
     // Personal Info
+    @NotBlank(message = "First name is required")
     private String firstName;
+
+    @NotBlank(message = "Last name is required")
     private String lastName;
-    private String fullName;
+
+    @NotNull(message = "Date of birth is required")
     private LocalDate dateOfBirth;
+
     private String gender;
 
-    @Column(unique = true)
+    @NotBlank(message = "National ID is required")
+    @Column(unique = true, nullable = false)
     private String nationalId;
 
     // Contact Details
-    @Column(unique = true)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Please provide a valid email address")
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @NotBlank(message = "Phone number is required")
+    @Size(min = 10, max = 10, message = "Phone number should be 10 digits")
     private String phoneNumber;
 
     @Column(columnDefinition = "TEXT")
@@ -36,7 +55,10 @@ public class Patient {
     private String relationship;
     private String emergencyPhone;
 
-    // Security (Typically mapped to a User entity in larger apps)
+    // Security
+    @NotBlank(message = "Password is required")
+    @Column(nullable = false)
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
 
 }
