@@ -1,6 +1,7 @@
 package com.medischeduler.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.medischeduler.model.Patient;
 import com.medischeduler.repository.PatientRepository;
@@ -18,20 +19,22 @@ public class PatientController {
     @Autowired
     private PatientRepository patientRepository;
 
-    /**
-     * Handles the "Create My Account" form from login.html
-     */
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/register")
     public String registerPatient(@ModelAttribute Patient patient, Model model) {
         try {
-            // Check if email already exists to prevent duplicates
             if (patientRepository.findByEmail(patient.getEmail()) != null) {
                 model.addAttribute("registerError", "Email is already in use.");
-                return "login"; // Returns to login page to show error
+                return "login";
             }
-            // Save the new patient to medischeduler_db in XAMPP
+
+            // Secure the password before saving
+            patient.setPassword(passwordEncoder.encode(patient.getPassword()));
             patientRepository.save(patient);
-            return "redirect:/login?success=true"; // Redirect to login with a success message in the URL
+
+            return "redirect:/login?success=true";
         } catch (Exception e) {
             model.addAttribute("registerError", "An error occurred during registration.");
             return "login";
@@ -43,28 +46,39 @@ public class PatientController {
                                @RequestParam String password,
                                HttpSession session,
                                Model model) {
-        // 1. Find the patient by email (the 'username' field in your form)
-        Patient patient = patientRepository.findByEmail(username);
 
-        // 2. Check if patient exists and password matches
-        if (patient != null && patient.getPassword().equals(password)) {
-            // 3. Store the patient object in the session to keep them logged in
+        // Use the new repository method to only find active users
+        Patient patient = patientRepository.findByEmailAndActiveTrue(username);
+
+        if (patient != null && passwordEncoder.matches(password, patient.getPassword())) {
             session.setAttribute("loggedInPatient", patient);
             return "redirect:/patient/dashboard";
         } else {
-            // 4. If login fails, send an error message back to the login page
-            model.addAttribute("signinError", "Invalid email or password.");
+            // More specific error message for user experience
+            model.addAttribute("signinError", "Invalid credentials or account is deactivated.");
             return "login";
         }
     }
 
-    /**
-     * Handles "Save Changes" from profile.html
-     */
+    @PostMapping("/deactivate-account")
+    public String deactivateAccount(HttpSession session) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient != null) {
+            patient.setActive(false); // Set status to false
+            patientRepository.save(patient); // Update in DB
+            session.invalidate(); // Log them out
+        }
+
+        return "redirect:/login?deactivated=true";
+    }
+
     @PostMapping("/update-profile")
-    public String updateProfile(@ModelAttribute Patient patient) {
-        // JPA .save() will update the existing record based on the ID
+    public String updateProfile(@ModelAttribute Patient patient, HttpSession session) {
+        // Ensure you aren't overwriting the password with a blank value if the user didn't change it
+        // Or re-hash if they did. For now, simple save:
         patientRepository.save(patient);
+        session.setAttribute("loggedInPatient", patient); // Update session with new data
         return "redirect:/patient/profile?updated=true";
     }
 }

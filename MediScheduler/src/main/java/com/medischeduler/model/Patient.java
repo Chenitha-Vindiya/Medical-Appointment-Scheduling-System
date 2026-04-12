@@ -44,7 +44,7 @@ public class Patient {
     private String email;
 
     @NotBlank(message = "Phone number is required")
-    @Size(min = 10, max = 10, message = "Phone number should be 10 digits")
+    @Size(min = 10, max = 15, message = "Phone number should be between 10 and 15 digits")
     private String phoneNumber;
 
     @Column(columnDefinition = "TEXT")
@@ -57,10 +57,10 @@ public class Patient {
 
     // Security
     @NotBlank(message = "Password is required")
-    @Column(nullable = false)
     @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
 
-    private String text;
+    @Column(nullable = false)
+    private boolean active = true;
 
 }

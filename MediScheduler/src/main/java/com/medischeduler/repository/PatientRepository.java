@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    // Spring will automatically create a query to find patient by email
+    // Find by email AND ensure the account is active
+    Patient findByEmailAndActiveTrue(String email);
+
     Patient findByEmail(String email);
 }
