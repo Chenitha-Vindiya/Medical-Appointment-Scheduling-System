@@ -4,6 +4,9 @@
 
 /* 1. Variables & Base Reset */
 :root {
+    --primary-container: #0ea5e9;
+    --primary2: #006591;
+    --on-primary: #ffffff;
     --primary: #2badee;
     --secondary: #1e293b;
     --slate-50: #f8fafc;
@@ -22,6 +25,9 @@
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    --transition: all 0.2s ease;
+    --radius-full: 9999px;
 }
 
 * {
@@ -42,6 +48,28 @@ body {
 body::-webkit-scrollbar {
   display: none;
 }
+
+/* Buttons */
+.btn-secondary {
+    background: linear-gradient(135deg, var(--primary2) 0%, var(--primary-container) 100%);
+    color: var(--on-primary);
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+    margin-bottom: 20px;
+}
+
+.btn-secondary:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 15px -3px rgba(0, 101, 145, 0.2);
+}
+
 
 /* 2. Floating Header */
 .floating-header {

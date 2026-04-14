@@ -10,6 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" th:href="@{/css/index-style.css}">
+  <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+
 </head>
 
 <body>
@@ -52,6 +55,9 @@
       </button>
 
       <ul class="nav-links" id="navLinks">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+          <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+        </button>
         <li><a th:href="@{/dashboard}">Dashboard</a></li>
         <li><button class="btn-login" onclick="window.location.href='/login'">Login</button></li>
         <li><button class="btn-primary" onclick="window.location.href='/login?tab=register'">Get Started</button></li>
@@ -264,6 +270,30 @@
         nav.classList.remove('open');
         btn.classList.remove('active');
       });
+    });
+
+    //mode icon toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const body = document.body;
+
+    // Check for saved user preference
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark-mode');
+      themeIcon.innerText = 'dark_mode';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+
+      // Toggle the icon text and save preference
+      if (body.classList.contains('dark-mode')) {
+        themeIcon.innerText = 'dark_mode';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeIcon.innerText = 'light_mode';
+        localStorage.setItem('theme', 'light');
+      }
     });
   </script>
 </body>

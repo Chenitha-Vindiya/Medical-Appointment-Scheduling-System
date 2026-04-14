@@ -1,5 +1,9 @@
 package com.medischeduler.controller;
 
+
+import org.springframework.ui.Model;
+import com.medischeduler.model.Patient;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -16,35 +20,85 @@ public class ViewController {
         return "login"; // This points to src/main/resources/templates/login.html
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        // Points to src/main/resources/templates/patient/dashboard.html
+    @GetMapping("/patient/dashboard")
+    public String showDashboard(HttpSession session, Model model) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
+        model.addAttribute("patientName", patient.getFirstName());
         return "patient/dashboard";
     }
 
-    @GetMapping("/appointment")
-    public String appointment() {
+    @GetMapping("/patient/appointment")
+    public String appointment(HttpSession session) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
         return "patient/appointment";
     }
 
-    @GetMapping("/billing")
-    public String billing() {
-        return "patient/billing";
+    @GetMapping("/patient/payment")
+    public String payment(HttpSession session) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
+        return "patient/payment";
     }
 
-    @GetMapping("/history")
-    public String history() {
+    @GetMapping("/patient/history")
+    public String history(HttpSession session) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
         return "patient/history";
     }
 
-    @GetMapping("/feedback")
-    public String feedback() {
-        // Looks for src/main/resources/templates/patient/feedback.html
+    @GetMapping("/patient/feedback")
+    public String feedback(HttpSession session) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
         return "patient/feedback";
     }
 
-    @GetMapping("/profile")
-    public String profile() {
+    @GetMapping("/patient/profile")
+    public String showProfile(HttpSession session, Model model) {
+        // 1. Get the patient from the session
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        // 2. Safety Check: If session is null, redirect to login instead of crashing
+        if (patient == null) {
+            return "redirect:/login";
+        }
+
+        // 3. Pass the patient object to the HTML
+        model.addAttribute("patient", patient);
         return "patient/profile";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // Clears all session data
+        return "redirect:/login?logout=true";
+    }
+
+    @GetMapping("/patient/deactivated")
+    public String showDeactivatedPage() {
+        return "deactivated";
     }
 }

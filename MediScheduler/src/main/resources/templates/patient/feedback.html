@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Feedback & Inquiries - MediScheduler</title>
+    <link rel="stylesheet" th:href="@{/css/patient/feedback.css}">
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+
+</head>
+<body>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">patient_list</span>
+            <span class="logo-text">Feedback</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
+            <li><a th:href="@{/patient/history}">History</a></li>
+            <li><a th:href="@{/patient/payment}">Payment</a></li>
+            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
+            <li><a th:href="@{/patient/profile}">Profile</a></li>
+            <!-- <li><a href="#portals">Portals</a></li>
+    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
+            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
+            <li>
+                <button class="btn-secondary" onclick="window.location.href='/logout'">Logout</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="app-container">
+    <!-- Main Content Area -->
+    <main class="main-canvas">
+        <div class="page-header">
+            <!-- Modal Trigger -->
+            <label class="btn-primary" for="modal-toggle">
+                <span class="material-symbols-outlined">edit_note</span> Submit New Feedback
+            </label>
+        </div>
+        <div class="feedback-container">
+            <div class="card">
+<!--                <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 24px;">Previous Feedbacks</h2>-->
+                <table class="feedback-list">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Subject</th>
+                        <th>Doctor</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="feedback-row">
+                        <td>Oct 12, 2023</td>
+                        <td style="font-weight: 600;">Post-op Consultation Clarity</td>
+                        <td>Dr. Michael Aris</td>
+                        <td><span class="chip chip-resolved">Resolved</span></td>
+                        <td><a class="view-link" href="#">View Details</a></td>
+                    </tr>
+                    <tr class="feedback-row">
+                        <td>Oct 05, 2023</td>
+                        <td style="font-weight: 600;">Wait Time Inquiry</td>
+                        <td>General Staff</td>
+                        <td><span class="chip chip-resolved">Resolved</span></td>
+                        <td><a class="view-link" href="#">View Details</a></td>
+                    </tr>
+                    <tr class="feedback-row">
+                        <td>Nov 18, 2023</td>
+                        <td style="font-weight: 600;">Prescription Refill Process</td>
+                        <td>Dr. Elena Kostic</td>
+                        <td><span class="chip chip-pending">Pending</span></td>
+                        <td><a class="view-link" href="#">View Details</a></td>
+                    </tr>
+                    <tr class="feedback-row">
+                        <td>Oct 12, 2023</td>
+                        <td style="font-weight: 600;">Post-op Consultation Clarity</td>
+                        <td>Dr. Michael Aris</td>
+                        <td><span class="chip chip-resolved">Resolved</span></td>
+                        <td><a class="view-link" href="#">View Details</a></td>
+                    </tr>
+                    <tr class="feedback-row">
+                        <td>Nov 18, 2023</td>
+                        <td style="font-weight: 600;">Prescription Refill Process</td>
+                        <td>Dr. Elena Kostic</td>
+                        <td><span class="chip chip-pending">Pending</span></td>
+                        <td><a class="view-link" href="#">View Details</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal Implementation -->
+<input id="modal-toggle" type="checkbox"/>
+<div class="modal-overlay">
+    <div class="modal-content">
+        <label class="modal-close" for="modal-toggle">
+            <span class="material-symbols-outlined">close</span>
+        </label>
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em;">New Feedback</h2>
+        <p style="color: var(--on-surface-variant); font-size: 0.875rem; margin-bottom: 32px;">Please provide details
+            about your recent visit or inquiry.</p>
+        <form action="#" method="POST" onsubmit="return false;">
+            <div class="form-group">
+                <label class="form-label">Subject</label>
+                <input class="form-control" placeholder="e.g., Appointment Scheduling Issue" type="text"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Select Doctor</label>
+                <select class="form-control">
+                    <option value="">Choose a Physician (Optional)</option>
+                    <option value="1">Dr. Michael Aris</option>
+                    <option value="2">Dr. Elena Kostic</option>
+                    <option value="3">Dr. James Wilson</option>
+                    <option value="0">General Inquiry</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" placeholder="Tell us more about your experience..."></textarea>
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 40px;">
+                <label class="btn-primary" for="modal-toggle"
+                       style="flex: 1; justify-content: center; background: none; border: 1px solid var(--outline-variant); color: var(--on-surface);">
+                    Cancel
+                </label>
+                <button class="btn-primary" style="flex: 2; justify-content: center;" type="submit">
+                    Submit Feedback
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+</script>
+</body>
+</html>

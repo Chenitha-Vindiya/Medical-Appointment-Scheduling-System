@@ -6,6 +6,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Medical Records | MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/history.css}">
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+
 </head>
 
 <body>
@@ -47,17 +50,16 @@
             </button>
 
             <ul class="nav-links" id="navLinks">
-                <li><a th:href="@{/dashboard}">Dashboard</a></li>
-                <li><a th:href="@{/appointment}">Appointments</a></li>
-                <li><a th:href="@{/history}">History</a></li>
-                <li><a th:href="@{/billing}">Billing</a></li>
-                <li><a th:href="@{/feedback}">Feedback</a></li>
-                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/patient/appointment}">Appointments</a></li>
+                <li><a th:href="@{/patient/history}">History</a></li>
+                <li><a th:href="@{/patient/payment}">Payment</a></li>
+                <li><a th:href="@{/patient/feedback}">Feedback</a></li>
+                <li><a th:href="@{/patient/profile}">Profile</a></li>
                 <!-- <li><a href="#portals">Portals</a></li>
         <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
                 <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
-                <li><button class="btn-primary">Logout</button>
-                </li>
+                <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
             </ul>
         </nav>
     </header>

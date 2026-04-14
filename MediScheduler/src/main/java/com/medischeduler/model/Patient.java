@@ -1,46 +1,66 @@
 package com.medischeduler.model;
 
 import jakarta.persistence.*;
-import java.util.List;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "patients")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Personal Info
+    @NotBlank(message = "First name is required")
     private String firstName;
+
+    @NotBlank(message = "Last name is required")
     private String lastName;
 
+    @NotNull(message = "Date of birth is required")
+    private LocalDate dateOfBirth;
+
+    private String gender;
+
+    @NotBlank(message = "National ID is required")
+    @Column(unique = true, nullable = false)
+    private String nationalId;
+
+    // Contact Details
+    @NotBlank(message = "Email is required")
+    @Email(message = "Please provide a valid email address")
     @Column(unique = true, nullable = false)
     private String email;
 
-    private String password;
+    @NotBlank(message = "Phone number is required")
+    @Size(min = 10, max = 10, message = "Phone number should be 10 digits")
     private String phoneNumber;
-    private String bloodGroup;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Appointment> appointments;
+    @Column(columnDefinition = "TEXT")
+    private String homeAddress;
 
-    // Getters
-    public Long getId() { return id; }
-    public String getFirstName() { return firstName; }
-    public String getLastName() { return lastName; }
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
-    public String getPhoneNumber() { return phoneNumber; }
-    public String getBloodGroup() { return bloodGroup; }
-    public List<Appointment> getAppointments() { return appointments; }
+    // Emergency Contact
+    private String emergencyContactName;
+    private String relationship;
+    private String emergencyPhone;
 
-    // Setters
-    public void setId(Long id) { this.id = id; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-    public void setEmail(String email) { this.email = email; }
-    public void setPassword(String password) { this.password = password; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-    public void setBloodGroup(String bloodGroup) { this.bloodGroup = bloodGroup; }
-    public void setAppointments(List<Appointment> appointments) { this.appointments = appointments; }
+    // Security
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
+    private String password;
+
+    @Column(nullable = false)
+    private boolean active = true;
+
 }
