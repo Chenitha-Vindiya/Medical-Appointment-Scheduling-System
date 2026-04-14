@@ -13,7 +13,8 @@ CRUD Operations:
 - **Create:** Register a new patient and save data to patients.txt.
 - **Read:** Search for patients by ID or National Identity number.
 - **Update:** Edit contact information or emergency contact details.
-- 
+
+  
 - **Deactivate:** Deactivate a patient profile if they are no longer active.
 
 ```
