@@ -13,14 +13,15 @@ CRUD Operations:
 - **Create:** Register a new patient and save data to patients.txt.
 - **Read:** Search for patients by ID or National Identity number.
 - **Update:** Edit contact information or emergency contact details.
-- **Delete:** Remove a patient profile if they are no longer active.
+- 
+- **Deactivate:** Deactivate a patient profile if they are no longer active.
 
 ```
 OOP Concept: Encapsulation using a Patient class with private attributes and public
 getters/setters.
 ```
 ```
-UI Pages: Patient Registration, Search Patient, Patient Profile.
+UI Pages: Patient Registration, Patient Login, Patient Dashboard, Patient Profile.
 ```
 ## Component 02 : Doctor & Staff Management
 
