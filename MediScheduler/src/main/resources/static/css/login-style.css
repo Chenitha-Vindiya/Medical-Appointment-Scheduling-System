@@ -368,6 +368,20 @@ body::-webkit-scrollbar { display: none; }
   margin-bottom: 0.45rem;
 }
 
+/* 1. Hide the browser's default calendar icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+
 .field-input-container { position: relative; }
 
 .field-icon {
