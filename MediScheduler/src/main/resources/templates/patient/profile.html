@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Patient Profile Settings - MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/profile.css}">
     <link rel="icon" type="image/svg+xml"
@@ -13,214 +13,371 @@
 
 <body class="page-body">
 
-    <!-- Scroll to Top Button -->
-    <button id="scrollTopBtn" title="Go to top">▲</button>
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
 
-    <script>
-        //Scroll to Top Button
-        const scrollTopBtn = document.getElementById('scrollTopBtn');
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 75) {
-                scrollTopBtn.classList.add('show');
-            } else {
-                scrollTopBtn.classList.remove('show');
-            }
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
         });
+    });
+</script>
 
-        scrollTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    </script>
-
-    <!-- HEADER -->
-    <header class="header-wrapper">
-        <nav class="navbar">
-            <div class="user-profile">
-                <span class="material-symbols-outlined logo-icon">patient_list</span>
-                <span class="logo-text">Patient Profile</span>
-            </div>
-
-            <!-- Hamburger (mobile) -->
-            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-                <span></span><span></span><span></span>
-            </button>
-
-            <ul class="nav-links" id="navLinks">
-                <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
-                <li><a th:href="@{/patient/appointment}">Appointments</a></li>
-                <li><a th:href="@{/patient/history}">History</a></li>
-                <li><a th:href="@{/patient/billing}">Billing</a></li>
-                <li><a th:href="@{/patient/feedback}">Feedback</a></li>
-                <li><a th:href="@{/patient/profile}">Profile</a></li>
-                <!-- <li><a href="#portals">Portals</a></li>
-        <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
-                <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
-                <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div id="successToast" th:if="${param.updated}" class="toast-notification">
-        <div class="toast-content">
-            <span class="material-symbols-outlined toast-icon">check_circle</span>
-            <div class="toast-message">
-                <span class="toast-title">Success</span>
-                <p>Your profile has been updated successfully.</p>
-            </div>
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">patient_list</span>
+            <span class="logo-text">Patient Profile</span>
         </div>
-        <button class="toast-close" onclick="closeToast()">
-            <span class="material-symbols-outlined">close</span>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
         </button>
-        <div class="toast-progress"></div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
+            <li><a th:href="@{/patient/history}">History</a></li>
+            <li><a th:href="@{/patient/payment}">Payment</a></li>
+            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
+            <li><a th:href="@{/patient/profile}">Profile</a></li>
+            <!-- <li><a href="#portals">Portals</a></li>
+    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
+            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
+            <li>
+                <button class="btn-primary" onclick="window.location.href='/logout'">Logout</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div id="successToast" th:if="${param.updated}" class="toast-notification">
+    <div class="toast-content">
+        <span class="material-symbols-outlined toast-icon">check_circle</span>
+        <div class="toast-message">
+            <span class="toast-title">Success</span>
+            <p>Your profile has been updated successfully.</p>
+        </div>
     </div>
+    <button class="toast-close" onclick="closeToast()">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="toast-progress"></div>
+</div>
 
-    <main class="main-content" data-purpose="main-content">
-        <form class="profile-form" th:action="@{/patient/update-profile}" method="post">
-            <input type="hidden" name="id" th:value="${patient.id}" />
+<div id="passwordSuccessToast" th:if="${passwordSuccess}" class="toast-notification">
+    <div class="toast-content">
+        <span class="material-symbols-outlined toast-icon">check_circle</span>
+        <div class="toast-message">
+            <span class="toast-title">Security Updated</span>
+            <p th:text="${passwordSuccess}"></p>
+        </div>
+    </div>
+    <button class="toast-close" onclick="closeToast()">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="toast-progress"></div>
+</div>
 
-            <section class="form-card" data-purpose="personal-info">
-                <h3 class="section-title">Personal Information</h3>
-                <div class="personal-info-container">
-                    <div class="profile-pic-section">
-                        <div class="avatar-container group">
-                            <img alt="Profile avatar" class="avatar-image"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqaYjdEhET8sXxvpjdkhjU3R1yxYDgebclNKNg7Agexdt_rfFyTGPHljIYDSNum0SEmQWqOqh0K4WCwbWOwxk8aKRzZefPJMFdyfRBW6nJJ1bIoZWul33WEF4L0Mu9FONBeXJ9j_Nt5weFrMqCrfTFrWtut87WOS2DFw8gyTz5akzleySl8wGKv8_7kvPOQIgXGg0TxlvtIsEKfwXFgiZhSa56tuqHhxkTvkEFNy-Ub0kHhvh5PPIKeRNdA0Q9OJuCeqMkOFUL9rla" />
-                            <div class="avatar-overlay">
-                                <svg class="camera-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
+<div id="passwordErrorToast" th:if="${passwordError}" class="toast-notification error-toast">
+    <div class="toast-content">
+        <span class="material-symbols-outlined toast-icon" style="color: #ef4444;">error</span>
+        <div class="toast-message">
+            <span class="toast-title" style="color: #991b1b;">Security Error</span>
+            <p th:text="${passwordError}"></p>
+        </div>
+    </div>
+    <button class="toast-close" onclick="closeToast()">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="toast-progress" style="background: #ef4444;"></div>
+</div>
+
+<main class="main-content" data-purpose="main-content">
+    <form class="profile-form" th:action="@{/patient/update-profile}" method="post">
+        <input type="hidden" name="id" th:value="${patient.id}"/>
+
+        <section class="form-card" data-purpose="personal-info">
+            <h3 class="section-title">Personal Information</h3>
+            <div class="personal-info-container">
+                <div class="profile-pic-section">
+                    <div class="avatar-container group">
+                        <img alt="Profile avatar" class="avatar-image"
+                             src="https://i.ibb.co/jvQk7FTH/5f278dff-551a-474c-9743-de92e6aeb202.jpg"/>
+                        <div class="avatar-overlay">
+                            <svg class="camera-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path
                                         d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
                                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                    <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"
-                                        stroke-linejoin="round" stroke-width="2"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <button class="change-photo-btn" type="button">Change Photo</button>
-                    </div>
-                    <div class="fields-grid">
-                        <div class="input-group">
-                            <label class="input-label">First Name</label>
-                            <input class="form-input" name="firstName" type="text" th:value="${patient.firstName}" />
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Last Name</label>
-                            <input class="form-input" name="lastName" type="text" th:value="${patient.lastName}" />
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Date of Birth</label>
-                            <input class="form-input" name="dateOfBirth" type="date" th:value="${patient.dateOfBirth}" />
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Gender</label>
-                            <select class="form-input" name="gender">
-                                <option th:selected="${patient.gender == 'Male'}">Male</option>
-                                <option th:selected="${patient.gender == 'Female'}">Female</option>
-                                <option th:selected="${patient.gender == 'Other'}">Other</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">National ID</label>
-                            <input class="form-input" name="nationalId" type="text" th:value="${patient.nationalId}" />
+                                <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"
+                                      stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <section class="form-card" data-purpose="contact-details">
-                <h3 class="section-title">Contact Details</h3>
-                <div class="contact-grid">
+                <div class="fields-grid">
                     <div class="input-group">
-                        <label class="input-label">Email Address</label>
-                        <input class="form-input" name="email" type="email" th:value="${patient.email}" />
+                        <label class="input-label">First Name</label>
+                        <input class="form-input" name="firstName" type="text" th:value="${patient.firstName}"/>
                     </div>
                     <div class="input-group">
-                        <label class="input-label">Phone Number</label>
-                        <input class="form-input" name="phoneNumber" type="tel" th:value="${patient.phoneNumber}" />
+                        <label class="input-label">Last Name</label>
+                        <input class="form-input" name="lastName" type="text" th:value="${patient.lastName}"/>
                     </div>
-                    <div class="input-group full-width">
-                        <label class="input-label">Home Address</label>
-                        <textarea class="form-input" name="homeAddress" rows="3" th:text="${patient.homeAddress}"></textarea>
+                    <div class="input-group">
+                        <label class="input-label">Date of Birth</label>
+                        <input class="form-input" name="dateOfBirth" type="date" th:value="${patient.dateOfBirth}"/>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Gender</label>
+                        <select class="form-input" name="gender">
+                            <option th:selected="${patient.gender == 'Male'}">Male</option>
+                            <option th:selected="${patient.gender == 'Female'}">Female</option>
+                            <option th:selected="${patient.gender == 'Other'}">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">National ID</label>
+                        <input class="form-input" name="nationalId" type="text" th:value="${patient.nationalId}"/>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="form-card" data-purpose="emergency-contact">
-                <h3 class="section-title">Emergency Contact</h3>
-                <div class="emergency-grid">
-                    <div class="input-group">
-                        <label class="input-label">Contact Name</label>
-                        <input class="form-input" name="emergencyContactName" type="text" th:value="${patient.emergencyContactName}" />
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Relationship</label>
-                        <input class="form-input" name="relationship" type="text" th:value="${patient.relationship}" />
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Phone Number</label>
-                        <input class="form-input" name="emergencyPhone" type="tel" th:value="${patient.emergencyPhone}" />
-                    </div>
+        <section class="form-card" data-purpose="contact-details">
+            <h3 class="section-title">Contact Details</h3>
+            <div class="contact-grid">
+                <div class="input-group">
+                    <label class="input-label">Email Address</label>
+                    <input class="form-input" name="email" type="email" th:value="${patient.email}"/>
                 </div>
-            </section>
-
-            <section class="form-card" data-purpose="security-settings">
-                <h3 class="section-title">Security</h3>
-                <div class="security-grid">
-                    <div class="input-group">
-                        <label class="input-label">New Password</label>
-                        <input class="form-input" name="password" type="password" />
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Confirm Password</label>
-                        <input class="form-input" name="password" type="password" />
-                    </div>
+                <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <input class="form-input" name="phoneNumber" type="tel" th:value="${patient.phoneNumber}"/>
                 </div>
-            </section>
+                <div class="input-group full-width">
+                    <label class="input-label">Home Address</label>
+                    <textarea class="form-input" name="homeAddress" rows="3"
+                              th:text="${patient.homeAddress}"></textarea>
+                </div>
+            </div>
+        </section>
 
-            <footer class="form-actions">
+        <section class="form-card" data-purpose="emergency-contact">
+            <h3 class="section-title">Emergency Contact</h3>
+            <div class="emergency-grid">
+                <div class="input-group">
+                    <label class="input-label">Contact Name</label>
+                    <input class="form-input" name="emergencyContactName" type="text"
+                           th:value="${patient.emergencyContactName}"/>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Relationship</label>
+                    <input class="form-input" name="relationship" type="text" th:value="${patient.relationship}"/>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <input class="form-input" name="emergencyPhone" type="tel" th:value="${patient.emergencyPhone}"/>
+                </div>
+            </div>
+        </section>
 
-                <button class="btn btn-cancel" type="button">Cancel</button>
+        <footer class="form-actions" id="formActions">
+            <div id="viewModeActions">
+                <button class="btn btn-edit" type="button" id="editProfileBtn">
+                    <span class="material-symbols-outlined">edit</span>
+                    Edit Profile
+                </button>
+            </div>
+
+            <div id="editModeActions" style="display: none;">
+                <button class="btn btn-cancel" type="button" id="discardChangesBtn">Discard</button>
                 <button class="btn btn-save" type="submit">Save Changes</button>
-            </footer>
-        </form>
-    </main>
+            </div>
+        </footer>
+    </form>
 
-        <script>
-        // Mobile hamburger menu
+    <section class="form-card danger-zone">
+        <h3 class="section-title danger-title">Danger Zone</h3>
+        <p class="section-desc">Manage your account security and sensitive actions.</p>
+        <div class="danger-actions">
+            <div class="danger-item">
+                <div class="danger-info">
+                    <strong>Change Password</strong>
+                    <p>Update your login credentials regularly for better security.</p>
+                </div>
+                <button type="button" class="btn btn-outline-danger" onclick="openPasswordModal()">Change Password
+                </button>
+            </div>
+            <div class="danger-item">
+                <div class="danger-info">
+                    <strong>Deactivate Account</strong>
+                    <p>This will temporarily disable your account and log you out.</p>
+                </div>
+                <form th:action="@{/patient/deactivate-account}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to deactivate your account? You will be logged out.')">
+                        Deactivate
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!--            <section class="form-card" data-purpose="security-settings">-->
+    <!--                <h3 class="section-title">Security</h3>-->
+    <!--                <div class="security-grid">-->
+    <!--                    <div class="input-group">-->
+    <!--                        <label class="input-label">New Password</label>-->
+    <!--                        <input class="form-input" name="password" type="password" />-->
+    <!--                    </div>-->
+    <!--                    <div class="input-group">-->
+    <!--                        <label class="input-label">Confirm Password</label>-->
+    <!--                        <input class="form-input" name="password" type="password" />-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </section>-->
+</main>
+
+<div id="passwordModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="material-symbols-outlined modal-close" onclick="closePasswordModal()">close</span>
+        <h3 class="modal-title">Change Password</h3>
+        <p class="modal-desc">Please verify your identity before changing your password.</p>
+
+        <form th:action="@{/patient/change-password}" method="post">
+            <div class="input-group">
+                <label class="input-label">Current Password</label>
+                <input type="password" name="currentPassword" required class="form-input"
+                       placeholder="Enter current password">
+            </div>
+            <div class="input-group">
+                <label class="input-label">New Password</label>
+                <input type="password" name="newPassword" required class="form-input" minlength="8"
+                       placeholder="At least 8 characters">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Confirm New Password</label>
+                <input type="password" name="confirmPassword" required class="form-input"
+                       placeholder="Repeat new password">
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closePasswordModal()" class="btn-cancel">Cancel</button>
+                <button type="submit" class="btn btn-danger">Update Password</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        /* --- 1. MOBILE MENU LOGIC --- */
         const btn = document.getElementById('hamburgerBtn');
         const nav = document.getElementById('navLinks');
-        btn.addEventListener('click', () => {
-            nav.classList.toggle('open');
-            btn.classList.toggle('active');
-        });
 
-        // Close menu on link click
-        nav.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('click', () => {
-                nav.classList.remove('open');
-                btn.classList.remove('active');
+        if (btn && nav) {
+            btn.addEventListener('click', () => {
+                nav.classList.toggle('open');
+                btn.classList.toggle('active');
             });
-        });
 
-        function closeToast() {
-            const toast = document.getElementById('successToast');
-            if (toast) {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                toast.style.transition = 'all 0.5s ease';
-                setTimeout(() => toast.remove(), 500);
-            }
+            // Close menu on link click
+            nav.querySelectorAll('a, button').forEach(el => {
+                el.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    btn.classList.remove('active');
+                });
+            });
         }
 
-        // Auto-close after 4 seconds
+        /* --- 2. EDIT/VIEW MODE TOGGLE LOGIC --- */
+        const form = document.getElementById('profileForm');
+        // Select all inputs except the hidden ID and the password modal fields
+        const inputs = document.querySelectorAll('.profile-form .form-input, .profile-form select, .profile-form textarea');
+        const editBtn = document.getElementById('editProfileBtn');
+        const discardBtn = document.getElementById('discardChangesBtn');
+        const viewActions = document.getElementById('viewModeActions');
+        const editActions = document.getElementById('editModeActions');
+
+        // Function to lock the form (View Mode)
+        const setViewMode = () => {
+            inputs.forEach(input => {
+                input.setAttribute('readonly', true);
+                if (input.tagName === 'SELECT') input.disabled = true;
+            });
+            if (viewActions) viewActions.style.display = 'block';
+            if (editActions) editActions.style.display = 'none';
+        };
+
+        // Function to unlock the form (Edit Mode)
+        const setEditMode = () => {
+            inputs.forEach(input => {
+                input.removeAttribute('readonly');
+                if (input.tagName === 'SELECT') input.disabled = false;
+            });
+            if (viewActions) viewActions.style.display = 'none';
+            if (editActions) editActions.style.display = 'flex';
+        };
+
+        // Initialize in View Mode
+        setViewMode();
+
+        if (editBtn) editBtn.addEventListener('click', setEditMode);
+
+        if (discardBtn) {
+            discardBtn.addEventListener('click', () => {
+                if (confirm("Are you sure? Unsaved changes will be lost.")) {
+                    location.reload(); // Reverts to database values
+                }
+            });
+        }
+
+        /* --- 3. TOAST NOTIFICATION LOGIC --- */
+        // Auto-close toast after 4 seconds
         if (document.getElementById('successToast')) {
             setTimeout(closeToast, 4000);
         }
-    </script>
+    });
+
+    /* --- GLOBAL FUNCTIONS (Accessible by HTML onclick) --- */
+
+    function closeToast() {
+        const toast = document.getElementById('successToast');
+        if (toast) {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100%)';
+            toast.style.transition = 'all 0.5s ease';
+            setTimeout(() => toast.remove(), 500);
+        }
+    }
+
+    // Password Modal Toggle
+    function openPasswordModal() {
+        const modal = document.getElementById('passwordModal');
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function closePasswordModal() {
+        const modal = document.getElementById('passwordModal');
+        if (modal) modal.style.display = 'none';
+    }
+</script>
 </body>
 
 </html>

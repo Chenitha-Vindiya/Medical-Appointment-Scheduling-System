@@ -416,15 +416,6 @@ body::-webkit-scrollbar { display: none; }
 .password-toggle:hover { color: var(--primary); }
 .password-toggle .material-symbols-outlined { font-size: 1.1rem; }
 
-.forgot-link {
-  font-size: 0.75rem;
-  color: var(--primary);
-  font-weight: 700;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.forgot-link:hover { opacity: 0.75; }
-
 .remember-me {
   display: flex;
   align-items: center;

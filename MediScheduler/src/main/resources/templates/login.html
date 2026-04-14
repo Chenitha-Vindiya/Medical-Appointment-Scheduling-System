@@ -69,6 +69,7 @@
 
 <main class="page-container">
     <div class="auth-card">
+        <div th:if="${registerError}" class="alert alert-danger" th:text="${registerError}"></div>
 
         <!-- LEFT: Branding -->
         <section class="branding-section">
@@ -127,7 +128,6 @@
                     <div class="field-group">
                         <div style="display:flex;justify-content:space-between;align-items:center;">
                             <label class="field-label" for="signinPassword">Password</label>
-                            <a href="#" class="forgot-link" onclick="showForgotPassword(event)">Forgot password?</a>
                         </div>
                         <div class="field-input-container">
                             <span class="material-symbols-outlined field-icon">lock</span>
@@ -144,8 +144,6 @@
 <!--                        <input type="checkbox" id="remember" name="remember-me"/>-->
 <!--                        <label for="remember">Remember this device</label>-->
 <!--                    </div>-->
-
-                    <div id="signinError" class="form-error" style="display:none;"></div>
 
                     <button class="btn-primary-action" type="submit" id="signinBtn">
                         <span>Sign In to Dashboard</span>
@@ -200,6 +198,30 @@
                     </div>
 
                     <div class="field-group">
+                        <label class="field-label" for="phoneNumber">Phone Number</label>
+                        <div class="field-input-container">
+                            <span class="material-symbols-outlined field-icon">call</span>
+                            <input id="phoneNumber" name="phoneNumber" class="text-input" placeholder="e.g. 0771234567" type="text" required/>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="nationalId">National ID (NIC)</label>
+                        <div class="field-input-container">
+                            <span class="material-symbols-outlined field-icon">badge</span>
+                            <input id="nationalId" name="nationalId" class="text-input" placeholder="e.g. 199912345678" type="text" required/>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="dateOfBirth">Date of Birth</label>
+                        <div class="field-input-container">
+                            <span class="material-symbols-outlined field-icon">calendar_today</span>
+                            <input id="dateOfBirth" name="dateOfBirth" class="text-input" type="date" required/>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
                         <label class="field-label" for="regPassword">Password</label>
                         <div class="field-input-container">
                             <span class="material-symbols-outlined field-icon">lock</span>
@@ -218,10 +240,16 @@
                             <span class="material-symbols-outlined field-icon">lock</span>
                             <input id="confirmPassword" class="text-input" placeholder="Re-enter password"
                                    type="password" required/>
+                            <button type="button" class="password-toggle"
+                                    onclick="togglePassword('confirmPassword', this)">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
                         </div>
                     </div>
 
-                    <div id="registerError" class="form-error" style="display:none;"></div>
+                    <div id="registerError" class="form-error"
+                         th:if="${registerError}" th:text="${registerError}"
+                         style="display:block;"></div>
 
                     <button class="btn-primary-action" type="submit" id="registerBtn">
                         <span>Create My Account</span>
@@ -386,16 +414,6 @@
         showSuccess(`Connecting to ${provider}...`, 'Redirecting you to complete authentication.');
     }
 
-    // ---- Forgot password ----
-    function showForgotPassword(e) {
-        e.preventDefault();
-        const email = document.getElementById('signinEmail').value.trim();
-        if (!email) {
-            showError('signinError', 'Please enter your email address first.');
-            return;
-        }
-        showSuccess('Reset Email Sent!', `A password reset link has been sent to ${email}.`);
-    }
 
     // ---- Helpers ----
     function showError(id, msg) {

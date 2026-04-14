@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Deactivated - MediScheduler</title>
+    <link rel="stylesheet" th:href="@{/css/login-style.css}">
+    <style>
+        .deactivated-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            text-align: center;
+            padding: 20px;
+        }
+        .warning-icon { font-size: 64px; color: #ef4444; margin-bottom: 20px; }
+        .info-card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 500px; }
+    </style>
+</head>
+<body class="page-body">
+<div class="deactivated-container">
+    <div class="info-card">
+        <span class="material-symbols-outlined warning-icon">report</span>
+        <h1>Account Deactivated</h1>
+        <p>Your MediScheduler account is currently inactive. You can no longer access your medical records or book new appointments.</p>
+        <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
+        <p style="font-size: 0.9rem; color: #64748b;">To reactivate your account, please contact our support team at <strong>support@medischeduler.lk</strong> or visit the hospital reception.</p>
+        <br>
+        <a th:href="@{/login}" class="btn-primary" style="text-decoration: none;">Back to Login</a>
+    </div>
+</div>
+</body>
+</html>

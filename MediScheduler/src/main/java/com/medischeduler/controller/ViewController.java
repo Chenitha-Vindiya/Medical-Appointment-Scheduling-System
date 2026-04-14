@@ -33,23 +33,46 @@ public class ViewController {
     }
 
     @GetMapping("/patient/appointment")
-    public String appointment() {
+    public String appointment(HttpSession session) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
         return "patient/appointment";
     }
 
-    @GetMapping("/patient/billing")
-    public String billing() {
-        return "patient/billing";
+    @GetMapping("/patient/payment")
+    public String payment(HttpSession session) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
+        return "patient/payment";
     }
 
     @GetMapping("/patient/history")
-    public String history() {
+    public String history(HttpSession session) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
         return "patient/history";
     }
 
     @GetMapping("/patient/feedback")
-    public String feedback() {
-        // Looks for src/main/resources/templates/patient/feedback.html
+    public String feedback(HttpSession session) {
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+
+        if (patient == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
         return "patient/feedback";
     }
 
@@ -72,5 +95,10 @@ public class ViewController {
     public String logout(HttpSession session) {
         session.invalidate(); // Clears all session data
         return "redirect:/login?logout=true";
+    }
+
+    @GetMapping("/patient/deactivated")
+    public String showDeactivatedPage() {
+        return "deactivated";
     }
 }

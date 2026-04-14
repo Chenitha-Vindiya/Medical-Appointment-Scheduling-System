@@ -200,19 +200,6 @@ body::-webkit-scrollbar {
     color: white;
 }
 
-.change-photo-btn {
-    background: none;
-    border: none;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--brand-blue);
-    cursor: pointer;
-}
-
-.change-photo-btn:hover {
-    text-decoration: underline;
-}
-
 /* Security Note */
 .security-note {
     margin-top: 1rem;
@@ -221,40 +208,141 @@ body::-webkit-scrollbar {
     font-style: italic;
 }
 
-/* Footer Actions */
+/* --- Standardized Button Alignment --- */
 .form-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-end; /* Aligns containers to the right */
+    width: 100%;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+#viewModeActions,
+#editModeActions {
+    display: flex;
+    justify-content: flex-end; /* Aligns buttons inside the containers to the right */
     gap: 1rem;
 }
 
+/* --- Button Styling --- */
 .btn {
-    padding: 0.625rem 2rem;
+    min-width: 140px;
+    padding: 0.625rem 1.5rem;
     border-radius: 0.5rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    font-size: 0.875rem;
 }
 
+/* Edit and Save Buttons (Primary) */
+.btn-edit,
+.btn-save {
+    background: var(--brand-blue);
+    color: white;
+}
+
+.btn-edit:hover,
+.btn-save:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Discard Button (Secondary/Outline) */
 .btn-cancel {
     background: white;
-    border: 1px solid #d1d5db;
-    color: #4b5563;
+    border: 1px solid var(--slate-200);
+    color: var(--slate-600);
 }
 
 .btn-cancel:hover {
-    background: #f9fafb;
+    background: var(--slate-50);
+    border-color: var(--slate-400);
+    color: var(--slate-800);
 }
 
-.btn-save {
-    background: var(--brand-blue);
-    border: none;
+/* Specific Icon Spacing for Edit Button */
+.btn-edit .material-symbols-outlined {
+    font-size: 1.25rem;
+    margin-right: 8px;
+}
+
+/* --- Danger Zone Section --- */
+.danger-zone {
+    max-width: 75rem;
+    margin: 2rem auto; /* Centers it and adds space from the form above */
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 1024px) {
+    .danger-zone { padding: 2rem; }
+}
+
+.danger-title {
+    color: #991b1b !important;
+    border-bottom: 1px solid #fecaca !important;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+}
+
+.section-desc {
+    font-size: 0.85rem;
+    color: var(--slate-500);
+    margin-bottom: 1.5rem;
+}
+
+.danger-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid #fecaca;
+}
+
+.danger-item:last-child {
+    border-bottom: none;
+}
+
+.danger-info strong {
+    font-size: 0.95rem;
+    color: var(--slate-800);
+}
+
+.danger-info p {
+    font-size: 0.8rem;
+    color: var(--slate-500);
+    margin: 4px 0 0 0;
+}
+
+/* Danger Buttons */
+.btn-danger {
+    background: #ef4444;
     color: white;
-    box-shadow: 0 4px 6px -1px rgba(43, 173, 238, 0.2);
 }
 
-.btn-save:hover {
-    background: #259cd8;
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+.btn-outline-danger {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+.btn-outline-danger:hover {
+    background: #fee2e2;
 }
 
 /* =====================
@@ -422,7 +510,7 @@ body::-webkit-scrollbar {
     padding: 1rem;
     z-index: 999;
   }
-  
+
   .nav-links .btn-login,
   .nav-links .btn-primary {
     width: 100%;
@@ -513,4 +601,122 @@ body::-webkit-scrollbar {
 
 @keyframes progress {
     100% { width: 0%; }
+}
+
+/* --- Readonly / Gray-out State --- */
+.form-input:disabled, .form-input[readonly] {
+    background-color: #f1f5f9;
+    color: #94a3b8;
+    cursor: not-allowed;
+    border-color: #e2e8f0;
+}
+
+/* --- Enhanced Modern Modal Style --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.4); /* Softer overlay */
+    backdrop-filter: blur(6px); /* Clean glass effect */
+    z-index: 2000;
+    display: none; /* Controlled by JS */
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 1.25rem;
+    padding: 2.25rem;
+    box-shadow:
+            0 20px 25px -5px rgba(0, 0, 0, 0.1),
+            0 10px 10px -5px rgba(0, 0, 0, 0.04),
+            0 0 0 1px rgba(0, 0, 0, 0.05); /* Subtle border shadow */
+    position: relative;
+    animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--slate-400);
+    border-radius: 50%;
+    transition: all 0.2s;
+    font-size: 20px !important;
+}
+
+.modal-close:hover {
+    background-color: var(--slate-100);
+    color: var(--slate-900);
+    transform: rotate(90deg);
+}
+
+.modal-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--slate-900);
+    letter-spacing: -0.025em;
+}
+
+.modal-desc {
+    margin: 0 0 2rem 0;
+    font-size: 0.95rem;
+    color: var(--slate-500);
+    line-height: 1.5;
+}
+
+/* Form refinement inside modal */
+.modal-content .input-group {
+    margin-bottom: 1.25rem;
+}
+
+.modal-content .input-label {
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    color: var(--slate-600);
+}
+
+.modal-content .form-input {
+    background-color: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.modal-content .form-input:focus {
+    background-color: #fff;
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 4px rgba(43, 173, 238, 0.1);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--slate-100);
+}
+
+/* Button sizing consistency */
+.modal-footer .btn {
+    min-width: 120px;
+    height: 44px;
 }
