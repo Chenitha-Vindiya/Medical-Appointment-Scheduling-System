@@ -69,8 +69,6 @@
 
 <main class="page-container">
     <div class="auth-card">
-        <div th:if="${registerError}" class="alert alert-danger" th:text="${registerError}"></div>
-
         <!-- LEFT: Branding -->
         <section class="branding-section">
             <svg class="bg-pattern" preserveAspectRatio="none" viewBox="0 0 100 100">
@@ -139,12 +137,12 @@
                             </button>
                         </div>
                     </div>
-
-<!--                    <div class="remember-me">-->
-<!--                        <input type="checkbox" id="remember" name="remember-me"/>-->
-<!--                        <label for="remember">Remember this device</label>-->
-<!--                    </div>-->
-
+                    <div th:if="${signinErrors}">
+                        <div th:each="err : ${signinErrors}" class="alert alert-danger">
+                            <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 8px;">lock_open</span>
+                            <span th:text="${err}">Login Error</span>
+                        </div>
+                    </div>
                     <button class="btn-primary-action" type="submit" id="signinBtn">
                         <span>Sign In to Dashboard</span>
                         <span class="material-symbols-outlined">arrow_forward</span>
@@ -173,14 +171,14 @@
                 <form th:action="@{/patient/register}" method="post">
                     <div class="field-row">
                         <div class="field-group">
-                            <label class="field-label" for="firstName">First Name</label>
+                            <label class="field-label" for="firstName">First Name<span class="required">*</span></label>
                             <div class="field-input-container">
                                 <span class="material-symbols-outlined field-icon">person</span>
                                 <input id="firstName" name="firstName" class="text-input" placeholder="John" type="text" required/>
                             </div>
                         </div>
                         <div class="field-group">
-                            <label class="field-label" for="lastName">Last Name</label>
+                            <label class="field-label" for="lastName">Last Name<span class="required">*</span></label>
                             <div class="field-input-container">
                                 <span class="material-symbols-outlined field-icon">person</span>
                                 <input id="lastName" name="lastName" class="text-input" placeholder="Doe" type="text" required/>
@@ -189,7 +187,7 @@
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label" for="regEmail">Email Address</label>
+                        <label class="field-label" for="regEmail">Email Address<span class="required">*</span></label>
                         <div class="field-input-container">
                             <span class="material-symbols-outlined field-icon">mail</span>
                             <input id="regEmail" name="email" class="text-input" placeholder="example@domain.com" type="email"
@@ -198,7 +196,7 @@
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label" for="phoneNumber">Phone Number</label>
+                        <label class="field-label" for="phoneNumber">Phone Number<span class="required">*</span></label>
                         <div class="field-input-container">
                             <span class="material-symbols-outlined field-icon">call</span>
                             <input id="phoneNumber" name="phoneNumber" class="text-input" placeholder="e.g. 0771234567" type="text" required/>
@@ -206,7 +204,7 @@
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label" for="nationalId">National ID (NIC)</label>
+                        <label class="field-label" for="nationalId">National ID (NIC)<span class="required">*</span></label>
                         <div class="field-input-container">
                             <span class="material-symbols-outlined field-icon">badge</span>
                             <input id="nationalId" name="nationalId" class="text-input" placeholder="e.g. 199912345678" type="text" required/>
@@ -214,7 +212,7 @@
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label" for="dateOfBirth">Date of Birth</label>
+                        <label class="field-label" for="dateOfBirth">Date of Birth<span class="required">*</span></label>
                         <div class="field-input-container">
                             <span class="material-symbols-outlined field-icon">calendar_today</span>
                             <input id="dateOfBirth" name="dateOfBirth" class="text-input" type="date" required/>
@@ -222,7 +220,7 @@
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label" for="regPassword">Password</label>
+                        <label class="field-label" for="regPassword">Password<span class="required">*</span></label>
                         <div class="field-input-container">
                             <span class="material-symbols-outlined field-icon">lock</span>
                             <input id="regPassword" name="password" class="text-input" placeholder="Min. 8 characters"
@@ -235,7 +233,7 @@
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label" for="confirmPassword">Confirm Password</label>
+                        <label class="field-label" for="confirmPassword">Confirm Password<span class="required">*</span></label>
                         <div class="field-input-container">
                             <span class="material-symbols-outlined field-icon">lock</span>
                             <input id="confirmPassword" class="text-input" placeholder="Re-enter password"
@@ -246,11 +244,12 @@
                             </button>
                         </div>
                     </div>
-
-                    <div id="registerError" class="form-error"
-                         th:if="${registerError}" th:text="${registerError}"
-                         style="display:block;"></div>
-
+                    <div th:if="${registerErrors}">
+                        <div th:each="err : ${registerErrors}" class="alert alert-danger">
+                            <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 8px;">error</span>
+                            <span th:text="${err}">Error message</span>
+                        </div>
+                    </div>
                     <button class="btn-primary-action" type="submit" id="registerBtn">
                         <span>Create My Account</span>
                         <span class="material-symbols-outlined">arrow_forward</span>
@@ -280,13 +279,59 @@
     let currentType = 'patient'; // 'patient' | 'doctor'
     let currentTab = 'signin';   // 'signin' | 'register'
 
+    function setupValidation() {
+        const regForm = document.querySelector('#registerForm form');
+        const regBtn = document.getElementById('registerBtn');
+        const inputs = regForm.querySelectorAll('input[required]');
+        const passwordInput = document.getElementById('regPassword');
+        const confirmInput = document.getElementById('confirmPassword');
+
+        const checkForm = () => {
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) allFilled = false;
+            });
+
+            const passwordsMatch = passwordInput.value === confirmInput.value;
+            const isLongEnough = passwordInput.value.length >= 8;
+
+            // Only enable button if everything is correct
+            regBtn.disabled = !(allFilled && passwordsMatch && isLongEnough);
+
+            if (confirmInput.value.length > 0) {
+                confirmInput.style.borderColor = passwordsMatch ? "" : "#ef4444";
+            }
+        };
+
+        inputs.forEach(input => {
+            input.addEventListener('input', checkForm);
+        });
+    }
+
+    // 3. UPDATED CLEAR ERRORS
+    function clearErrors() {
+        // Updated to match the "List" of errors logic we added previously
+        const alerts = document.querySelectorAll('.alert-danger');
+        alerts.forEach(alert => alert.remove());
+    }
+
     // ---- Init from URL params ----
     function init() {
         const params = new URLSearchParams(window.location.search);
-        const type = params.get('type') || 'patient';
-        const tab = params.get('tab') || 'signin';
-        setType(type);
-        switchTab(tab);
+        const serverTab = "[[${activeTab}]]";
+        const tab = serverTab || params.get('tab') || 'signin';
+
+        setType(params.get('type') || 'patient');
+
+        // Manually set display instead of calling switchTab(tab)
+        // to avoid triggering clearErrors() on init
+        currentTab = tab;
+        document.getElementById('signinForm').style.display = tab === 'signin' ? 'block' : 'none';
+        document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+        document.getElementById('signinTab').classList.toggle('active', tab === 'signin');
+        document.getElementById('registerTab').classList.toggle('active', tab === 'register');
+
+        setupValidation();
     }
 
     // ---- Toggle patient/doctor ----
@@ -370,41 +415,6 @@
             showSuccess(
                 `Welcome back!`,
                 `You're signed in as a ${currentType === 'patient' ? 'Patient' : 'Doctor'}. Redirecting to your dashboard...`
-            );
-        }, 1500);
-    }
-
-    // ---- Register handler ----
-    function handleRegister(e) {
-        e.preventDefault();
-        clearErrors();
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const email = document.getElementById('regEmail').value.trim();
-        const password = document.getElementById('regPassword').value;
-        const confirm = document.getElementById('confirmPassword').value;
-
-        if (!firstName || !lastName || !email || !password || !confirm) {
-            showError('registerError', 'Please fill in all fields.');
-            return;
-        }
-        if (password !== confirm) {
-            showError('registerError', 'Passwords do not match.');
-            return;
-        }
-        if (password.length < 8) {
-            showError('registerError', 'Password must be at least 8 characters.');
-            return;
-        }
-
-        const btn = document.getElementById('registerBtn');
-        setLoading(btn, true);
-
-        setTimeout(() => {
-            setLoading(btn, false);
-            showSuccess(
-                'Account Created!',
-                `Your ${currentType === 'patient' ? 'Patient' : 'Doctor'} account has been created. Redirecting...`
             );
         }, 1500);
     }

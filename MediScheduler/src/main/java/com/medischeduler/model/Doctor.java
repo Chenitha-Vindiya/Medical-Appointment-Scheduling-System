@@ -8,34 +8,31 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import java.time.LocalDate;
 
 @Entity
-@Table(name = "patients")
+@Table(name = "doctors")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Patient {
+public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Personal Info
+    // Professional Info
     @NotBlank(message = "First name is required")
     private String firstName;
 
     @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @NotNull(message = "Date of birth is required")
-    private LocalDate dateOfBirth;
+    @NotBlank(message = "Specialization is required")
+    private String specialization;
 
-    private String gender;
-
-    @NotBlank(message = "National ID is required")
+    @NotBlank(message = "Medical License Number is required")
     @Column(unique = true, nullable = false)
-    private String nationalId;
+    private String licenseNumber;
 
     // Contact Details
     @NotBlank(message = "Email is required")
@@ -45,16 +42,16 @@ public class Patient {
 
     @NotBlank(message = "Phone number is required")
     @Size(min = 10, max = 10, message = "Phone number should be 10 digits")
-    @Column(unique = true, nullable = false)
     private String phoneNumber;
 
-    @Column(columnDefinition = "TEXT")
-    private String homeAddress;
+    // Office/Clinic Info
+    private String department;
 
-    // Emergency Contact
-    private String emergencyContactName;
-    private String relationship;
-    private String emergencyPhone;
+    @Column(columnDefinition = "TEXT")
+    private String biography;
+
+    @Column(columnDefinition = "TEXT")
+    private String consultationFees; // Can be String or Double depending on requirements
 
     // Security
     @NotBlank(message = "Password is required")
@@ -64,4 +61,8 @@ public class Patient {
     @Column(nullable = false)
     private boolean active = true;
 
+    // Helper method to get full name
+    public String getFullName() {
+        return "Dr. " + firstName + " " + lastName;
+    }
 }
