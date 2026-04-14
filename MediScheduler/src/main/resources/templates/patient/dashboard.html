@@ -6,42 +6,27 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Patient Dashboard - MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/dashboard.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
     <link rel="icon" type="image/svg+xml"
-          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
-
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232badee'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
 </head>
 
 <body>
 
-<!-- Scroll to Top Button -->
-<button id="scrollTopBtn" title="Go to top">▲</button>
-
-<script>
-    //Scroll to Top Button
-    const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 75) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
-        }
-    });
-
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-</script>
+<!-- Scroll to Top -->
+<button id="scrollTopBtn" title="Go to top">&#9650;</button>
 
 <!-- HEADER -->
 <header class="header-wrapper">
     <nav class="navbar">
+
+        <!-- LEFT: Logo -->
         <div class="user-profile">
             <span class="material-symbols-outlined logo-icon">patient_list</span>
-            <span th:text="'Welcome, ' + ${patientName}" class="logo-text">Welcome, Patient</span>
+            <span class="logo-text">Patient Appointments</span>
         </div>
 
         <!-- Hamburger (mobile) -->
@@ -49,69 +34,76 @@
             <span></span><span></span><span></span>
         </button>
 
+        <!-- CENTER + RIGHT: Nav links (Logout inside list, like appointment page) -->
         <ul class="nav-links" id="navLinks">
-            <ul class="nav-links">
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
+            <li><a th:href="@{/patient/history}">History</a></li>
+            <li><a th:href="@{/patient/payment}">Payment</a></li>
+            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
+            <li><a th:href="@{/patient/profile}">Profile</a></li>
+            <li>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
                     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
                 </button>
-                <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
-                <li><a th:href="@{/patient/appointment}">Appointments</a></li>
-                <li><a th:href="@{/patient/history}">History</a></li>
-                <li><a th:href="@{/patient/payment}">Payment</a></li>
-                <li><a th:href="@{/patient/feedback}">Feedback</a></li>
-                <li><a th:href="@{/patient/profile}">Profile</a></li>
-            </ul>
-            <!-- <li><a href="#portals">Portals</a></li>
-    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
-            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
-            <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
+            </li>
+            <li>
+                <button class="btn-primary" onclick="window.location.href='/logout'">Logout</button>
+            </li>
         </ul>
+
     </nav>
 </header>
 
-<main class="dashboard-grid">
-    <div class="stats-grid">
+<!-- MAIN CONTENT -->
+<main class="main-content">
+
+    <!-- Stats Row -->
+    <section class="stats-grid">
         <div class="stat-card">
             <div class="stat-icon icon-blue">
                 <span class="material-symbols-outlined">event</span>
             </div>
-            <div>
+            <div class="stat-body">
                 <p class="stat-label">Next Appointment</p>
                 <p class="stat-value">Oct 24, 2023</p>
             </div>
         </div>
+
         <div class="stat-card">
             <div class="stat-icon icon-green">
                 <span class="material-symbols-outlined">assignment_turned_in</span>
             </div>
-            <div>
+            <div class="stat-body">
                 <p class="stat-label">Total Visits</p>
                 <p class="stat-value">12 Visits</p>
             </div>
         </div>
+
         <div class="stat-card">
             <div class="stat-icon icon-orange">
                 <span class="material-symbols-outlined">pending_actions</span>
             </div>
-            <div>
+            <div class="stat-body">
                 <p class="stat-label">Pending Invoices</p>
                 <p class="stat-value">2 Invoices</p>
             </div>
         </div>
-    </div>
+    </section>
 
+    <!-- Appointments Table -->
     <section class="appointments-card">
         <div class="card-header">
             <h3>Upcoming Appointments</h3>
-            <a href="#" class="link-primary">View All</a>
         </div>
+
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
                 <tr>
                     <th>Doctor</th>
                     <th>Specialty</th>
-                    <th>Date & Time</th>
+                    <th>Date &amp; Time</th>
                     <th>Status</th>
                     <th class="text-right">Actions</th>
                 </tr>
@@ -120,7 +112,7 @@
                 <tr>
                     <td>
                         <div class="doctor-info">
-                            <img alt="Doctor"
+                            <img alt="Dr. Sarah Wilson"
                                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEULt1N5NeTmikbvvvIBTwXic6LwKRZnjZY_UGPqg4qZ5dlhhrx8MQvwr9G3tqkSZdhbSgvxtTZinYOAwL1AM-iISy3AOdKBWaxM4w4r5sudSCztGL4FswntX_fo70S1EEcShuqnPg6OW3ZGIorUxNTMn1qbjd-dGkwO33s89SKHOUycbf_qVxosJ2DnQfULtxTPC5QAh-gPXTd1_Xb9n-JAK4stklkcK3mXMZXNwVaDi_ihA3X1eYO4Qz_56iDqKCKSbjnI7h_QdK"/>
                             <span class="doctor-name">Dr. Sarah Wilson</span>
                         </div>
@@ -132,14 +124,15 @@
                     </td>
                     <td><span class="status-badge confirmed">Confirmed</span></td>
                     <td class="text-right">
-                        <button class="action-btn"><span
-                                class="material-symbols-outlined">more_vert</span></button>
+                        <button class="action-btn" aria-label="More options">
+                            <span class="material-symbols-outlined">more_vert</span>
+                        </button>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="doctor-info">
-                            <img alt="Doctor"
+                            <img alt="Dr. Michael Chen"
                                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc"/>
                             <span class="doctor-name">Dr. Michael Chen</span>
                         </div>
@@ -151,14 +144,15 @@
                     </td>
                     <td><span class="status-badge pending">Pending</span></td>
                     <td class="text-right">
-                        <button class="action-btn"><span
-                                class="material-symbols-outlined">more_vert</span></button>
+                        <button class="action-btn" aria-label="More options">
+                            <span class="material-symbols-outlined">more_vert</span>
+                        </button>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="doctor-info">
-                            <img alt="Doctor"
+                            <img alt="Dr. Michael Chen"
                                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc"/>
                             <span class="doctor-name">Dr. Michael Chen</span>
                         </div>
@@ -170,14 +164,15 @@
                     </td>
                     <td><span class="status-badge pending">Pending</span></td>
                     <td class="text-right">
-                        <button class="action-btn"><span
-                                class="material-symbols-outlined">more_vert</span></button>
+                        <button class="action-btn" aria-label="More options">
+                            <span class="material-symbols-outlined">more_vert</span>
+                        </button>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="doctor-info">
-                            <img alt="Doctor"
+                            <img alt="Dr. Michael Chen"
                                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc"/>
                             <span class="doctor-name">Dr. Michael Chen</span>
                         </div>
@@ -189,14 +184,15 @@
                     </td>
                     <td><span class="status-badge pending">Pending</span></td>
                     <td class="text-right">
-                        <button class="action-btn"><span
-                                class="material-symbols-outlined">more_vert</span></button>
+                        <button class="action-btn" aria-label="More options">
+                            <span class="material-symbols-outlined">more_vert</span>
+                        </button>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="doctor-info">
-                            <img alt="Doctor"
+                            <img alt="Dr. Michael Chen"
                                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc"/>
                             <span class="doctor-name">Dr. Michael Chen</span>
                         </div>
@@ -208,17 +204,32 @@
                     </td>
                     <td><span class="status-badge pending">Pending</span></td>
                     <td class="text-right">
-                        <button class="action-btn"><span
-                                class="material-symbols-outlined">more_vert</span></button>
+                        <button class="action-btn" aria-label="More options">
+                            <span class="material-symbols-outlined">more_vert</span>
+                        </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </section>
+
 </main>
 
 <script>
+    // Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
     // Mobile hamburger menu
     const btn = document.getElementById('hamburgerBtn');
     const nav = document.getElementById('navLinks');
@@ -235,30 +246,20 @@
         });
     });
 
-    //mode icon toggle
+    // Dark mode toggle
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
-    const body = document.body;
-
-    // Check for saved user preference
     if (localStorage.getItem('theme') === 'dark') {
-        body.classList.add('dark-mode');
+        document.body.classList.add('dark-mode');
         themeIcon.innerText = 'dark_mode';
     }
-
     themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-
-        // Toggle the icon text and save preference
-        if (body.classList.contains('dark-mode')) {
-            themeIcon.innerText = 'dark_mode';
-            localStorage.setItem('theme', 'dark');
-        } else {
-            themeIcon.innerText = 'light_mode';
-            localStorage.setItem('theme', 'light');
-        }
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
 </script>
-</body>
 
+</body>
 </html>
