@@ -35,6 +35,10 @@ public class Doctor {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @NotBlank(message = "National ID is required")
+    @Column(unique = true, nullable = false)
+    private String nationalId;
+
     @NotBlank(message = "Phone number is required")
     @Size(min = 10, max = 10, message = "Phone number should be 10 digits")
     private String phoneNumber;

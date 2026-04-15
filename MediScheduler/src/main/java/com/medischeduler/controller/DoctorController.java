@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/doctor")
 public class DoctorController {
@@ -21,7 +23,9 @@ public class DoctorController {
             doctorService.registerDoctor(doctor);
             return "redirect:/login?success=true";
         } catch (Exception e) {
-            model.addAttribute("registerError", "An error occurred: " + e.getMessage());
+            String[] errorArray = e.getMessage().split("\\|");
+            model.addAttribute("registerErrors", errorArray);
+            model.addAttribute("activeTab", "register");
             return "login";
         }
     }
@@ -30,11 +34,19 @@ public class DoctorController {
     public String loginDoctor(@RequestParam String username, @RequestParam String password, HttpSession session, Model model) {
         Doctor doctor = doctorService.authenticate(username, password);
 
-        if (doctor != null && doctor.isActive()) {
-            session.setAttribute("loggedInDoctor", doctor);
-            return "redirect:/doctor/dashboard";
+        if (doctor != null) {
+            if (doctor.isActive()) {
+                session.setAttribute("loggedInDoctor", doctor);
+                return "redirect:/doctor/dashboard";
+            } else {
+                model.addAttribute("signinErrors", List.of("This account has been deactivated."));
+                model.addAttribute("activeTab", "signin");
+                return "login";
+            }
         } else {
-            model.addAttribute("signinError", "Invalid doctor credentials.");
+            // Use "signinErrors" to match the multiple-error loop logic
+            model.addAttribute("signinErrors", List.of("Invalid email or password."));
+            model.addAttribute("activeTab", "signin");
             return "login";
         }
     }

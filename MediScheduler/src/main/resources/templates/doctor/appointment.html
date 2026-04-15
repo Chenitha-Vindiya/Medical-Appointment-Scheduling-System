@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Appointment - MediScheduler</title>
+    <link rel="stylesheet" th:href="@{/css/doctor/appointment.css}"/>
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <button class="menu-toggle" id="menuToggle">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <span class="header-title">Daily Schedule</span>
+        <div class="date-badge">
+            <span class="material-symbols-outlined date-icon">calendar_month</span>
+            <span id="header-date">Monday, Oct 23</span>
+        </div>
+        <div class="stats-divider"></div>
+        <div class="stats-group">
+            <div class="stat-item">
+                <div class="stat-icon blue">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">group</span>
+                </div>
+                <div class="stat-text-group">
+                    <p class="stat-label">Patients</p>
+                    <p class="stat-value">12</p>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon orange">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">avg_time</span>
+                </div>
+                <div class="stat-text-group">
+                    <p class="stat-label">Wait Time</p>
+                    <p class="stat-value">8 min</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="search-container">
+            <input class="search-input" placeholder="Search..." type="text"/>
+            <span class="material-symbols-outlined search-icon">search</span>
+        </div>
+        <button class="header-action-btn">
+            <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <button class="header-action-btn">
+            <span class="material-symbols-outlined">settings</span>
+        </button>
+        <div class="user-profile">
+            <img alt="Dr. Profile"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6sAEkowa2E7APFSiZxNGATGkUCfGPu7sVcTOm0GFfJqR9l3L_276QJ8qVcU2GC4fObwiShbc0ChBWNAaAFbGCZ35b007jEugmu_BjZttE_NSZe737NMtVP0ICwhFKcNEEWPERyFw8bPxesyaUj4n3DPzEqnpUx4CZAb2r0u1it3py7vBr0BCXu-Ynn3k_LVgxMo2H_Aoxhcu7rFVpy-QG-XjuDSXsOuTKEh8MKEu_x2Vk9WJZ8Cm8w3wE3pd2cYRkIoIWGPxrCmF5"/>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="welcome-section">
+        <h2 id="welcome-text">Good morning, Dr. Clinical.</h2>
+        <p id="welcome-subtext">You have 12 appointments scheduled for today. Your first patient is arriving in 15
+            minutes.</p>
+    </div>
+    <div class="timeline-container">
+        <div class="timeline-header">
+            <h3 id="view-title">Appointment Timeline</h3>
+            <div class="view-switcher">
+                <button class="active" data-view="day">Day</button>
+                <button data-view="week">Week</button>
+                <button data-view="month">Month</button>
+            </div>
+        </div>
+        <!-- Day View -->
+        <div class="view-content active" id="view-day">
+            <div class="schedule-list">
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">09:00</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-marker"></div>
+                    <div class="appointment-card confirmed">
+                        <img alt="Alice Montgomery" class="patient-avatar"
+                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXMqJ39Zee5fVcNOD0xOQChSNNsRSCHxT9tQsljVnvEZ6Q1kwwu6srwcg52kQYe0Xm2RwyA_XGEHs2MWfB67bLWefLXZVrc7k-dZHVkT_Wz0QAFUb0SbWaxp0rpfcn733flO88NWeRjFoucdr0iaq-Iyj8NtsAj1CFXTbTT3PsstE0jXH_WAPsu2yeX97KNGwZE6WXXaNh5bg5R67tKaDErzwMGwwl8e_sh4bBEymQ_UMUU5CnpzdenGD2PjwgXMil9X1Hwbd2Qmm_"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Alice Montgomery</h4>
+                            <p class="appointment-details">Routine Checkup • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: var(--primary);">Examination A</div>
+                        <span class="status-pill confirmed">Confirmed</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">09:30</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-marker inactive"></div>
+                    <button class="empty-slot-btn">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span>Available Slot</span>
+                    </button>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">10:00</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-marker orange"></div>
+                    <div class="appointment-card in-progress">
+                        <img alt="Robert Jenkins" class="patient-avatar"
+                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuB129F_TGe0HyOY-Wo8W5s_OKhY4u2RQ-WiAVyUxq0_QdkMwGE9KSG_1vQdAQQ9dq202jjfTrwpTpOvw5oLHvIAeqVttFje4EXADJJHPn4VMqjqGaoWaWlpJ3JV4vYQU7Y_k_LbcRGrdDzGadiBjq5MRX4A_s2qvLxx9ve0xSYCgbeIfSSkD2VV5IPa3agbAcQlYwXoefeRCURGQZZ2YrOSIww235qnd0Vukh2XSkDnvZSZtJf5f_BjI0pyvLqY8rWrMmTKNxfy1sAJ"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Robert Jenkins</h4>
+                            <p class="appointment-details">Post-Op Consultation • 45 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: #92400e;">Recovery Lab</div>
+                        <span class="status-pill in-progress">In-Progress</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">11:00</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-marker slate"></div>
+                    <div class="appointment-card arrived">
+                        <img alt="Sarah Williams" class="patient-avatar"
+                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqfATO0JyQ9ccDTHMpcP7JqI0iegnpKJ5it8sY29WoGoLU2tOc5wXWtgXiwRqjz_0xykfY5kVjApLWVintMLC8P9heXpZFBANuY4xIW6DkQiLhWkCi5XmzL2mOdR_gWiPzeKGiBJDwWMKcf1IqKfefvgsNeQyTslTBF-qojxTV-fGZRuRl2gajaOmIhifj5YhkeMuoy3BW-d5uClLP9rarRMPBrGMS6JJk8xHJm7RcFZIaIoLuiI0DKSWwQnyImf3li11NdV3Wp8CE"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Sarah Williams</h4>
+                            <p class="appointment-details">Initial Assessment • 60 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: #475569;">Consult Room 4</div>
+                        <span class="status-pill arrived">Arrived</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Week View -->
+        <div class="view-content" id="view-week">
+            <div class="week-grid">
+                <!-- Header -->
+                <div class="week-header-cell"><span class="day-name">Mon</span><span class="day-number">23</span></div>
+                <div class="week-header-cell"><span class="day-name">Tue</span><span class="day-number">24</span></div>
+                <div class="week-header-cell"><span class="day-name">Wed</span><span class="day-number">25</span></div>
+                <div class="week-header-cell today"><span class="day-name">Thu</span><span class="day-number">26</span>
+                </div>
+                <div class="week-header-cell"><span class="day-name">Fri</span><span class="day-number">27</span></div>
+                <div class="week-header-cell"><span class="day-name">Sat</span><span class="day-number">28</span></div>
+                <div class="week-header-cell"><span class="day-name">Sun</span><span class="day-number">29</span></div>
+                <!-- Body -->
+                <div class="week-body-cell">
+                    <div class="week-event blue">09:00 Alice M.</div>
+                    <div class="week-event orange">10:00 Robert J.</div>
+                    <div class="week-event blue">11:30 Sarah W.</div>
+                </div>
+                <div class="week-body-cell">
+                    <div class="week-event blue">08:30 Tom H.</div>
+                    <div class="week-event blue">14:00 Jane D.</div>
+                </div>
+                <div class="week-body-cell">
+                    <div class="week-event orange">10:00 Surgery</div>
+                </div>
+                <div class="week-body-cell">
+                    <div class="week-event blue">09:00 Mike L.</div>
+                    <div class="week-event blue">11:00 Anna S.</div>
+                    <div class="week-event blue">15:30 Chris P.</div>
+                </div>
+                <div class="week-body-cell">
+                    <div class="week-event blue">10:00 Staff Mtg</div>
+                </div>
+                <div class="week-body-cell"></div>
+                <div class="week-body-cell"></div>
+            </div>
+        </div>
+        <!-- Month View -->
+        <div class="view-content" id="view-month">
+            <div class="month-grid">
+                <!-- Headers -->
+                <div class="month-header-cell">Mon</div>
+                <div class="month-header-cell">Tue</div>
+                <div class="month-header-cell">Wed</div>
+                <div class="month-header-cell">Thu</div>
+                <div class="month-header-cell">Fri</div>
+                <div class="month-header-cell">Sat</div>
+                <div class="month-header-cell">Sun</div>
+                <!-- Days (Simplified for Mobile) -->
+                <div class="month-day-cell other-month"><span class="month-day-number">28</span></div>
+                <div class="month-day-cell other-month"><span class="month-day-number">29</span></div>
+                <div class="month-day-cell other-month"><span class="month-day-number">30</span></div>
+                <div class="month-day-cell other-month"><span class="month-day-number">31</span></div>
+                <div class="month-day-cell"><span class="month-day-number">1</span>
+                    <div class="month-indicator-container">
+                        <div class="month-indicator blue"></div>
+                    </div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">2</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">3</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">4</span>
+                    <div class="month-indicator-container">
+                        <div class="month-indicator blue"></div>
+                        <div class="month-indicator orange"></div>
+                    </div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">5</span>
+                    <div class="month-indicator-container">
+                        <div class="month-indicator blue"></div>
+                    </div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">6</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">7</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">8</span>
+                    <div class="month-indicator-container">
+                        <div class="month-indicator orange"></div>
+                    </div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">9</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">10</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">11</span>
+                    <div class="month-indicator-container">
+                        <div class="month-indicator blue"></div>
+                    </div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">12</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">13</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">14</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">15</span>
+                    <div class="month-indicator-container">
+                        <div class="month-indicator orange"></div>
+                    </div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">16</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">17</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">18</span>
+                    <div class="month-indicator-container">
+                        <div class="month-indicator blue"></div>
+                    </div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">19</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">20</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">21</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">22</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">23</span>
+                    <div class="month-indicator-container">
+                        <div class="month-indicator blue"></div>
+                        <div class="month-indicator blue"></div>
+                    </div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">24</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">25</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">26</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+                <div class="month-day-cell"><span class="month-day-number">27</span>
+                    <div class="month-indicator-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // View Switcher logic
+        const switcherButtons = document.querySelectorAll('.view-switcher button');
+        const views = {
+            day: document.getElementById('view-day'),
+            week: document.getElementById('view-week'),
+            month: document.getElementById('view-month')
+        };
+        const viewTitle = document.getElementById('view-title');
+        const headerDate = document.getElementById('header-date');
+        const welcomeText = document.getElementById('welcome-text');
+        const welcomeSubtext = document.getElementById('welcome-subtext');
+
+        switcherButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const selectedView = button.getAttribute('data-view');
+
+                switcherButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                Object.values(views).forEach(view => view.classList.remove('active'));
+                views[selectedView].classList.add('active');
+
+                switch (selectedView) {
+                    case 'day':
+                        viewTitle.textContent = 'Appointment Timeline';
+                        headerDate.textContent = 'Monday, Oct 23';
+                        welcomeText.textContent = 'Good morning, Dr. Clinical.';
+                        welcomeSubtext.textContent = 'You have 12 appointments scheduled for today. Your first patient is arriving in 15 minutes.';
+                        break;
+                    case 'week':
+                        viewTitle.textContent = 'Weekly Schedule';
+                        headerDate.textContent = 'Oct 23 - Oct 29, 2023';
+                        welcomeText.textContent = 'Your Week at a Glance';
+                        welcomeSubtext.textContent = 'You have 48 total appointments scheduled for this week. 85% capacity reached.';
+                        break;
+                    case 'month':
+                        viewTitle.textContent = 'Monthly Planner';
+                        headerDate.textContent = 'October 2023';
+                        welcomeText.textContent = 'October Overview';
+                        welcomeSubtext.textContent = 'A total of 184 patients scheduled this month. Next available slot is Nov 2nd.';
+                        break;
+                }
+            });
+        });
+
+        // Mobile Sidebar logic
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const menuToggle = document.getElementById('menuToggle');
+        const closeSidebar = document.getElementById('closeSidebar');
+
+        const toggleSidebar = () => {
+            sidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        };
+
+        menuToggle.addEventListener('click', toggleSidebar);
+        closeSidebar.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Close sidebar on nav item click (mobile)
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

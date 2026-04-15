@@ -102,12 +102,21 @@ public class ViewController {
         return "deactivated";
     }
 
-    // Add this to your existing ViewController.java
+    //Doctor Dashboard
     @GetMapping("/doctor/dashboard")
     public String doctorDashboard(HttpSession session, Model model) {
         if (session.getAttribute("loggedInDoctor") == null) {
             return "redirect:/login"; // Redirect to login if not authenticated
         }
-        return "doctor/dashboard"; // Maps to templates/doctor/dashboard.html
+        return "doctor/dashboard";
+    }
+
+    //Doctor's Appointment
+    @GetMapping("/doctor/appointment")
+    public String doctorAppointment(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInDoctor") == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+        return "doctor/appointment";
     }
 }

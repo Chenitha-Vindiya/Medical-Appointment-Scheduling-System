@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class DoctorService {
 
@@ -16,9 +19,26 @@ public class DoctorService {
     private PasswordEncoder passwordEncoder;
 
     public void registerDoctor(Doctor doctor) throws Exception {
+        List<String> errors = new ArrayList<>();
+
         if (doctorRepository.findByEmail(doctor.getEmail()) != null) {
-            throw new Exception("Email is already in use.");
+            errors.add("Email address is already registered.");
         }
+
+        if (doctorRepository.findByNationalId(doctor.getNationalId()) != null) {
+            errors.add("National ID (NIC) is already registered.");
+        }
+
+        //Phone Number (The new fix)
+        if (doctorRepository.findByPhoneNumber(doctor.getPhoneNumber()) != null) {
+            errors.add("Phone number is already registered.");
+        }
+
+        if (!errors.isEmpty()) {
+            // Join errors with a delimiter or handle as a custom exception
+            throw new Exception(String.join("|", errors));
+        }
+
         doctor.setPassword(passwordEncoder.encode(doctor.getPassword()));
         doctorRepository.save(doctor);
     }
