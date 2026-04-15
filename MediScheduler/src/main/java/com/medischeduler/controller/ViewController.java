@@ -101,4 +101,13 @@ public class ViewController {
     public String showDeactivatedPage() {
         return "deactivated";
     }
+
+    // Add this to your existing ViewController.java
+    @GetMapping("/doctor/dashboard")
+    public String doctorDashboard(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInDoctor") == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+        return "doctor/dashboard"; // Maps to templates/doctor/dashboard.html
+    }
 }

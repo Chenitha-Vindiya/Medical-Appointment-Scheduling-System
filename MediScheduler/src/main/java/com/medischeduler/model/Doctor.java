@@ -27,12 +27,7 @@ public class Doctor {
     @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @NotBlank(message = "Specialization is required")
     private String specialization;
-
-    @NotBlank(message = "Medical License Number is required")
-    @Column(unique = true, nullable = false)
-    private String licenseNumber;
 
     // Contact Details
     @NotBlank(message = "Email is required")
@@ -47,11 +42,9 @@ public class Doctor {
     // Office/Clinic Info
     private String department;
 
-    @Column(columnDefinition = "TEXT")
-    private String biography;
 
     @Column(columnDefinition = "TEXT")
-    private String consultationFees; // Can be String or Double depending on requirements
+    private String consultationFees;
 
     // Security
     @NotBlank(message = "Password is required")

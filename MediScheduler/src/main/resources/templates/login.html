@@ -340,14 +340,22 @@
         const patientToggle = document.getElementById('patientToggle');
         const doctorToggle = document.getElementById('doctorToggle');
 
+        // Get the forms
+        const loginForm = document.querySelector('#signinForm form');
+        const registerForm = document.querySelector('#registerForm form');
+
         if (type === 'patient') {
             patientToggle.classList.add('active');
             doctorToggle.classList.remove('active');
-            patientToggle.querySelector('input').checked = true;
+            // Set actions to PatientController
+            loginForm.action = "/patient/login";
+            registerForm.action = "/patient/register";
         } else {
             doctorToggle.classList.add('active');
             patientToggle.classList.remove('active');
-            doctorToggle.querySelector('input').checked = true;
+            // Set actions to DoctorController
+            loginForm.action = "/doctor/login";
+            registerForm.action = "/doctor/register";
         }
         updateSubtitles();
     }

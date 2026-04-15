@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Doctor Dashboard - Clinical Sanctuary</title>
+    <link rel="stylesheet" th:href="@{/css/doctor/dashboard.css}"/>
+</head>
+<body>
+
+<!-- Main Content -->
+<main class="main-content">
+    <div class="container">
+        <div class="stats-grid">
+            <!-- Card 1 -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon icon-blue">
+                        <span class="material-symbols-outlined">event_available</span>
+                    </div>
+                    <span class="stat-badge badge-blue">+4%</span>
+                </div>
+                <p class="stat-label">Today's Appointments</p>
+                <h4 class="stat-value">12</h4>
+                <p class="stat-footer">Next appointment at 10:30 AM</p>
+            </div>
+            <!-- Card 2 -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon icon-slate">
+                        <span class="material-symbols-outlined">person_add</span>
+                    </div>
+                    <span class="stat-badge badge-slate">New</span>
+                </div>
+                <p class="stat-label">New Patients</p>
+                <h4 class="stat-value">04</h4>
+                <p class="stat-footer">Ready for onboarding records</p>
+            </div>
+            <!-- Card 3 -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon icon-orange">
+                        <span class="material-symbols-outlined">schedule</span>
+                    </div>
+                </div>
+                <p class="stat-label">Consultation Hours</p>
+                <h4 class="stat-value">06.5</h4>
+                <p class="stat-footer">Scheduled time for today</p>
+            </div>
+        </div>
+        <section class="table-section">
+            <div class="table-header">
+                <h5>Upcoming Appointments</h5>
+                <button class="btn-link">View Calendar</button>
+            </div>
+            <table class="appointments-table">
+                <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Time</th>
+                    <th>Visit Type</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="appointment-row">
+                    <td>
+                        <div class="patient-cell">
+                            <img alt="Sarah Miller" class="patient-avatar"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvm5CHPJAmNIg7am3S3fZVfnoCHlUtja5n_n3bsgU2gSe768gMf_zfMmwj5-tp8mMfq4RwgZ8Qdwdy7TmQIqPVb1IcU3n27aOSO4jkDaNMyahzMMYQHpu2OaqaBDbHf6ZA6MlCQNPBkL9h5v3V0D0TaS4QN-_vHUtAQbzGGokWpsfMflhbnW1pspR4FP_NpVtPFFrUuNC_wXp8z4y3Nq0x6CLHjlinRmEH8ycOF3ugxwxFs6o3FXQbOtRJwFmI0Jv6eKHaoBh4XopG"/>
+                            <div>
+                                <p class="patient-name">Sarah Miller</p>
+                                <p class="patient-id">ID: #PAT-2024-001</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-label="Time">10:30 AM</td>
+                    <td class="visit-type" data-label="Visit Type">General Checkup</td>
+                    <td data-label="Status"><span class="status-chip status-confirmed">Confirmed</span></td>
+                    <td><a class="action-link" href="#">Start Consult</a></td>
+                </tr>
+                <tr class="appointment-row">
+                    <td>
+                        <div class="patient-cell">
+                            <img alt="James Wilson" class="patient-avatar"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_ysRs0bcUCs11uqLUMbalVTt67qdDdWRcw6pD1yZWN-ACGSHFRFyKwburQ5WLVW0qmFhbJIKIickdlowMpXlJ-dCqLMzOsN6a9gAxTeQITBs8nrINe30J_g8wQNCTajqilKLqRXo10aB7gqX6EUSioO_M7XA68B_GMjC4rURnMHav-v_RCLOaN6YpN9_MeX_m9x-poCHCyzjUfOxNCsuKu5Gc_eKV7OHhAP4WhePgxoGBN_v-7bOcCDiKkxaiBsX7Q4ryVDp8qZmJ"/>
+                            <div>
+                                <p class="patient-name">James Wilson</p>
+                                <p class="patient-id">ID: #PAT-2024-045</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-label="Time">11:15 AM</td>
+                    <td class="visit-type" data-label="Visit Type">Follow-up</td>
+                    <td data-label="Status"><span class="status-chip status-pending">Pending</span></td>
+                    <td><a class="action-link" href="#">Start Consult</a></td>
+                </tr>
+                <tr class="appointment-row">
+                    <td>
+                        <div class="patient-cell">
+                            <img alt="Elena Rodriguez" class="patient-avatar"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdQM7dqbxDdBvhET4HrZ7gj3aRsGTm4RAN_4-a16s622rwU_sar39Sx0mzZX9n55gJvqbtEouZJYIiKB0Dm_bIrISCaLk3daoSgS-kBbMedzFigJ-o8j3JnmT_dzrysrxM6WNZCJwskTHGWHPOsBqhbd7RVlVj0EPfew1fA4Tao2Gc9M6wOhvR2JYBda4CoJZiw-mZG5SdoiNnUT572jCIqS1nFYWu36BE65VzhXd7CUM-hGKCORkZJK8jirfLoK2q83wpWiLNl3yL"/>
+                            <div>
+                                <p class="patient-name">Elena Rodriguez</p>
+                                <p class="patient-id">ID: #PAT-2023-892</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-label="Time">02:00 PM</td>
+                    <td class="visit-type" data-label="Visit Type">Blood Test Review</td>
+                    <td data-label="Status"><span class="status-chip status-confirmed">Confirmed</span></td>
+                    <td><a class="action-link" href="#">Start Consult</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+
+</body>
+</html>
