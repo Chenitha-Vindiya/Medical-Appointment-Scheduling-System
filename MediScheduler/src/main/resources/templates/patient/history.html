@@ -240,6 +240,24 @@
         </button>
     </main>
 
+    <script>
+        // Mobile hamburger menu
+        const btn = document.getElementById('hamburgerBtn');
+        const nav = document.getElementById('navLinks');
+        btn.addEventListener('click', () => {
+            nav.classList.toggle('open');
+            btn.classList.toggle('active');
+        });
+
+        // Close menu on link click
+        nav.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', () => {
+                nav.classList.remove('open');
+                btn.classList.remove('active');
+            });
+        });
+    </script>
+
 </body>
 
 </html>
