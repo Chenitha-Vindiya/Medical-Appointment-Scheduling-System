@@ -35,6 +35,11 @@ body {
     overflow-x: hidden;
 }
 
+/* Hide scrollbar but allow scrolling */
+body::-webkit-scrollbar {
+    display: none;
+}
+
 /* Main Content Styles */
 .main-content {
     /*margin-left: var(--sidebar-width);*/
