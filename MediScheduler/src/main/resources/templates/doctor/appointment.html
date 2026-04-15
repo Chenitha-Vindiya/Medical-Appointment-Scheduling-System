@@ -9,6 +9,60 @@
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
 </head>
 <body>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">stethoscope</span>
+            <span class="logo-text" th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a th:href="@{/doctor/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/doctor/appointment}">Appointments</a></li>
+            <li><a th:href="@{/doctor/patient}">Patient</a></li>
+            <li><a th:href="@{/doctor/payment}">Payment</a></li>
+            <li><a th:href="@{/doctor/feedback}">Feedback</a></li>
+            <li><a th:href="@{/doctor/profile}">Profile</a></li>
+            <li>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
+        </ul>
+    </nav>
+</header>
+
 <main>
     <div class="timeline-container">
         <div class="timeline-header">
@@ -57,10 +111,28 @@
                              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB129F_TGe0HyOY-Wo8W5s_OKhY4u2RQ-WiAVyUxq0_QdkMwGE9KSG_1vQdAQQ9dq202jjfTrwpTpOvw5oLHvIAeqVttFje4EXADJJHPn4VMqjqGaoWaWlpJ3JV4vYQU7Y_k_LbcRGrdDzGadiBjq5MRX4A_s2qvLxx9ve0xSYCgbeIfSSkD2VV5IPa3agbAcQlYwXoefeRCURGQZZ2YrOSIww235qnd0Vukh2XSkDnvZSZtJf5f_BjI0pyvLqY8rWrMmTKNxfy1sAJ"/>
                         <div class="patient-info">
                             <h4 class="patient-name">Robert Jenkins</h4>
-                            <p class="appointment-details">Post-Op Consultation • 45 mins</p>
+                            <p class="appointment-details">Post-Op Consultation • 30 mins</p>
                         </div>
                         <div class="room-tag" style="color: #92400e;">Recovery Lab</div>
                         <span class="status-pill in-progress">In-Progress</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">10:30</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-marker slate"></div>
+                    <div class="appointment-card arrived">
+                        <img alt="Sarah Williams" class="patient-avatar"
+                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqfATO0JyQ9ccDTHMpcP7JqI0iegnpKJ5it8sY29WoGoLU2tOc5wXWtgXiwRqjz_0xykfY5kVjApLWVintMLC8P9heXpZFBANuY4xIW6DkQiLhWkCi5XmzL2mOdR_gWiPzeKGiBJDwWMKcf1IqKfefvgsNeQyTslTBF-qojxTV-fGZRuRl2gajaOmIhifj5YhkeMuoy3BW-d5uClLP9rarRMPBrGMS6JJk8xHJm7RcFZIaIoLuiI0DKSWwQnyImf3li11NdV3Wp8CE"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Sarah Williams</h4>
+                            <p class="appointment-details">Initial Assessment • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: #475569;">Consult Room 4</div>
+                        <span class="status-pill arrived">Arrived</span>
                         <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
                     </div>
                 </div>
@@ -75,10 +147,197 @@
                              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqfATO0JyQ9ccDTHMpcP7JqI0iegnpKJ5it8sY29WoGoLU2tOc5wXWtgXiwRqjz_0xykfY5kVjApLWVintMLC8P9heXpZFBANuY4xIW6DkQiLhWkCi5XmzL2mOdR_gWiPzeKGiBJDwWMKcf1IqKfefvgsNeQyTslTBF-qojxTV-fGZRuRl2gajaOmIhifj5YhkeMuoy3BW-d5uClLP9rarRMPBrGMS6JJk8xHJm7RcFZIaIoLuiI0DKSWwQnyImf3li11NdV3Wp8CE"/>
                         <div class="patient-info">
                             <h4 class="patient-name">Sarah Williams</h4>
-                            <p class="appointment-details">Initial Assessment • 60 mins</p>
+                            <p class="appointment-details">Initial Assessment • 30 mins</p>
                         </div>
                         <div class="room-tag" style="color: #475569;">Consult Room 4</div>
                         <span class="status-pill arrived">Arrived</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">11:30</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-marker slate"></div>
+                    <div class="appointment-card arrived">
+                        <img alt="Sarah Williams" class="patient-avatar"
+                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqfATO0JyQ9ccDTHMpcP7JqI0iegnpKJ5it8sY29WoGoLU2tOc5wXWtgXiwRqjz_0xykfY5kVjApLWVintMLC8P9heXpZFBANuY4xIW6DkQiLhWkCi5XmzL2mOdR_gWiPzeKGiBJDwWMKcf1IqKfefvgsNeQyTslTBF-qojxTV-fGZRuRl2gajaOmIhifj5YhkeMuoy3BW-d5uClLP9rarRMPBrGMS6JJk8xHJm7RcFZIaIoLuiI0DKSWwQnyImf3li11NdV3Wp8CE"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Sarah Williams</h4>
+                            <p class="appointment-details">Initial Assessment • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: #475569;">Consult Room 4</div>
+                        <span class="status-pill arrived">Arrived</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">12:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker inactive"></div>
+                    <button class="empty-slot-btn">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span>Available Slot</span>
+                    </button>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">12:30</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker inactive"></div>
+                    <button class="empty-slot-btn">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span>Available Slot</span>
+                    </button>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">01:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker"></div>
+                    <div class="appointment-card confirmed">
+                        <img alt="Saman Kumara" class="patient-avatar" src="https://ui-avatars.com/api/?name=Saman+Kumara&background=random"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Saman Kumara</h4>
+                            <p class="appointment-details">Post-Op Follow-up • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: var(--primary);">Consultation Room 1</div>
+                        <span class="status-pill confirmed">Confirmed</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">01:30</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker"></div>
+                    <div class="appointment-card pending">
+                        <img alt="Dilini Perera" class="patient-avatar" src="https://ui-avatars.com/api/?name=Dilini+Perera&background=random"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Dilini Perera</h4>
+                            <p class="appointment-details">Blood Report Review • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: var(--primary);">Examination B</div>
+                        <span class="status-pill pending">Arriving Soon</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">02:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker"></div>
+                    <div class="appointment-card confirmed">
+                        <img alt="Kasun Jayasinghe" class="patient-avatar" src="https://ui-avatars.com/api/?name=Kasun+Jayasinghe&background=random"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Kasun Jayasinghe</h4>
+                            <p class="appointment-details">General Consultation • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: var(--primary);">Examination A</div>
+                        <span class="status-pill confirmed">Confirmed</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">02:30</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker"></div>
+                    <div class="appointment-card confirmed">
+                        <img alt="Anjali De Silva" class="patient-avatar" src="https://ui-avatars.com/api/?name=Anjali+De+Silva&background=random"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Anjali De Silva</h4>
+                            <p class="appointment-details">Vaccination • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: var(--primary);">Consultation Room 1</div>
+                        <span class="status-pill confirmed">Confirmed</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">03:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker"></div>
+                    <div class="appointment-card cancelled">
+                        <img alt="Sunil Perera" class="patient-avatar" src="https://ui-avatars.com/api/?name=Sunil+Perera&background=random"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Sunil Perera</h4>
+                            <p class="appointment-details">Physical Exam • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: var(--primary);">Examination B</div>
+                        <span class="status-pill cancelled" style="background: #fee2e2; color: #ef4444;">Cancelled</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">03:30</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker"></div>
+                    <div class="appointment-card confirmed">
+                        <img alt="Nimali Cooray" class="patient-avatar" src="https://ui-avatars.com/api/?name=Nimali+Cooray&background=random"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Nimali Cooray</h4>
+                            <p class="appointment-details">Migraine Consultation • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: var(--primary);">Examination A</div>
+                        <span class="status-pill confirmed">Confirmed</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">04:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker"></div>
+                    <div class="appointment-card confirmed">
+                        <img alt="Pathum Nissanka" class="patient-avatar" src="https://ui-avatars.com/api/?name=Pathum+Nissanka&background=random"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Pathum Nissanka</h4>
+                            <p class="appointment-details">Skin Allergy Test • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: var(--primary);">Consultation Room 1</div>
+                        <span class="status-pill confirmed">Confirmed</span>
+                        <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">04:30</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker inactive"></div>
+                    <button class="empty-slot-btn">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span>Available Slot</span>
+                    </button>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-label">
+                        <span class="hour">05:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-marker"></div>
+                    <div class="appointment-card confirmed">
+                        <img alt="Chamari Atapattu" class="patient-avatar" src="https://ui-avatars.com/api/?name=Chamari+Atapattu&background=random"/>
+                        <div class="patient-info">
+                            <h4 class="patient-name">Chamari Atapattu</h4>
+                            <p class="appointment-details">Urgent Pain Management • 30 mins</p>
+                        </div>
+                        <div class="room-tag" style="color: var(--primary);">Consultation Room 1</div>
+                        <span class="status-pill confirmed">Confirmed</span>
                         <button class="card-actions"><span class="material-symbols-outlined">more_vert</span></button>
                     </div>
                 </div>
@@ -88,52 +347,43 @@
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // View Switcher logic
-        const switcherButtons = document.querySelectorAll('.view-switcher button');
-        const views = {
-            day: document.getElementById('view-day'),
-            week: document.getElementById('view-week'),
-            month: document.getElementById('view-month')
-        };
-        const viewTitle = document.getElementById('view-title');
-        const headerDate = document.getElementById('header-date');
-        const welcomeText = document.getElementById('welcome-text');
-        const welcomeSubtext = document.getElementById('welcome-subtext');
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
 
-        switcherButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const selectedView = button.getAttribute('data-view');
-
-                switcherButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                Object.values(views).forEach(view => view.classList.remove('active'));
-                views[selectedView].classList.add('active');
-
-                switch (selectedView) {
-                    case 'day':
-                        viewTitle.textContent = 'Appointment Timeline';
-                        headerDate.textContent = 'Monday, Oct 23';
-                        welcomeText.textContent = 'Good morning, Dr. Clinical.';
-                        welcomeSubtext.textContent = 'You have 12 appointments scheduled for today. Your first patient is arriving in 15 minutes.';
-                        break;
-                    case 'week':
-                        viewTitle.textContent = 'Weekly Schedule';
-                        headerDate.textContent = 'Oct 23 - Oct 29, 2023';
-                        welcomeText.textContent = 'Your Week at a Glance';
-                        welcomeSubtext.textContent = 'You have 48 total appointments scheduled for this week. 85% capacity reached.';
-                        break;
-                    case 'month':
-                        viewTitle.textContent = 'Monthly Planner';
-                        headerDate.textContent = 'October 2023';
-                        welcomeText.textContent = 'October Overview';
-                        welcomeSubtext.textContent = 'A total of 184 patients scheduled this month. Next available slot is Nov 2nd.';
-                        break;
-                }
-            });
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
         });
     });
+
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Check for saved user preference on load
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode'; // Changes icon to moon
+    } else {
+        themeIcon.innerText = 'light_mode'; // Changes icon to sun
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+
+        // Update icon text and save preference
+        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
 </script>
+
 </body>
 </html>

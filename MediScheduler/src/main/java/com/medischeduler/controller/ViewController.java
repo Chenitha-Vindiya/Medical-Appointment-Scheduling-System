@@ -119,4 +119,31 @@ public class ViewController {
         }
         return "doctor/appointment";
     }
+
+    //Doctor's Patient
+    @GetMapping("/doctor/patient")
+    public String doctorPatient(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInDoctor") == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+        return "doctor/patient";
+    }
+
+    //Doctor's Payment
+    @GetMapping("/doctor/payment")
+    public String doctorPayment(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInDoctor") == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+        return "doctor/payment";
+    }
+
+    //Doctor's Profile
+    @GetMapping("/doctor/profile")
+    public String doctorProfile(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInDoctor") == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+        return "doctor/profile";
+    }
 }

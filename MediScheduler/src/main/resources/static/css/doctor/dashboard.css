@@ -4,6 +4,7 @@
 :root {
     /* Ether Health Design System Tokens */
     --primary: #0ea5e9;
+    --primary-hover: #238dc2;
     --primary-dark: #006591;
     --primary-fixed: #c9e6ff;
     --on-primary-fixed: #001e2f;
@@ -19,6 +20,10 @@
     --on-surface-variant: #3e4850;
     --outline-variant: rgba(110, 120, 129, 0.1);
     --error: #ba1a1a;
+    --slate-100: #f1f5f9;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
 }
 
 * {
@@ -40,9 +45,164 @@ body::-webkit-scrollbar {
     display: none;
 }
 
+/* Scroll to Top Button ---------------------------------*/
+#scrollTopBtn {
+    position: fixed;
+    bottom: 35px;
+    right: 35px;
+    background-color: var(--primary);
+    font-weight: bolder;
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.3s ease;
+    z-index: 1001;
+}
+
+#scrollTopBtn:hover {
+    transform: scale(1.07);
+    background-color: var(--primary-hover);
+}
+
+/* When visible */
+#scrollTopBtn.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* =====================
+   HEADER & NAVBAR
+   ===================== */
+.header-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 1000;
+    padding-top: 1rem;
+}
+
+.navbar {
+    width: 92%;
+    max-width: 1200px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    padding: 12px 24px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    color: var(--primary);
+    font-size: 28px;
+}
+
+.logo-text {
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--slate-600);
+    font-weight: 500;
+    font-size: 0.93rem;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+/* Hamburger button */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 10;
+}
+
+.hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--slate-700);
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Buttons */
+.btn-login {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--slate-700);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.875rem;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
 /* Main Content Styles */
 .main-content {
-    /*margin-left: var(--sidebar-width);*/
     min-height: 100vh;
     transition: margin-left 0.3s ease;
 }
@@ -119,7 +279,7 @@ body::-webkit-scrollbar {
 
 .badge-slate {
     background: rgba(211, 228, 254, 0.3);
-    color: #54647a;
+    color: #bec7d5;
 }
 
 .stat-label {
@@ -269,20 +429,57 @@ body::-webkit-scrollbar {
 }
 
 
-
 @media (max-width: 768px) {
+    /* Hamburger visible */
+    .hamburger {
+        display: flex;
+    }
+
+    /* Nav links hidden by default, dropdown on open */
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        background: #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        z-index: 999;
+    }
+
+    .nav-links .btn-login,
+    .nav-links .btn-primary {
+        width: 100%;
+        margin: 0.3rem 0;
+        text-align: center;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 0.6rem 0.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        width: 100%;
+    }
+
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    /* Hide specialty to fit mobile */
     .main-content {
         margin-left: 0;
     }
 
-    .header {
-        left: 0;
-        padding: 0 16px;
-    }
-
-    .search-container {
-        display: none; /* Hide search on mobile header to save space */
-    }
 
     .container {
         padding: 88px 16px 32px;
@@ -354,8 +551,138 @@ body::-webkit-scrollbar {
     }
 }
 
+/* =====================
+   DARK MODE
+   ===================== */
+body.dark-mode {
+    /* Design System Tokens - Dark Overrides */
+    --surface: #0c1322;
+    --surface-lowest: #182030;
+    --surface-container-low: #1e2d40;
+    --surface-container-high: #263347;
+
+    --on-surface: #f1f5f9;
+    --on-surface-variant: #94a3b8;
+    --outline-variant: rgba(255, 255, 255, 0.08);
+
+    /* Slate Palette for Dark Mode */
+    --slate-100: #1e2d40;
+    --slate-700: #f1f5f9;
+    --slate-600: #cbd5e1;
+    --slate-500: #94a3b8;
+
+    /* Shadows */
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Navbar & Header */
+body.dark-mode .navbar {
+    background-color: rgba(24, 32, 48, 0.9);
+    border-color: var(--outline-variant);
+    box-shadow: var(--shadow-lg);
+}
+
+body.dark-mode .nav-links a {
+    color: var(--slate-600);
+}
+
+body.dark-mode .nav-links a:hover {
+    color: var(--primary);
+}
+
+/* Cards & Sections */
+body.dark-mode .stat-card,
+body.dark-mode .table-section {
+    background: var(--surface-lowest);
+    border-color: var(--outline-variant);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .stat-value,
+body.dark-mode .patient-name,
+body.dark-mode .table-header h5 {
+    color: var(--on-surface);
+}
+
+/* Tables */
+body.dark-mode .appointments-table th {
+    color: var(--on-surface-variant);
+}
+
+body.dark-mode .appointment-row td {
+    background-color: var(--surface-container-low);
+    color: var(--on-surface-variant);
+}
+
+body.dark-mode .appointment-row:hover td {
+    background-color: var(--surface-container-high);
+}
+
+/* Status Chips Adjustments */
+body.dark-mode .status-confirmed {
+    background-color: rgba(14, 165, 233, 0.15);
+    color: #7dd3fc;
+}
+
+body.dark-mode .status-pending {
+    background-color: rgba(133, 83, 0, 0.15);
+    color: #ffddb8;
+}
+
+/* UI Elements */
+body.dark-mode #scrollTopBtn {
+    color: var(--surface-lowest);
+}
+
+/* Theme toggle — icon button inside nav */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--slate-500);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, background 0.2s;
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    color: var(--primary);
+    background: var(--slate-100);
+}
+
+.theme-toggle .material-symbols-outlined {
+    font-size: 22px;
+    transition: transform 0.35s ease;
+}
+
+.theme-toggle:hover .material-symbols-outlined {
+    transform: rotate(20deg);
+}
+
+body.dark-mode .theme-toggle {
+    color: #94a3b8;
+}
+
+body.dark-mode .theme-toggle:hover {
+    color: var(--primary);
+    background: rgba(255,255,255,0.06);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    body.dark-mode .nav-links {
+        background: var(--surface-container-high);
+    }
+}
+
 @media (max-width: 480px) {
     .stats-grid {
         grid-template-columns: 1fr;
     }
 }
+

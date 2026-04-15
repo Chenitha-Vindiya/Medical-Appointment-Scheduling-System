@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Doctor's Patient - MediScheduler</title>
+    <link rel="stylesheet" th:href="@{/css/doctor/patient.css}"/>
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg
+          xmlns='http://www.w3.org/2000/svg'
+          viewBox='0 0 24 24'
+          fill='%23007bff'%3E%3Cpath
+          d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">stethoscope</span>
+            <span class="logo-text" th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a th:href="@{/doctor/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/doctor/appointment}">Appointments</a></li>
+            <li><a th:href="@{/doctor/patient}">Patient</a></li>
+            <li><a th:href="@{/doctor/payment}">Payment</a></li>
+            <li><a th:href="@{/doctor/feedback}">Feedback</a></li>
+            <li><a th:href="@{/doctor/profile}">Profile</a></li>
+            <li>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="main-content">
+    <div class="container">
+        <div class="grid">
+            <!-- Card 1 -->
+            <div class="card" data-patient-id="#CL-88291" data-patient-name="Sarah Henderson">
+                <div class="card-header">
+                    <img alt="Patient Avatar" class="patient-img"
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLdybpCstZtWgYj9k26UCGJB8rNPK8R2DeENXAmV_adl-dlwtYRu8eTNHVT76vpLCHrs7KDeMivX9k98SJ67GE9ckxb-XXHW6FvJvcU4qVlfc39WDVasrUSsDbZTP4wppgKC86SKJEjc0_JmWy5XmL1gEliv8OTamyiU6hmONrSzA8crvbkjikeGKc3YlYKF1i51u4kq9DmB6fOow023PC6iNIaRlAiMcTI8dkBbq3PuPsNyFNPTP5BNlSwLIy4fKMTFxSsJqsR37m"/>
+                    <span class="badge badge-confirmed">Confirmed</span>
+                </div>
+                <h3>Sarah Henderson</h3>
+                <p class="patient-id">
+                    <span class="material-symbols-outlined" style="font-size: 14px">fingerprint</span>
+                    ID: #CL-88291
+                </p>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Last Visit</span>
+                        <span class="info-value">Oct 12, 2023</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Next Appt.</span>
+                        <span class="text-primary">In 3 Days</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Condition</span>
+                        <span class="text-tertiary">Post-Op Recovery</span>
+                    </div>
+                </div>
+                <button class="btn-action open-modal">
+                    View Details
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+            <!-- Card 2 -->
+            <div class="card" data-patient-id="#CL-10442" data-patient-name="Robert Chen">
+                <div class="card-header">
+                    <img alt="Patient Avatar" class="patient-img"
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCzu69fVOcSVyq_TQ-UYEt4DYZW1N0ybOXpwZbZfcMFuKUnKYjHB94-uX1yhassMNbn429tSVcFbD4bHoI3ElKbxuLvubYlDhYq1x7ECJyirgcBz4E1aE7Dywn-_Yy0SsXZxv8dKC91hYNjhQHn6qmx6oXFs2XXk9LeJ5Xbbw9uCFgZAXANuimTkNWD8QqZoQ2yN3GCe5NO9nklQ36YlnGYY6PVD3S3y9k8NeUeixe3zlUdmi_D1aPtseFo4gY--j8ERVxv-FhN3Ho"/>
+                    <span class="badge badge-pending">Pending</span>
+                </div>
+                <h3>Robert Chen</h3>
+                <p class="patient-id">
+                    <span class="material-symbols-outlined" style="font-size: 14px">fingerprint</span>
+                    ID: #CL-10442
+                </p>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Last Visit</span>
+                        <span class="info-value">Sep 28, 2023</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Next Appt.</span>
+                        <span class="info-value">TBD</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Condition</span>
+                        <span class="text-tertiary">Hypertension</span>
+                    </div>
+                </div>
+                <button class="btn-action open-modal">
+                    View Details
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+            <!-- Card 3 -->
+            <div class="card" data-patient-id="#CL-99012" data-patient-name="Amara Okafor">
+                <div class="card-header">
+                    <img alt="Patient Avatar" class="patient-img"
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK1pbm8i2uyDFxtDf2ixcMprr6CEekhHevSQPxivohVwh4PVRC6BW4E-bunoZCBTd8ip3UElyTkBbxJPcvjcWvzuaYEg-fdstjIyXHRLAj31BA27QUD8OBiQqjhS_2rtDcV2r7EL-3Fc12L3anTL_JHOGokeH2BYnEVKek1Omi7U5XnhyRMTVgkxdVnrClgRZyZUeRlTZp50rH5zYUoZR4gKF-KhNhaKrthPe-eHT7_DocisH0-oVOIIUHHJSHReWALm6Fl2CuAaOg"/>
+                    <span class="badge badge-confirmed">Confirmed</span>
+                </div>
+                <h3>Amara Okafor</h3>
+                <p class="patient-id">
+                    <span class="material-symbols-outlined" style="font-size: 14px">fingerprint</span>
+                    ID: #CL-99012
+                </p>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Last Visit</span>
+                        <span class="info-value">Aug 05, 2023</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Next Appt.</span>
+                        <span class="text-primary">Tomorrow</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Condition</span>
+                        <span class="text-tertiary">Annual Checkup</span>
+                    </div>
+                </div>
+                <button class="btn-action open-modal">
+                    View Details
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+            <!-- Card 4 (Archived) -->
+            <div class="card card-archived" data-patient-id="#CL-77123" data-patient-name="Marcus Thorne">
+                <div class="card-header">
+                    <img alt="Patient Avatar" class="patient-img"
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuArCf_P-pTNi7zfYY33i8-iiFKWXB7-oyamYklvAOL8JIf9Ma9NgEj441BFKWg-l_7BQYx4CZr6Uy-z0dYfKKOVqxFv7HgCPjSg7sHbTXBnSNpD8C70A4ybcqC2nGlHreMM9z3Sg1IvQeZ39qHcKJrW0uMEB0FZqmA4-NGad5wVfmwvjujusa29rLAlFAiY-M3k8yM-WPnBSF2MUx0qVH4PZRjZaFFnhS4M2aQAmnJnKErNE_Pc2fB3TBZ99UFxo4QfejX0iMQWmquA"/>
+                    <span class="badge badge-archived">Archived</span>
+                </div>
+                <h3>Marcus Thorne</h3>
+                <p class="patient-id">
+                    <span class="material-symbols-outlined" style="font-size: 14px">fingerprint</span>
+                    ID: #CL-77123
+                </p>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Last Visit</span>
+                        <span class="info-value">Dec 12, 2022</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Status</span>
+                        <span class="info-value">Case Closed</span>
+                    </div>
+                </div>
+                <button class="btn-action open-modal">
+                    View Details
+                    <span class="material-symbols-outlined">history</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- Patient Details Modal -->
+<div class="modal-overlay" id="patientModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalPatientName">Patient Profile</h2>
+            <button class="modal-close-btn" id="closeModal">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-section">
+                <span class="modal-section-title">Personal Information</span>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <p>Phone Number</p>
+                        <span id="modalPhone">+1 (555) 012-3456</span>
+                    </div>
+                    <div class="info-box">
+                        <p>Email Address</p>
+                        <span id="modalEmail">patient@email.com</span>
+                    </div>
+                    <div class="info-box" id="addressBox" style="grid-column: span 2;">
+                        <p>Home Address</p>
+                        <span id="modalAddress">123 Medical Plaza, Suite 400, North Springfield, IL 62704</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-section">
+                <span class="modal-section-title">Recent Medical Notes</span>
+                <div class="notes-content" id="modalNotes">
+                    Patient is showing steady improvement since last consultation.
+                </div>
+            </div>
+            <div class="modal-section">
+                <span class="modal-section-title">Upcoming Medications</span>
+                <ul class="med-list" id="modalMeds">
+                    <li class="med-item">
+                        <span class="material-symbols-outlined med-icon">pill</span>
+                        <div class="med-details">
+                            <h4>Lisinopril 10mg</h4>
+                            <p>Take 1 tablet daily every morning</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary2" id="footerClose">Close Details</button>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('patientModal');
+        const openBtns = document.querySelectorAll('.open-modal');
+        const closeBtn = document.getElementById('closeModal');
+        const footerCloseBtn = document.getElementById('footerClose');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+
+        // Sidebar Toggle logic
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            const icon = sidebarToggle.querySelector('.material-symbols-outlined');
+            icon.innerText = sidebar.classList.contains('active') ? 'close' : 'menu';
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target) && sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    sidebarToggle.querySelector('.material-symbols-outlined').innerText = 'menu';
+                }
+            }
+        });
+
+        const patientData = {
+            "#CL-88291": {
+                name: "Sarah Henderson",
+                phone: "+1 (555) 902-1142",
+                email: "s.henderson@example.com",
+                address: "42 Oak Lane, Riverdale, NY 10471",
+                notes: "Successful post-op recovery. Incision sites are healing well. No signs of infection. Patient reports minimal pain managed by OTC medication. Scheduled for stitch removal next visit.",
+                meds: [
+                    {name: "Naproxen 500mg", instructions: "Twice daily as needed for pain"},
+                    {name: "Ciprofloxacin 250mg", instructions: "Take until course is finished"}
+                ]
+            },
+            "#CL-10442": {
+                name: "Robert Chen",
+                phone: "+1 (555) 231-8890",
+                email: "r.chen88@provider.net",
+                address: "789 Pinecrest Ave, Apt 4C, Seattle, WA 98101",
+                notes: "Hypertension management ongoing. Blood pressure stabilized at 135/85. Patient has implemented dietary changes (DASH diet). Monitoring for side effects from new medication dosage.",
+                meds: [
+                    {name: "Metoprolol Succinate 50mg", instructions: "One tablet daily in the morning"}
+                ]
+            },
+            "#CL-99012": {
+                name: "Amara Okafor",
+                phone: "+1 (555) 612-4431",
+                email: "amara.o@healthcare.org",
+                address: "15 Highland Terrace, Austin, TX 78701",
+                notes: "Routine annual checkup scheduled. Last lab results showed Vitamin D deficiency. Discussed supplementation and sun exposure. Otherwise in excellent health.",
+                meds: [
+                    {name: "Vitamin D3 2000 IU", instructions: "Daily with meal"},
+                    {name: "Multivitamin", instructions: "Daily"}
+                ]
+            },
+            "#CL-77123": {
+                name: "Marcus Thorne",
+                phone: "+1 (555) 009-1223",
+                email: "m.thorne.legacy@domain.com",
+                address: "99 Heritage Blvd, Boston, MA 02108",
+                notes: "Case archived. All follow-up protocols completed. Final assessment showed full restoration of mobility. Patient discharged from active care list.",
+                meds: []
+            }
+        };
+
+        const openModal = (id) => {
+            const data = patientData[id];
+            if (data) {
+                document.getElementById('modalPatientName').innerText = data.name + ' - Profile';
+                document.getElementById('modalPhone').innerText = data.phone;
+                document.getElementById('modalEmail').innerText = data.email;
+                document.getElementById('modalAddress').innerText = data.address;
+                document.getElementById('modalNotes').innerText = data.notes;
+
+                const medList = document.getElementById('modalMeds');
+                medList.innerHTML = '';
+
+                if (data.meds.length > 0) {
+                    data.meds.forEach(med => {
+                        const li = document.createElement('li');
+                        li.className = 'med-item';
+                        li.innerHTML = `
+                            <span class="material-symbols-outlined med-icon">pill</span>
+                            <div class="med-details">
+                                <h4>${med.name}</h4>
+                                <p>${med.instructions}</p>
+                            </div>
+                        `;
+                        medList.appendChild(li);
+                    });
+                } else {
+                    medList.innerHTML = '<li class="med-item"><p style="font-size: 0.875rem; color: var(--on-surface-variant);">No active prescriptions</p></li>';
+                }
+            }
+
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeModal = () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        openBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('.card');
+                const patientId = card.getAttribute('data-patient-id');
+                openModal(patientId);
+            });
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        footerCloseBtn.addEventListener('click', closeModal);
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    });
+</script>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Check for saved user preference on load
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode'; // Changes icon to moon
+    } else {
+        themeIcon.innerText = 'light_mode'; // Changes icon to sun
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+
+        // Update icon text and save preference
+        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+</script>
+</body>
+</html>

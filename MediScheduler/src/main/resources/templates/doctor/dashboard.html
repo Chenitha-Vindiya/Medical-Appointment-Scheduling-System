@@ -11,6 +11,59 @@
 </head>
 <body>
 
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">stethoscope</span>
+            <span class="logo-text" th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a th:href="@{/doctor/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/doctor/appointment}">Appointments</a></li>
+            <li><a th:href="@{/doctor/patient}">Patient</a></li>
+            <li><a th:href="@{/doctor/payment}">Payment</a></li>
+            <li><a th:href="@{/doctor/feedback}">Feedback</a></li>
+            <li><a th:href="@{/doctor/profile}">Profile</a></li>
+            <li>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
+        </ul>
+    </nav>
+</header>
+
 <!-- Main Content -->
 <main class="main-content">
     <div class="container">
@@ -120,6 +173,45 @@
         </section>
     </div>
 </main>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Check for saved user preference on load
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode'; // Changes icon to moon
+    } else {
+        themeIcon.innerText = 'light_mode'; // Changes icon to sun
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+
+        // Update icon text and save preference
+        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+</script>
 
 </body>
 </html>
