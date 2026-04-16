@@ -428,8 +428,7 @@ body::-webkit-scrollbar {
     text-decoration: underline;
 }
 
-
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     /* Hamburger visible */
     .hamburger {
         display: flex;
@@ -470,11 +469,12 @@ body::-webkit-scrollbar {
         width: 100%;
     }
 
-
     .nav-links.open {
         display: flex;
     }
+}
 
+@media (max-width: 768px) {
     /* Hide specialty to fit mobile */
     .main-content {
         margin-left: 0;

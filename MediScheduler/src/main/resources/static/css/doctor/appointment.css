@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
 :root {
-    --primary-hover: #238dc2;
     --primary-light: #e0f2fe;
     --primary-container: #0ea5e9;
     --on-primary: #ffffff;
@@ -22,9 +21,11 @@
     --radius-xl: 32px;
     --slate-700: #334155;
     --primary: #0ea5e9;
+    --primary-hover: #238dc2;
     --slate-100: #f1f5f9;
     --slate-500: #64748b;
     --slate-600: #475569;
+    --slate-700: #334155;
 }
 
 * {
@@ -467,7 +468,7 @@ main {
     border-color: var(--accent-slate);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     /* Hamburger visible */
     .hamburger {
         display: flex;
@@ -511,7 +512,9 @@ main {
     .nav-links.open {
         display: flex;
     }
+}
 
+@media (max-width: 768px) {
     /* Day View Scaled for Mobile */
     .schedule-list {
         padding-left: 54px;

@@ -49,9 +49,11 @@
     --on-primary: #ffffff;
     --on-error-container: #93000a;
     --primary: #0ea5e9;
+    --primary-hover: #238dc2;
     --slate-100: #f1f5f9;
     --slate-500: #64748b;
     --slate-600: #475569;
+    --slate-700: #334155;
 }
 
 * {
@@ -370,7 +372,7 @@ body::-webkit-scrollbar {
     font-weight: 600;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     /* Hamburger visible */
     .hamburger {
         display: flex;
@@ -411,13 +413,19 @@ body::-webkit-scrollbar {
         width: 100%;
     }
 
-
     .nav-links.open {
         display: flex;
     }
+}
 
+@media (max-width: 768px) {
     .card {
         padding: 1.25rem;
+    }
+
+    .main {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
     }
 
     /* Responsive Table (Card View) */

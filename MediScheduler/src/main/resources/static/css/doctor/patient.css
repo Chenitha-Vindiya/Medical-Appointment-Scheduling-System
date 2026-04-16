@@ -24,9 +24,11 @@
     --error: #ba1a1a;
     --shadow: 0px 20px 40px rgba(25, 28, 30, 0.06);
     --primary: #0ea5e9;
+    --primary-hover: #238dc2;
     --slate-100: #f1f5f9;
     --slate-500: #64748b;
     --slate-600: #475569;
+    --slate-700: #334155;
 }
 
 * {
@@ -619,8 +621,7 @@ body::-webkit-scrollbar {
     }
 }
 
-@media (max-width: 768px) {
-
+@media (max-width: 1024px) {
     /* Hamburger visible */
     .hamburger {
         display: flex;
@@ -661,11 +662,12 @@ body::-webkit-scrollbar {
         width: 100%;
     }
 
-
     .nav-links.open {
         display: flex;
     }
+}
 
+@media (max-width: 768px) {
     .info-grid {
         grid-template-columns: 1fr;
     }

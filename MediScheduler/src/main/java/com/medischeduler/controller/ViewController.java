@@ -138,6 +138,15 @@ public class ViewController {
         return "doctor/payment";
     }
 
+    //Doctor's Feedback
+    @GetMapping("/doctor/feedback")
+    public String doctorFeedback(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInDoctor") == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+        return "doctor/feedback";
+    }
+
     //Doctor's Profile
     @GetMapping("/doctor/profile")
     public String doctorProfile(HttpSession session, Model model) {

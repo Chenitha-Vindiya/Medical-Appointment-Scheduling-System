@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Feedback - MediScheduler</title>
+    <link rel="stylesheet" th:href="@{/css/doctor/feedback.css}"/>
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+</head>
+<body>
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">stethoscope</span>
+            <span class="logo-text" th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a th:href="@{/doctor/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/doctor/appointment}">Appointments</a></li>
+            <li><a th:href="@{/doctor/patient}">Patient</a></li>
+            <li><a th:href="@{/doctor/payment}">Payment</a></li>
+            <li><a th:href="@{/doctor/feedback}">Feedback</a></li>
+            <li><a th:href="@{/doctor/profile}">Profile</a></li>
+            <li>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="stats-card editorial-shadow">
+        <div>
+            <h3>4.9/5.0</h3>
+            <p>Patient Satisfaction Score</p>
+            <div class="star-rating">
+                <span class="material-symbols-outlined">star</span>
+                <span class="material-symbols-outlined">star</span>
+                <span class="material-symbols-outlined">star</span>
+                <span class="material-symbols-outlined">star</span>
+                <span class="material-symbols-outlined">star</span>
+            </div>
+        </div>
+        <div class="stats-divider">
+            <div class="stat-item">
+                <span class="stat-value primary">128</span>
+                <span class="stat-label">Total Reviews</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value secondary">94%</span>
+                <span class="stat-label">Response Rate</span>
+            </div>
+        </div>
+    </div>
+    <div class="filter-row">
+        <div class="filter-group">
+            <button class="filter-btn active">All Feedback</button>
+            <button class="filter-btn inactive">Unresolved</button>
+            <button class="filter-btn inactive">Responded</button>
+            <button class="filter-btn inactive">Ignored</button>
+        </div>
+    </div>
+    <div class="feedback-list">
+        <!-- Feedback Item 1 -->
+        <div class="feedback-item editorial-shadow">
+            <div class="feedback-header">
+                <div class="patient-info">
+                    <div class="avatar"
+                         style="background-color: var(--secondary-container); color: var(--on-secondary-container);">AB
+                    </div>
+                    <div class="feedback-content">
+                        <h4>Alice Bennett <span class="badge badge-patient">Confirmed Patient</span></h4>
+                        <div class="mini-stars">
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                        </div>
+                        <p class="comment">
+                            "Dr. Clinical took the time to listen to all my concerns about the new medication. I never
+                            felt rushed during our appointment, which is rare these days. The clinic atmosphere was also
+                            very calming."
+                        </p>
+                    </div>
+                </div>
+                <div class="meta-info">
+                    <span class="time-ago">2 hours ago</span>
+                    <span class="status-pill">NEW</span>
+                </div>
+            </div>
+            <div class="feedback-footer">
+                <div class="action-links">
+                    <button class="action-btn primary"><span class="material-symbols-outlined">reply</span> Respond
+                    </button>
+                    <button class="action-btn"><span class="material-symbols-outlined">flag</span> Report</button>
+                </div>
+            </div>
+        </div>
+        <!-- Feedback Item 2 -->
+        <div class="feedback-item editorial-shadow">
+            <div class="feedback-header">
+                <div class="patient-info">
+                    <div class="avatar"
+                         style="background-color: var(--tertiary-fixed); color: var(--on-tertiary-fixed);">JH
+                    </div>
+                    <div class="feedback-content">
+                        <h4>James Harrison <span class="badge badge-inquiry">Inquiry</span></h4>
+                        <div class="mini-stars">
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined" style="color: #e2e8f0;">star</span>
+                        </div>
+                        <p class="comment italic">
+                            "Quick question regarding my follow-up: should I bring the previous lab results, or are they
+                            already in the digital portal? Great experience overall."
+                        </p>
+                    </div>
+                </div>
+                <div class="meta-info">
+                    <span class="time-ago">Yesterday</span>
+                    <span class="status-pill action">ACTION REQUIRED</span>
+                </div>
+            </div>
+            <div class="feedback-footer">
+                <div class="action-links">
+                    <button class="action-btn primary"><span class="material-symbols-outlined">chat_bubble</span> Reply
+                        to Inquiry
+                    </button>
+                    <button class="action-btn"><span class="material-symbols-outlined">archive</span> Archive</button>
+                </div>
+            </div>
+        </div>
+        <!-- Feedback Item 3 -->
+        <div class="feedback-item editorial-shadow resolved-fade">
+            <div class="feedback-header">
+                <div class="patient-info">
+                    <div class="avatar"><img alt="Sarah Miller"
+                                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmq7RFp_5UZ2qxm-x-OkXj-j5m61Ss4x63l5omzH-eRmBqAKunwhDbZMsgdeC53OPHfGu3VCn4J9N2pexA6FNlWmCFb0Am6SjvxdpIDeNVcOZ5e58eQ8DQeLUtQ40EZjBfsWbzfQnATo0yWxPX7l-yMO85cpDfuoFYHAS0Rprhnqe4J5mzwtQjRk6CaI0kT355qHtHa47Wi_0VqSwsb1_1SaHq-_doYOYlJUjPzVkzQwiymyj03Yu0Ok5c7ptvyR0aZcfXdyicnoIh"/>
+                    </div>
+                    <div class="feedback-content">
+                        <h4>Sarah Miller <span class="badge badge-patient">Confirmed Patient</span></h4>
+                        <div class="mini-stars">
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                            <span class="material-symbols-outlined"
+                                  style='font-variation-settings: "FILL" 1;'>star</span>
+                        </div>
+                        <p class="comment">
+                            "The online scheduling was seamless. Dr. Clinical explained my blood work in terms I could
+                            actually understand. Very grateful for the care."
+                        </p>
+                    </div>
+                </div>
+                <div class="meta-info">
+                    <span class="time-ago">Dec 12, 2023</span>
+                    <span class="status-pill resolved">RESOLVED</span>
+                </div>
+            </div>
+            <div class="feedback-footer">
+                <div class="reply-note">
+                    <div class="check-circle">
+                        <span class="material-symbols-outlined"
+                              style="font-size: 14px; color: var(--primary);">done_all</span>
+                    </div>
+                    <span class="reply-text">You replied on Dec 13: "Thank you Sarah! Happy we could help..."</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Check for saved user preference on load
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode'; // Changes icon to moon
+    } else {
+        themeIcon.innerText = 'light_mode'; // Changes icon to sun
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+
+        // Update icon text and save preference
+        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+</script>
+</body>
+</html>

@@ -13,6 +13,13 @@
 
 <body>
 
+<script>
+    // Check for saved user preference from the home page
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+</script>
+
 <!-- Scroll to Top Button -->
 <button id="scrollTopBtn" title="Go to top">▲</button>
 

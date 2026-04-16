@@ -621,7 +621,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 @media (max-width: 560px) {
-  .page-container { padding: 1rem 0.5rem; }
+  .page-container { padding: 5rem 0.5rem; }
 
   .auth-card {
     border-radius: 0.75rem;
@@ -740,4 +740,54 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: 500;
   border-radius: 8px;
   justify-content: center; /* Center the error text */
+}
+
+/* =====================
+   DARK MODE OVERRIDES
+   ===================== */
+body.dark-mode {
+  --bg-light: #0f172a;
+  --nav-bg: rgba(15, 23, 42, 0.9);
+  --slate-900: #f8fafc; /* Inverts main text */
+  --slate-700: #cbd5e1; /* Inverts secondary text */
+  --slate-600: #94a3b8;
+  --slate-500: #64748b;
+  --slate-400: #475569;
+  --slate-200: #334155; /* Darker borders */
+  --slate-100: #1e293b; /* Darker card/input accents */
+  --white: #1e293b; /* Auth card background */
+}
+
+/* Specific component tweaks for the login page */
+body.dark-mode .logo-text {
+  color: #ffffff;
+}
+
+body.dark-mode .text-input {
+  background-color: var(--slate-100);
+  color: var(--slate-900);
+  border-color: var(--slate-200);
+}
+
+body.dark-mode .text-input:focus {
+  background-color: var(--white);
+}
+
+body.dark-mode .social-item {
+  background-color: var(--slate-100);
+  color: var(--slate-900);
+  border-color: var(--slate-200);
+}
+
+body.dark-mode .portal-toggle {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+body.dark-mode .toggle-option.active {
+  background: var(--slate-100);
+  color: var(--primary);
+}
+
+body.dark-mode .form-tabs {
+  border-bottom-color: var(--slate-200);
 }
