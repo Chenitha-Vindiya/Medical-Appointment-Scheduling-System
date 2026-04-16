@@ -1,6 +1,8 @@
 package com.medischeduler.controller;
 
-
+import com.medischeduler.repository.DoctorRepository;
+import com.medischeduler.repository.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import com.medischeduler.model.Patient;
 import com.medischeduler.model.Doctor;
@@ -10,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ViewController {
+
+    @Autowired
+    private DoctorRepository doctorRepository;
 
     @GetMapping("/")
     public String index() {
@@ -156,6 +161,7 @@ public class ViewController {
             return "redirect:/login"; // Redirect to login if not authenticated
         }
 
+        doctor = doctorRepository.findById(doctor.getId()).orElse(null);
         model.addAttribute("doctor", doctor);
         return "doctor/profile";
     }

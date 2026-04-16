@@ -2,6 +2,7 @@ package com.medischeduler.controller;
 
 import com.medischeduler.model.Doctor;
 import com.medischeduler.model.Patient;
+import com.medischeduler.model.WorkingHours;
 import com.medischeduler.service.DoctorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +107,18 @@ public class DoctorController {
         } else {
             redirAttrs.addFlashAttribute("passwordError", "The current password you entered is incorrect.");
         }
+
+        return "redirect:/doctor/profile";
+    }
+
+    @PostMapping("/update-working-hours")
+    public String updateWorkingHours(@ModelAttribute("doctor") Doctor formDoctor, RedirectAttributes redirAttrs) {
+
+        // Pass the ID and the list from the form to the service
+        doctorService.updateDoctorWorkingHours(formDoctor.getId(), formDoctor.getWorkingHours());
+
+        // Add success message for the UI
+        redirAttrs.addFlashAttribute("updated", true);
 
         return "redirect:/doctor/profile";
     }

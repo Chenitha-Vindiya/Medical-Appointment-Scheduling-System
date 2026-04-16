@@ -192,183 +192,52 @@
             </div>
         </footer>
     </form>
-
     <!-- Office Hours Section -->
-    <div class="content-wrapper">
-        <section class="form-card">
+    <section class="form-card office-hours-card">
+        <form th:action="@{/doctor/update-working-hours}" th:object="${doctor}" method="post">
+            <input type="hidden" th:field="*{id}" />
             <h3 class="section-title">Office Hours</h3>
+
             <div class="hours-container">
-                <!-- Mon -->
-                <div class="hour-row">
-                    <div class="day-check">
-                        <span class="day-name">Monday</span>
-                    </div>
-                    <div class="time-inputs">
-                        <div class="time-field">
-                            <input type="text" value="09:00 AM"/>
-                            <span class="material-symbols-outlined">schedule</span>
+                <div th:each="wh, iStat : *{workingHours}" class="hour-card-mobile">
+                    <input type="hidden" th:field="*{workingHours[__${iStat.index}__].id}" />
+                    <input type="hidden" th:field="*{workingHours[__${iStat.index}__].day}" />
+
+                    <div class="card-top-row">
+                        <span class="day-name" th:text="${wh.day}">Monday</span>
+
+                        <div class="time-group-wrapper">
+                            <div class="time-input-container">
+                                <input type="time" class="time-input-clean" th:field="*{workingHours[__${iStat.index}__].startTime}" />
+                                <span class="material-symbols-outlined time-icon-small">schedule</span>
+                            </div>
+
+                            <span class="to-label-small">TO</span>
+
+                            <div class="time-input-container">
+                                <input type="time" class="time-input-clean" th:field="*{workingHours[__${iStat.index}__].endTime}" />
+                                <span class="material-symbols-outlined time-icon-small">schedule</span>
+                            </div>
                         </div>
-                        <span class="to-separator">To</span>
-                        <div class="time-field">
-                            <input type="text" value="05:00 PM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
                     </div>
-                    <div class="status-toggle">
-                        <span class="status-text">Active</span>
+
+                    <div class="card-bottom-row">
+                        <span class="status-label-small">ACTIVE</span>
                         <label class="switch">
-                            <input checked="" type="checkbox"/>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <!-- Tue -->
-                <div class="hour-row">
-                    <div class="day-check">
-                        <span class="day-name">Tuesday</span>
-                    </div>
-                    <div class="time-inputs">
-                        <div class="time-field">
-                            <input type="text" value="09:00 AM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                        <span class="to-separator">To</span>
-                        <div class="time-field">
-                            <input type="text" value="05:00 PM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                    </div>
-                    <div class="status-toggle">
-                        <span class="status-text">Active</span>
-                        <label class="switch">
-                            <input checked="" type="checkbox"/>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <!-- Wed -->
-                <div class="hour-row">
-                    <div class="day-check">
-                        <span class="day-name">Wednesday</span>
-                    </div>
-                    <div class="time-inputs">
-                        <div class="time-field">
-                            <input type="text" value="10:00 AM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                        <span class="to-separator">To</span>
-                        <div class="time-field">
-                            <input type="text" value="07:00 PM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                    </div>
-                    <div class="status-toggle">
-                        <span class="status-text">Active</span>
-                        <label class="switch">
-                            <input checked="" type="checkbox"/>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <!-- Thu -->
-                <div class="hour-row">
-                    <div class="day-check">
-                        <span class="day-name">Thursday</span>
-                    </div>
-                    <div class="time-inputs">
-                        <div class="time-field">
-                            <input type="text" value="09:00 AM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                        <span class="to-separator">To</span>
-                        <div class="time-field">
-                            <input type="text" value="05:00 PM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                    </div>
-                    <div class="status-toggle">
-                        <span class="status-text">Active</span>
-                        <label class="switch">
-                            <input checked="" type="checkbox"/>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <!-- Fri -->
-                <div class="hour-row disabled">
-                    <div class="day-check">
-                        <span class="day-name">Friday</span>
-                    </div>
-                    <div class="time-inputs">
-                        <div class="time-field">
-                            <input type="text" value="09:00 AM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                        <span class="to-separator">To</span>
-                        <div class="time-field">
-                            <input type="text" value="05:00 PM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                    </div>
-                    <div class="status-toggle">
-                        <span class="status-text">Active</span>
-                        <label class="switch">
-                            <input type="checkbox"/>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <!-- Sat -->
-                <div class="hour-row disabled">
-                    <div class="day-check">
-                        <span class="day-name">Saturday</span>
-                    </div>
-                    <div class="time-inputs">
-                        <div class="time-field">
-                            <input type="text" value="09:00 AM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                        <span class="to-separator">To</span>
-                        <div class="time-field">
-                            <input type="text" value="01:00 PM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                    </div>
-                    <div class="status-toggle">
-                        <span class="status-text">Active</span>
-                        <label class="switch">
-                            <input type="checkbox"/>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <!-- Sun -->
-                <div class="hour-row disabled">
-                    <div class="day-check">
-                        <span class="day-name">Sunday</span>
-                    </div>
-                    <div class="time-inputs">
-                        <div class="time-field">
-                            <input type="text" value="09:00 AM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                        <span class="to-separator">To</span>
-                        <div class="time-field">
-                            <input type="text" value="05:00 PM"/>
-                            <span class="material-symbols-outlined">schedule</span>
-                        </div>
-                    </div>
-                    <div class="status-toggle">
-                        <span class="status-text">Active</span>
-                        <label class="switch">
-                            <input type="checkbox"/>
+                            <input type="checkbox"
+                                   th:field="*{workingHours[__${iStat.index}__].active}"
+                                   class="active-checkbox">
                             <span class="slider"></span>
                         </label>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+
+            <div class="form-actions no-border-top">
+                <button type="submit" class="btn btn-save">Save Office Hours</button>
+            </div>
+        </form>
+    </section>
 
     <section class="form-card danger-zone">
         <h3 class="section-title danger-title">Danger Zone</h3>
