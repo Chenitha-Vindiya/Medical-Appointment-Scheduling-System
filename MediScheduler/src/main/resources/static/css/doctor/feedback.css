@@ -692,3 +692,45 @@ main {
 .theme-toggle:hover .material-symbols-outlined {
     transform: rotate(20deg);
 }
+
+/* =====================
+   DARK MODE OVERRIDES
+   ===================== */
+body.dark-mode {
+    --surface: #0c1322;
+    --surface-container-low: #1e2d40;
+    --surface-container-high: #263347;
+    --surface-container-lowest: #182030;
+    --on-surface: #f1f5f9;
+    --on-surface-variant: #94a3b8;
+    --outline-variant: #1e293b;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .stats-card,
+body.dark-mode .feedback-item {
+    background-color: var(--surface-container-lowest);
+    color: var(--on-surface);
+}
+
+body.dark-mode .stats-divider {
+    border-color: #1e2d40;
+}
+
+body.dark-mode .feedback-content h4,
+body.dark-mode .comment {
+    color: var(--on-surface);
+}
+
+body.dark-mode .filter-btn.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+body.dark-mode .feedback-footer {
+    border-top-color: #1e2d40;
+}
+
+body.dark-mode .check-circle {
+    background-color: rgba(14, 165, 233, 0.15);
+}

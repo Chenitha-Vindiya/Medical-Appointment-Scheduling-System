@@ -3,6 +3,7 @@ package com.medischeduler.controller;
 
 import org.springframework.ui.Model;
 import com.medischeduler.model.Patient;
+import com.medischeduler.model.Doctor;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -150,9 +151,12 @@ public class ViewController {
     //Doctor's Profile
     @GetMapping("/doctor/profile")
     public String doctorProfile(HttpSession session, Model model) {
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
         if (session.getAttribute("loggedInDoctor") == null) {
             return "redirect:/login"; // Redirect to login if not authenticated
         }
+
+        model.addAttribute("doctor", doctor);
         return "doctor/profile";
     }
 }

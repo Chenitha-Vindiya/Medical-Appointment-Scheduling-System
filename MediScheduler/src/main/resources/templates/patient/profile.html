@@ -118,7 +118,7 @@
                 <div class="profile-pic-section">
                     <div class="avatar-container group">
                         <img alt="Profile avatar" class="avatar-image"
-                             src="https://i.ibb.co/jvQk7FTH/5f278dff-551a-474c-9743-de92e6aeb202.jpg"/>
+                             th:src="'https://ui-avatars.com/api/?name=' + ${patient.firstName} + '+' + ${patient.lastName} + '&background=0ea5e9&color=fff'"/>
                         <div class="avatar-overlay">
                             <svg class="camera-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -239,20 +239,6 @@
             </div>
         </div>
     </section>
-
-    <!--            <section class="form-card" data-purpose="security-settings">-->
-    <!--                <h3 class="section-title">Security</h3>-->
-    <!--                <div class="security-grid">-->
-    <!--                    <div class="input-group">-->
-    <!--                        <label class="input-label">New Password</label>-->
-    <!--                        <input class="form-input" name="password" type="password" />-->
-    <!--                    </div>-->
-    <!--                    <div class="input-group">-->
-    <!--                        <label class="input-label">Confirm Password</label>-->
-    <!--                        <input class="form-input" name="password" type="password" />-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--            </section>-->
 </main>
 
 <div id="passwordModal" class="modal-overlay">
@@ -307,7 +293,6 @@
         }
 
         /* --- 2. EDIT/VIEW MODE TOGGLE LOGIC --- */
-        const form = document.getElementById('profileForm');
         // Select all inputs except the hidden ID and the password modal fields
         const inputs = document.querySelectorAll('.profile-form .form-input, .profile-form select, .profile-form textarea');
         const editBtn = document.getElementById('editProfileBtn');

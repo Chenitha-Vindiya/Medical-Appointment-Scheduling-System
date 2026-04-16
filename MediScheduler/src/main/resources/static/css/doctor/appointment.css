@@ -19,7 +19,6 @@
     --radius-md: 12px;
     --radius-lg: 24px;
     --radius-xl: 32px;
-    --slate-700: #334155;
     --primary: #0ea5e9;
     --primary-hover: #238dc2;
     --slate-100: #f1f5f9;
@@ -615,4 +614,53 @@ main {
 
 .theme-toggle:hover .material-symbols-outlined {
     transform: rotate(20deg);
+}
+
+/* =====================
+   DARK MODE OVERRIDES
+   ===================== */
+body.dark-mode {
+    --surface: #0c1322;
+    --on-surface: #f1f5f9;
+    --on-surface-variant: #94a3b8;
+    --outline-variant: #1e293b;
+    --slate-100: #1e2d40;
+    --slate-600: #cbd5e1;
+    --slate-700: #f1f5f9;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .timeline-container,
+body.dark-mode .appointment-card {
+    background-color: #182030;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--on-surface);
+}
+
+body.dark-mode .timeline-header h3,
+body.dark-mode .time-label .hour,
+body.dark-mode .patient-name {
+    color: #ffffff;
+}
+
+body.dark-mode .schedule-list::before {
+    background: #1e2d40;
+}
+
+body.dark-mode .room-tag {
+    background: #1e2d40;
+    color: #94a3b8;
+}
+
+body.dark-mode .empty-slot-btn {
+    border-color: #1e2d40;
+}
+
+body.dark-mode .empty-slot-btn:hover {
+    background: rgba(14, 165, 233, 0.05);
+}
+
+body.dark-mode .timeline-marker {
+    background: #182030;
+    box-shadow: 0 0 0 4px #182030;
 }

@@ -509,3 +509,34 @@ body::-webkit-scrollbar {
 .theme-toggle:hover .material-symbols-outlined {
     transform: rotate(20deg);
 }
+
+/* =====================
+   DARK MODE OVERRIDES
+   ===================== */
+body.dark-mode {
+    --surface: #0c1322;
+    --surface-container-low: #1e2d40;
+    --surface-container-high: #263347;
+    --surface-container-lowest: #182030;
+    --on-surface: #f1f5f9;
+    --on-surface-variant: #94a3b8;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .card {
+    background-color: var(--surface-container-lowest);
+    color: var(--on-surface);
+}
+
+body.dark-mode .data-table td {
+    background-color: var(--surface-container-low);
+    color: var(--on-surface);
+}
+
+body.dark-mode .data-table tr:hover td {
+    background-color: var(--surface-container-high);
+}
+
+body.dark-mode .data-table td::before {
+    color: var(--primary); /* Labels on mobile view */
+}

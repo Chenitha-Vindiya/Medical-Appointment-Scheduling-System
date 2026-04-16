@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     Doctor findByEmail(String email);
-    Doctor findByEmailAndActiveTrue(String email);
     Doctor findByNationalId(String nationalId);
     Doctor findByPhoneNumber(String phoneNumber);
 }

@@ -725,3 +725,39 @@ body::-webkit-scrollbar {
 .theme-toggle:hover .material-symbols-outlined {
     transform: rotate(20deg);
 }
+
+/* =====================
+   DARK MODE OVERRIDES
+   ===================== */
+body.dark-mode {
+    --background: #0c1322;
+    --surface: #0c1322;
+    --surface-container-low: #1e2d40;
+    --surface-container-lowest: #182030;
+    --on-surface: #f1f5f9;
+    --on-surface-variant: #94a3b8;
+    --outline-variant: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .navbar,
+body.dark-mode .card,
+body.dark-mode .modal-content {
+    background-color: var(--surface-container-lowest);
+    color: var(--on-surface);
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer,
+body.dark-mode .notes-content {
+    background-color: var(--surface-container-low);
+}
+
+body.dark-mode .card-archived {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .info-box span,
+body.dark-mode .med-details h4 {
+    color: #ffffff;
+}

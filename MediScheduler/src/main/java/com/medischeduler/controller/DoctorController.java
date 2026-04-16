@@ -1,12 +1,14 @@
 package com.medischeduler.controller;
 
 import com.medischeduler.model.Doctor;
+import com.medischeduler.model.Patient;
 import com.medischeduler.service.DoctorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -49,5 +51,62 @@ public class DoctorController {
             model.addAttribute("activeTab", "signin");
             return "login";
         }
+    }
+
+    @PostMapping("/deactivate-account")
+    public String deactivateAccount(HttpSession session, RedirectAttributes redirAttrs) {
+        Doctor sessionDoctor = (Doctor) session.getAttribute("loggedInDoctor");
+
+        if (sessionDoctor != null && doctorService.deactivateAccount(sessionDoctor.getId())) {
+            session.invalidate();
+            redirAttrs.addFlashAttribute("deactivatedMessage", "Your account has been deactivated.");
+            return "redirect:/patient/deactivated";
+        }
+        return "redirect:/login";
+    }
+
+    @PostMapping("/update-profile")
+    public String updateProfile(@ModelAttribute Doctor formDoctor, HttpSession session) {
+        // 1. Call the service to update the database
+        Doctor updated = doctorService.updateProfile(formDoctor);
+
+        // 2. If the update was successful, refresh the session data
+        if (updated != null) {
+            session.setAttribute("loggedInDoctor", updated);
+        }
+
+        // 3. Redirect back to the profile page with a success parameter
+        return "redirect:/doctor/profile?updated=true";
+    }
+
+    @PostMapping("/change-password")
+    public String changePassword(@RequestParam String currentPassword, @RequestParam String newPassword,
+                                 @RequestParam String confirmPassword, HttpSession session, RedirectAttributes redirAttrs) {
+
+        Doctor sessionDoctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (sessionDoctor == null) return "redirect:/login";
+
+        // Keep your original validation logic in the controller for UI feedback
+        if (!newPassword.equals(confirmPassword)) {
+            redirAttrs.addFlashAttribute("passwordError", "New passwords do not match.");
+            return "redirect:/doctor/profile";
+        }
+
+        if (newPassword.length() < 8) {
+            redirAttrs.addFlashAttribute("passwordError", "New password must be at least 8 characters long.");
+            return "redirect:/doctor/profile";
+        }
+
+        String result = doctorService.changePassword(sessionDoctor.getId(), currentPassword, newPassword);
+
+        if (result.equals("SUCCESS")) {
+            // Re-fetch to update session
+            session.setAttribute("loggedInDoctor", (Doctor) session.getAttribute("loggedInDoctor"));
+            redirAttrs.addFlashAttribute("passwordSuccess", "Password updated successfully!");
+        } else {
+            redirAttrs.addFlashAttribute("passwordError", "The current password you entered is incorrect.");
+        }
+
+        return "redirect:/doctor/profile";
     }
 }
