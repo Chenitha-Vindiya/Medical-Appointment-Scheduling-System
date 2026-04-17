@@ -23,9 +23,14 @@ public class AppointmentService {
     public List<String> createAppointment(Long doctorId, String reason, LocalDate date, LocalTime time, Patient patient) {
         List<String> errors = new ArrayList<>();
 
-        // 0. Date Validation (Future/Today only)
-        if (date.isBefore(LocalDate.now())) {
+        // 0. Strict Date & Time Validation
+        LocalDate today = LocalDate.now();
+        if (date.isBefore(today)) {
             errors.add("You cannot book an appointment for a past date.");
+        } else if (date.isEqual(today) && time.isBefore(LocalTime.now())) {
+            errors.add("The selected time has already passed for today.");
+        }else if (date.isEqual(today) && time.isBefore(LocalTime.now().plusMinutes(30))) {
+            errors.add("Appointments must be booked at least 30 minutes in advance.");
         }
 
         Doctor doctor = doctorRepository.findById(doctorId)

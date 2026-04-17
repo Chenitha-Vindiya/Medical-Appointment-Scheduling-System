@@ -56,6 +56,7 @@ body::-webkit-scrollbar {
     vertical-align: middle;
 }
 
+
 /* Scroll to Top Button ---------------------------------*/
 #scrollTopBtn {
     position: fixed;
@@ -224,67 +225,20 @@ body::-webkit-scrollbar {
     margin: 0 auto;
 }
 
-.page-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 2.5rem;
-}
-
-.page-header h2 {
-    font-size: 1.875rem;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    margin-bottom: 0.5rem;
-}
-
-.page-header p {
-    color: var(--on-surface-variant);
-    max-width: 28rem;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 0.75rem;
-}
-
-.btn-secondary {
-    background-color: var(--surface-container-lowest);
-    color: var(--on-surface);
-    padding: 0.625rem 1.25rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: background-color 0.2s;
-}
-
-.btn-secondary:hover {
-    background-color: var(--surface-container-high);
-}
-
 /* Grid and Cards */
 .grid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     gap: 1.5rem;
+    align-items: start;
 }
 
 @media (min-width: 768px) {
-    .grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (min-width: 1024px) {
-    .grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    .grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 .card {
@@ -293,6 +247,9 @@ body::-webkit-scrollbar {
     padding: 1.5rem;
     box-shadow: var(--shadow);
     transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensure all cards in a row have same height */
 }
 
 .card:hover {
@@ -303,44 +260,45 @@ body::-webkit-scrollbar {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .patient-img {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 0.75rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.5rem;
     object-fit: cover;
 }
 
 .badge {
-    padding: 0.25rem 0.75rem;
-    font-size: 11px;
+    padding: 0.25rem 0.625rem;
+    font-size: 10px;
     font-weight: 700;
-    border-radius: 0.125rem;
+    border-radius: 0.25rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-.badge-confirmed {
-    background-color: var(--primary-fixed);
-    color: var(--on-primary-fixed);
+.badge-confirmed { background-color: var(--primary-fixed); color: var(--on-primary-fixed); }
+.badge-pending { background-color: var(--tertiary-fixed); color: var(--on-tertiary-fixed); }
+.badge-archived { background-color: var(--surface-container-highest); color: var(--on-surface-variant); }
+
+.patient-info-main {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
-.badge-pending {
-    background-color: var(--tertiary-fixed);
-    color: var(--on-tertiary-fixed);
-}
-
-.badge-archived {
-    background-color: var(--surface-container-highest);
-    color: var(--on-surface-variant);
+.patient-text-group {
+    flex: 1;
+    text-align: right; /* Align name and ID to the right */
 }
 
 .card h3 {
     font-size: 1.125rem;
     font-weight: 700;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.125rem;
 }
 
 .patient-id {
@@ -348,15 +306,16 @@ body::-webkit-scrollbar {
     color: var(--on-surface-variant);
     display: flex;
     align-items: center;
+    justify-content: flex-end; /* Align icon/text right */
     gap: 0.25rem;
-    margin-bottom: 1.5rem;
 }
 
 .info-list {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* Pushes button to bottom */
 }
 
 .info-item {
@@ -365,32 +324,19 @@ body::-webkit-scrollbar {
     font-size: 0.875rem;
 }
 
-.info-label {
-    color: var(--on-surface-variant);
-}
-
-.info-value {
-    font-weight: 600;
-}
-
-.text-primary {
-    color: var(--primary);
-    font-weight: 700;
-}
-
-.text-tertiary {
-    color: var(--tertiary);
-    font-weight: 500;
-}
+.info-label { color: var(--on-surface-variant); }
+.info-value { font-weight: 600; text-align: right; }
+.text-primary { color: var(--primary); font-weight: 700; }
+.text-tertiary { color: var(--tertiary); font-weight: 500; }
 
 .btn-action {
     width: 100%;
     padding: 0.75rem;
-    border-radius: 9999px;
-    background-color: var(--secondary-container);
-    color: var(--on-secondary-container);
+    border-radius: 0.75rem;
+    background-color: #dbeafe;
+    color: #1e40af;
     border: none;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 0.875rem;
     cursor: pointer;
     display: flex;
@@ -398,16 +344,17 @@ body::-webkit-scrollbar {
     justify-content: center;
     gap: 0.5rem;
     transition: background-color 0.2s;
+    margin-top: auto; /* Solidify position at bottom */
 }
 
 .btn-action:hover {
-    background-color: var(--secondary-fixed);
+    background-color: #bfdbfe;
 }
 
 /* Archived Card Variant */
 .card-archived {
-    background-color: rgba(242, 244, 246, 0.5);
-    border: 1px dashed rgba(110, 120, 129, 0.3);
+    background-color: #f8fafc;
+    border: 1px dashed #cbd5e1;
     box-shadow: none;
 }
 
@@ -416,21 +363,9 @@ body::-webkit-scrollbar {
     opacity: 0.8;
 }
 
-.card-archived h3 {
-    opacity: 0.7;
-}
-
-.card-archived .info-list {
-    opacity: 0.6;
-}
-
 .card-archived .btn-action {
     background-color: var(--surface-container);
     color: var(--on-surface-variant);
-}
-
-.card-archived .btn-action:hover {
-    background-color: var(--surface-container-highest);
 }
 
 /* Modal Styles */
@@ -463,14 +398,8 @@ body::-webkit-scrollbar {
 }
 
 @keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-header {
@@ -593,33 +522,63 @@ body::-webkit-scrollbar {
     background-color: var(--surface-container-low);
 }
 
-.btn-primary2 {
-    background-color: var(--primary);
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 9999px;
-    border: none;
-    font-weight: 700;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-.btn-primary2:hover {
-    opacity: 0.9;
-}
-
 /* Responsive Styles */
-@media (max-width: 1024px) {
-    .top-header {
-        padding: 0 1.5rem;
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding-top: 5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
-    .main-content {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+    .search-container {
+        width: auto;
+        flex: 1;
+        margin-right: 1rem;
+    }
+
+    .user-info {
+        display: none;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .action-buttons {
+        width: 100%;
+    }
+
+    .btn-secondary {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        max-height: 85vh;
+        margin: 0.5rem;
+    }
+
+    .modal-body {
+        padding: 1.25rem;
+    }
+
+    .modal-header {
+        padding: 1rem 1.25rem;
     }
 }
+
 
 @media (max-width: 1024px) {
     /* Hamburger visible */
@@ -665,34 +624,10 @@ body::-webkit-scrollbar {
     .nav-links.open {
         display: flex;
     }
-}
 
-@media (max-width: 768px) {
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .modal-content {
-        max-height: 85vh;
-        margin: 0.5rem;
-    }
-
-    .modal-body {
-        padding: 1.25rem;
-    }
-
-    .modal-header {
-        padding: 1rem 1.25rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .modal-footer {
-        padding: 1rem 1.25rem;
-    }
-
-    .btn-primary2 {
-        width: 100%;
+    .main-content {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
     }
 }
 

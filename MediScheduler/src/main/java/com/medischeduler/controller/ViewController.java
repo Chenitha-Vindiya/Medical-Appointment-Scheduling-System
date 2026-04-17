@@ -1,19 +1,26 @@
 package com.medischeduler.controller;
 
 import com.medischeduler.model.Appointment;
+import com.medischeduler.model.WorkingHours;
 import com.medischeduler.repository.AppointmentRepository;
 import com.medischeduler.repository.DoctorRepository;
 import com.medischeduler.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
 import com.medischeduler.model.Patient;
 import com.medischeduler.model.Doctor;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class ViewController {
@@ -138,18 +145,82 @@ public class ViewController {
     //Doctor Dashboard
     @GetMapping("/doctor/dashboard")
     public String doctorDashboard(HttpSession session, Model model) {
-        if (session.getAttribute("loggedInDoctor") == null) {
-            return "redirect:/login"; // Redirect to login if not authenticated
+        Doctor sessionDoc = (Doctor) session.getAttribute("loggedInDoctor");
+        if (sessionDoc == null) return "redirect:/login";
+
+        Doctor doctor = doctorRepository.findById(sessionDoc.getId()).orElse(null);
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+        // 1. Fetch today's appointments
+        List<Appointment> todayAppointments = appointmentRepository
+                .findByDoctorIdAndAppointmentDateOrderByStartTimeAsc(doctor.getId(), today);
+
+        // 2. Find Next Appointment
+        LocalTime nextTime = todayAppointments.stream()
+                .map(Appointment::getStartTime)
+                .filter(t -> t.isAfter(now))
+                .findFirst().orElse(null);
+
+        // 3. Consultation Hours Logic
+        double totalHours = 0;
+        String dayOfWeek = today.getDayOfWeek().name();
+
+        // Check if doctor has a shift today
+        WorkingHours todayShift = doctor.getWorkingHours().stream()
+                .filter(wh -> wh.getDay().equalsIgnoreCase(dayOfWeek) && wh.isActive())
+                .findFirst().orElse(null);
+
+        if (todayShift != null) {
+            long minutes = java.time.Duration.between(todayShift.getStartTime(), todayShift.getEndTime()).toMinutes();
+            totalHours = minutes / 60.0;
         }
+
+        model.addAttribute("todayCount", todayAppointments.size());
+        model.addAttribute("nextTime", nextTime);
+        model.addAttribute("consultationHours", totalHours);
+        model.addAttribute("isWorkingToday", todayShift != null); // New flag for the UI
+
         return "doctor/dashboard";
     }
 
     //Doctor's Appointment
     @GetMapping("/doctor/appointment")
-    public String doctorAppointment(HttpSession session, Model model) {
-        if (session.getAttribute("loggedInDoctor") == null) {
-            return "redirect:/login"; // Redirect to login if not authenticated
+    public String doctorAppointments(
+            @RequestParam(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate,
+            HttpSession session,
+            Model model) {
+
+        Doctor sessionDoc = (Doctor) session.getAttribute("loggedInDoctor");
+        if (sessionDoc == null) return "redirect:/login";
+
+        if (selectedDate == null) {
+            selectedDate = LocalDate.now();
         }
+
+        // 1. Re-fetch doctor
+        Doctor doctor = doctorRepository.findById(sessionDoc.getId()).orElse(null);
+        String dayOfWeek = selectedDate.getDayOfWeek().name();
+
+        // 2. Get today's working hours (keep this to show "No working hours" msg if needed)
+        WorkingHours selectedDayHours = doctor.getWorkingHours().stream()
+                .filter(wh -> wh.getDay().equalsIgnoreCase(dayOfWeek) && wh.isActive())
+                .findFirst().orElse(null);
+
+        // 3. Get actual bookings for the SELECTED date
+        List<Appointment> bookedList = appointmentRepository
+                .findByDoctorIdAndAppointmentDateOrderByStartTimeAsc(doctor.getId(), selectedDate);
+
+        // 4. Add navigation and data to model
+        model.addAttribute("selectedDate", selectedDate);
+        model.addAttribute("prevDate", selectedDate.minusDays(1));
+        model.addAttribute("nextDate", selectedDate.plusDays(1));
+        model.addAttribute("isToday", selectedDate.equals(LocalDate.now()));
+
+        // This is the important part for only showing existing appointments
+        model.addAttribute("bookedAppointments", bookedList);
+        model.addAttribute("todayHours", selectedDayHours);
+
         return "doctor/appointment";
     }
 

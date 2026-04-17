@@ -21,7 +21,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     // 3. Find appointments for a specific patient
     List<Appointment> findByPatientId(Long patientId);
 
-    // Inside AppointmentRepository.java
-    // Inside AppointmentRepository.java
     List<Appointment> findByPatientIdAndAppointmentDateGreaterThanEqualOrderByAppointmentDateAsc(Long patientId, LocalDate date);
+
+    List<Appointment> findByDoctorIdAndAppointmentDateOrderByStartTimeAsc(Long doctorId, LocalDate date);
 }

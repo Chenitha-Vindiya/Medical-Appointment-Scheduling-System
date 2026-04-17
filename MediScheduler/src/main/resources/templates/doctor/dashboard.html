@@ -68,18 +68,24 @@
 <main class="main-content">
     <div class="container">
         <div class="stats-grid">
-            <!-- Card 1 -->
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon icon-blue">
                         <span class="material-symbols-outlined">event_available</span>
                     </div>
-                    <span class="stat-badge badge-blue">+4%</span>
                 </div>
                 <p class="stat-label">Today's Appointments</p>
-                <h4 class="stat-value">12</h4>
-                <p class="stat-footer">Next appointment at 10:30 AM</p>
+                <h4 class="stat-value" th:text="${todayCount}">0</h4>
+
+                <p class="stat-footer">
+                    <span th:if="${nextTime != null}" th:text="'Next appointment at ' + ${#temporals.format(nextTime, 'hh:mm A')}"></span>
+
+                    <span th:if="${nextTime == null && todayCount > 0}">No more appointments today</span>
+
+                    <span th:if="${todayCount == 0}">No bookings for today</span>
+                </p>
             </div>
+
             <!-- Card 2 -->
             <div class="stat-card">
                 <div class="stat-header">
@@ -92,7 +98,7 @@
                 <h4 class="stat-value">04</h4>
                 <p class="stat-footer">Ready for onboarding records</p>
             </div>
-            <!-- Card 3 -->
+
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon icon-orange">
@@ -100,10 +106,16 @@
                     </div>
                 </div>
                 <p class="stat-label">Consultation Hours</p>
-                <h4 class="stat-value">06.5</h4>
-                <p class="stat-footer">Scheduled time for today</p>
+
+                <h4 class="stat-value" th:text="${isWorkingToday} ? ${#numbers.formatDecimal(consultationHours, 1, 1)} : '0.0'">0.0</h4>
+
+                <p class="stat-footer">
+                    <span th:if="${isWorkingToday}">Scheduled time for today</span>
+                    <span th:unless="${isWorkingToday}" style="color: var(--danger);">Today is your day off</span>
+                </p>
             </div>
         </div>
+
         <section class="table-section">
             <div class="table-header">
                 <h5>Upcoming Appointments</h5>
