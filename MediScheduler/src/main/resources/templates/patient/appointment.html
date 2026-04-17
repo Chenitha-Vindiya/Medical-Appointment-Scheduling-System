@@ -133,7 +133,7 @@
 </main>
 
 <!--Reschedule Appointment Model-->
-<div id="rescheduleModal" class="modal-overlay">
+<div id="rescheduleModal" class="modal-overlay" th:classappend="${isRescheduleError != null} ? 'show-flex'">
     <div class="modal-container">
         <div class="modal-header-blue">
             <h2>Reschedule Appointment</h2>
@@ -144,7 +144,7 @@
             <input type="hidden" name="appointmentId" id="rescheduleId">
 
             <div class="form-group">
-                <label>DOCTOR (LOCKED)</label>
+                <label>DOCTOR</label>
                 <input type="text" id="rescheduleDoctor" class="modal-select" readonly
                        style="background: #f1f5f9; cursor: not-allowed; border: 1px dashed #cbd5e1;">
             </div>
@@ -167,6 +167,13 @@
                 <textarea name="reason" id="rescheduleReason" required placeholder="Reason for rescheduling..."></textarea>
             </div>
 
+            <div th:if="${errorList != null}" class="error-container">
+                <div th:each="error : ${errorList}" class="error-alert">
+                    <span class="material-symbols-outlined">error</span>
+                    <span th:text="${error}">Error message</span>
+                </div>
+            </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
                 <button type="submit" class="btn-confirm">Save Changes</button>
@@ -174,8 +181,9 @@
         </form>
     </div>
 </div>
+
 <!--New Appointment Model-->
-<div id="appointmentModal" class="modal-overlay" th:classappend="${errorList != null} ? 'show'">
+<div id="appointmentModal" class="modal-overlay" th:classappend="${errorList != null && isRescheduleError == null} ? 'show'">
     <div class="modal-container">
         <div class="modal-header-blue">
             <h2>Make Appointment</h2>
@@ -271,28 +279,50 @@
         });
     });
 
-    // Reschedule Model Open
-    function openRescheduleModal(id, doctorName, specialization, date, time, reason) {
-        document.getElementById('rescheduleId').value = id;
-        document.getElementById('rescheduleDoctor').value = "Dr. " + doctorName + " - " + specialization;
-        document.getElementById('rescheduleDate').value = date;
+    // --- Reschedule Modal Functionality ---
 
-        // Ensure time is in HH:mm format for the input
+    const reschedModal = document.getElementById('rescheduleModal');
+
+    /**
+     * Opens the Reschedule Modal and populates it with existing data
+     * Triggered by the "Reschedule" button in the appointment card
+     */
+    function openRescheduleModal(id, doctorName, specialization, date, time, reason) {
+        // Fill hidden ID field
+        document.getElementById('rescheduleId').value = id;
+
+        // Fill read-only Doctor display
+        document.getElementById('rescheduleDoctor').value = "Dr. " + doctorName + " - " + specialization;
+
+        // Fill editable fields
+        document.getElementById('rescheduleDate').value = date;
         document.getElementById('rescheduleTime').value = time;
         document.getElementById('rescheduleReason').value = reason;
 
-        // Use 'flex' to align center based on CSS
-        document.getElementById('rescheduleModal').style.display = 'flex';
+        // Show modal using flex for centering (as per CSS class)
+        reschedModal.style.display = 'flex';
+        reschedModal.classList.add('show-flex');
     }
 
-    // Reschedule Model Close
+    /**
+     * Closes the Reschedule Modal and cleans up the UI state
+     */
     function closeModal() {
-        document.getElementById('rescheduleModal').style.display = 'none';
+        reschedModal.style.display = 'none';
+        reschedModal.classList.remove('show-flex');
+
+        // If the modal was opened due to a server-side error (editError=true),
+        // redirect to clear the URL parameters and avoid re-opening on refresh.
+        if (window.location.search.includes('editError')) {
+            window.location.href = window.location.pathname;
+        }
     }
 
-    // Close Reschedule Modal if clicking outside
+    /**
+     * Global click listener to handle "Outside Click" to close the modal
+     */
     window.addEventListener('click', (e) => {
-        const reschedModal = document.getElementById('rescheduleModal');
+        // If the click target is exactly the overlay background
         if (e.target === reschedModal) {
             closeModal();
         }

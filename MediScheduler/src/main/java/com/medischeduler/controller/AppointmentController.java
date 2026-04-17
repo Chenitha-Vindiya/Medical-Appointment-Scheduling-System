@@ -79,8 +79,13 @@ public class AppointmentController {
                 appointmentId, appointmentDate, startTime, reason);
 
         if (!errors.isEmpty()) {
+            // 1. Pass the errors
             redirectAttributes.addFlashAttribute("errorList", errors);
-            // Optionally pass a flag to reopen the edit modal if your UI supports it
+
+            // 2. Pass the specific flag for Reschedule
+            redirectAttributes.addFlashAttribute("isRescheduleError", true);
+
+            // 3. Keep your URL parameter for extra safety
             return "redirect:/patient/appointment?editError=true";
         }
 
