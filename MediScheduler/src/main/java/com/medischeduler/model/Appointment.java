@@ -1,4 +1,4 @@
-package com.medischeduler.entity;
+package com.medischeduler.model;
 
 import com.medischeduler.model.Doctor;
 import com.medischeduler.model.Patient;

@@ -62,7 +62,18 @@
             </div>
             <div class="stat-body">
                 <p class="stat-label">Next Appointment</p>
-                <p class="stat-value">Oct 24, 2023</p>
+
+                <div th:if="${nextAppointment != null}">
+                    <p class="stat-value" th:text="${#temporals.format(nextAppointment.appointmentDate, 'MMM dd, yyyy')}">
+                        Oct 24, 2023
+                    </p>
+                    <small th:text="'with Dr. ' + ${nextAppointment.doctor.lastName}"></small>
+                </div>
+
+                <div th:unless="${nextAppointment != null}">
+                    <p class="stat-value">None</p>
+                    <small>Schedule your first visit</small>
+                </div>
             </div>
         </div>
 

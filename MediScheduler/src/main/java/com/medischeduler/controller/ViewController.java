@@ -1,5 +1,7 @@
 package com.medischeduler.controller;
 
+import com.medischeduler.model.Appointment;
+import com.medischeduler.repository.AppointmentRepository;
 import com.medischeduler.repository.DoctorRepository;
 import com.medischeduler.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +12,17 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Controller
 public class ViewController {
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     @GetMapping("/")
     public String index() {
@@ -34,17 +42,36 @@ public class ViewController {
             return "redirect:/login"; // Redirect to login if not authenticated
         }
 
+        // Fetch upcoming appointments starting from today
+        List<Appointment> upcoming = appointmentRepository
+                .findByPatientIdAndAppointmentDateGreaterThanEqualOrderByAppointmentDateAsc(patient.getId(), LocalDate.now());
+
+        // Pass the first one to the model if it exists
+        if (!upcoming.isEmpty()) {
+            model.addAttribute("nextAppointment", upcoming.get(0));
+        }
+
         model.addAttribute("patientName", patient.getFirstName());
         return "patient/dashboard";
     }
 
     @GetMapping("/patient/appointment")
-    public String appointment(HttpSession session) {
+    public String appointment(HttpSession session, Model model) {
         Patient patient = (Patient) session.getAttribute("loggedInPatient");
 
         if (patient == null) {
-            return "redirect:/login"; // Redirect to login if not authenticated
+            return "redirect:/login";
         }
+
+        // 1. Fetch ONLY active doctors for the Modal dropdown
+        List<Doctor> activeDoctors = doctorRepository.findByActiveTrue();
+        // 2. Add them to the model so Thymeleaf can see them
+        model.addAttribute("doctors", activeDoctors);
+
+        // 2. Fetch the logged-in patient's appointments for the Card Grid
+        // We use the patient's ID to filter only their data
+        List<Appointment> appointments = appointmentRepository.findByPatientId(patient.getId());
+        model.addAttribute("appointments", appointments);
 
         return "patient/appointment";
     }

@@ -134,15 +134,15 @@
                 <div class="fields-grid">
                     <div class="input-group">
                         <label class="input-label">First Name</label>
-                        <input class="form-input" name="firstName" type="text" th:value="${patient.firstName}"/>
+                        <input class="form-input" name="firstName" type="text" th:value="${patient.firstName}" required/>
                     </div>
                     <div class="input-group">
                         <label class="input-label">Last Name</label>
-                        <input class="form-input" name="lastName" type="text" th:value="${patient.lastName}"/>
+                        <input class="form-input" name="lastName" type="text" th:value="${patient.lastName}" required/>
                     </div>
                     <div class="input-group">
                         <label class="input-label">Date of Birth</label>
-                        <input class="form-input" name="dateOfBirth" type="date" th:value="${patient.dateOfBirth}"/>
+                        <input class="form-input" name="dateOfBirth" type="date" th:value="${patient.dateOfBirth}" required/>
                     </div>
                     <div class="input-group">
                         <label class="input-label">Gender</label>
@@ -154,7 +154,7 @@
                     </div>
                     <div class="input-group">
                         <label class="input-label">National ID</label>
-                        <input class="form-input" name="nationalId" type="text" th:value="${patient.nationalId}"/>
+                        <input class="form-input" name="nationalId" type="text" th:value="${patient.nationalId}" required/>
                     </div>
                 </div>
             </div>
@@ -165,11 +165,11 @@
             <div class="contact-grid">
                 <div class="input-group">
                     <label class="input-label">Email Address</label>
-                    <input class="form-input" name="email" type="email" th:value="${patient.email}"/>
+                    <input class="form-input" name="email" type="email" th:value="${patient.email}" required/>
                 </div>
                 <div class="input-group">
                     <label class="input-label">Phone Number</label>
-                    <input class="form-input" name="phoneNumber" type="tel" th:value="${patient.phoneNumber}"/>
+                    <input class="form-input" name="phoneNumber" type="tel" th:value="${patient.phoneNumber}" required/>
                 </div>
                 <div class="input-group full-width">
                     <label class="input-label">Home Address</label>
