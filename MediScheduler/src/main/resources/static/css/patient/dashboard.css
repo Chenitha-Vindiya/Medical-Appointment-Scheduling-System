@@ -439,8 +439,6 @@ body::-webkit-scrollbar { display: none; }
   background: rgba(43,173,238,0.08);
 }
 
-.text-right { text-align: right; }
-
 /* =====================
    SCROLL TO TOP
    ===================== */
@@ -550,6 +548,66 @@ body::-webkit-scrollbar { display: none; }
   }
 
   .stat-card { padding: 18px 20px; }
+}
+
+@media (max-width: 768px) {
+  /* 1. Hide the table header entirely */
+  .data-table thead {
+    display: none;
+  }
+
+  /* 2. Remove table formatting and make rows look like cards */
+  .data-table,
+  .data-table tbody,
+  .data-table tr,
+  .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table {
+    margin-top: 16px;
+    min-width: unset; /* Remove the minimum width */
+  }
+
+  .data-table tbody tr {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: var(--surface-container-low);
+    border-radius: 16px; /* Matching your image */
+    border: 1px solid var(--slate-100);
+    box-shadow: var(--shadow-xs);
+  }
+
+  /* 3. Style individual cells to look like rows in the card */
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0 !important;
+    border-radius: 0 !important;
+  }
+
+  /* 4. Use the data-label to show "TIME", "STATUS", etc. on the left */
+  .data-table td::before {
+    content: attr(data-label);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--slate-400);
+    text-transform: uppercase;
+  }
+
+  /* 5. Override specific cells to match your screenshot layout */
+  .data-table td[data-label="Doctor"] {
+    justify-content: flex-start;
+    border-bottom: 1px solid var(--slate-100);
+    padding-bottom: 16px !important;
+    margin-bottom: 8px;
+  }
+
+  .data-table td[data-label="Doctor"]::before {
+    display: none; /* Hide label for the header part */
+  }
 }
 
 /* =====================

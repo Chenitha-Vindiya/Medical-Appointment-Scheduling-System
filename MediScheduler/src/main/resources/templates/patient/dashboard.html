@@ -105,119 +105,42 @@
         </div>
 
         <div class="table-responsive">
-            <table class="data-table">
+            <table class="data-table" th:if="${not #lists.isEmpty(upcomingAppointments)}">
                 <thead>
                 <tr>
                     <th>Doctor</th>
                     <th>Specialty</th>
-                    <th>Date &amp; Time</th>
+                    <th>Date & Time</th>
                     <th>Status</th>
-                    <th class="text-right">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
+                <tr th:each="app : ${upcomingAppointments}">
+                    <td data-label="Doctor">
                         <div class="doctor-info">
-                            <img alt="Dr. Sarah Wilson"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEULt1N5NeTmikbvvvIBTwXic6LwKRZnjZY_UGPqg4qZ5dlhhrx8MQvwr9G3tqkSZdhbSgvxtTZinYOAwL1AM-iISy3AOdKBWaxM4w4r5sudSCztGL4FswntX_fo70S1EEcShuqnPg6OW3ZGIorUxNTMn1qbjd-dGkwO33s89SKHOUycbf_qVxosJ2DnQfULtxTPC5QAh-gPXTd1_Xb9n-JAK4stklkcK3mXMZXNwVaDi_ihA3X1eYO4Qz_56iDqKCKSbjnI7h_QdK"/>
-                            <span class="doctor-name">Dr. Sarah Wilson</span>
+                            <img th:alt="'Dr. ' + ${app.doctor.lastName}"
+                                 th:src="'https://ui-avatars.com/api/?name=' + ${app.doctor.firstName} + '+' + ${app.doctor.lastName} + '&background=random'"/>
+                            <span class="doctor-name" th:text="'Dr. ' + ${app.doctor.firstName} + ' ' + ${app.doctor.lastName}">Dr. Name</span>
                         </div>
                     </td>
-                    <td class="specialty-cell">Cardiologist</td>
-                    <td class="datetime-cell">
-                        <div class="date">Oct 24, 2023</div>
-                        <div class="time">10:00 AM</div>
+                    <td class="specialty-cell" data-label="Specialty" th:text="${app.doctor.specialization}">Specialty</td>
+
+                    <td class="datetime-cell" data-label="Date & Time">
+                        <div class="date" th:text="${#temporals.format(app.appointmentDate, 'MMM dd, yyyy')}">Date</div>
+                        <div class="time" th:text="${#temporals.format(app.startTime, 'hh:mm a')}">Time</div>
                     </td>
-                    <td><span class="status-badge confirmed">Confirmed</span></td>
-                    <td class="text-right">
-                        <button class="action-btn" aria-label="More options">
-                            <span class="material-symbols-outlined">more_vert</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="doctor-info">
-                            <img alt="Dr. Michael Chen"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc"/>
-                            <span class="doctor-name">Dr. Michael Chen</span>
-                        </div>
-                    </td>
-                    <td class="specialty-cell">General Dentist</td>
-                    <td class="datetime-cell">
-                        <div class="date">Nov 02, 2023</div>
-                        <div class="time">02:30 PM</div>
-                    </td>
-                    <td><span class="status-badge pending">Pending</span></td>
-                    <td class="text-right">
-                        <button class="action-btn" aria-label="More options">
-                            <span class="material-symbols-outlined">more_vert</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="doctor-info">
-                            <img alt="Dr. Michael Chen"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc"/>
-                            <span class="doctor-name">Dr. Michael Chen</span>
-                        </div>
-                    </td>
-                    <td class="specialty-cell">General Dentist</td>
-                    <td class="datetime-cell">
-                        <div class="date">Nov 02, 2023</div>
-                        <div class="time">02:30 PM</div>
-                    </td>
-                    <td><span class="status-badge pending">Pending</span></td>
-                    <td class="text-right">
-                        <button class="action-btn" aria-label="More options">
-                            <span class="material-symbols-outlined">more_vert</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="doctor-info">
-                            <img alt="Dr. Michael Chen"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc"/>
-                            <span class="doctor-name">Dr. Michael Chen</span>
-                        </div>
-                    </td>
-                    <td class="specialty-cell">General Dentist</td>
-                    <td class="datetime-cell">
-                        <div class="date">Nov 02, 2023</div>
-                        <div class="time">02:30 PM</div>
-                    </td>
-                    <td><span class="status-badge pending">Pending</span></td>
-                    <td class="text-right">
-                        <button class="action-btn" aria-label="More options">
-                            <span class="material-symbols-outlined">more_vert</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="doctor-info">
-                            <img alt="Dr. Michael Chen"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC65TmGM7f25Aqm_tRlt7rms3dSet-XplWHhiHXHmX6Eh7HlIKVRDn-ZiS7ohT4WFE6E8L5cuRYeSC6_-Y_nvUPRKP22N5J7ux6Sz_6_jwt24SWFyuhMf_ljoFj5JgaCl8zlXrlG0exJ1xBFKYJ1shM-iq3deUR8R2YRJmRMUpKSle3EOweT8W9OmzqheB_KXphy7gi5kZQJkymMu2sMTGKCSqAlllXFTAPYo-i-n0mxIa6hiSQaYUxqbnAtwcbcu-f7XKfxUrrxrc"/>
-                            <span class="doctor-name">Dr. Michael Chen</span>
-                        </div>
-                    </td>
-                    <td class="specialty-cell">General Dentist</td>
-                    <td class="datetime-cell">
-                        <div class="date">Nov 02, 2023</div>
-                        <div class="time">02:30 PM</div>
-                    </td>
-                    <td><span class="status-badge pending">Pending</span></td>
-                    <td class="text-right">
-                        <button class="action-btn" aria-label="More options">
-                            <span class="material-symbols-outlined">more_vert</span>
-                        </button>
+
+                    <td data-label="Status">
+                        <span class="status-badge" th:classappend="${app.status.toLowerCase()}" th:text="${app.status}">Status</span>
                     </td>
                 </tr>
                 </tbody>
             </table>
+
+            <div th:if="${#lists.isEmpty(upcomingAppointments)}" style="padding: 2rem; text-align: center; color: var(--slate-500);">
+                <p>You have no upcoming appointments scheduled.</p>
+                <a th:href="@{/patient/book}" style="color: var(--primary); text-decoration: none; font-weight: 600;">Book an Appointment Now</a>
+            </div>
         </div>
     </section>
 

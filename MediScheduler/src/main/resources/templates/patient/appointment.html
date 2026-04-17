@@ -114,8 +114,9 @@
                         </div>
                     </div>
                     <div class="card-actions">
-                        <button class="btn btn-outline"><span class="material-symbols-outlined">edit_calendar</span>
-                            Reschedule
+                        <button class="btn btn-outline"
+                                th:attr="onclick=|openRescheduleModal('${app.id}', '${app.doctor.lastName}', '${app.doctor.specialization}', '${app.appointmentDate}', '${app.startTime}', '${app.reason}')|">
+                            <span class="material-symbols-outlined">edit_calendar</span> Reschedule
                         </button>
                         <form th:action="@{/patient/appointment/cancel}" method="post">
                             <input type="hidden" name="id" th:value="${app.id}"/>
@@ -131,6 +132,49 @@
     </div>
 </main>
 
+<!--Reschedule Appointment Model-->
+<div id="rescheduleModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header-blue">
+            <h2>Reschedule Appointment</h2>
+            <p>Update your visit details below.</p>
+        </div>
+
+        <form th:action="@{/patient/appointment/reschedule}" method="post" class="modal-form">
+            <input type="hidden" name="appointmentId" id="rescheduleId">
+
+            <div class="form-group">
+                <label>DOCTOR (LOCKED)</label>
+                <input type="text" id="rescheduleDoctor" class="modal-select" readonly
+                       style="background: #f1f5f9; cursor: not-allowed; border: 1px dashed #cbd5e1;">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>NEW DATE</label>
+                    <input type="date" name="appointmentDate" id="rescheduleDate"
+                           th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label>NEW TIME</label>
+                    <input type="time" name="startTime" id="rescheduleTime" step="1800" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>REASON FOR VISIT</label>
+                <textarea name="reason" id="rescheduleReason" required placeholder="Reason for rescheduling..."></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn-confirm">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!--New Appointment Model-->
 <div id="appointmentModal" class="modal-overlay" th:classappend="${errorList != null} ? 'show'">
     <div class="modal-container">
         <div class="modal-header-blue">
@@ -225,6 +269,33 @@
             nav.classList.remove('open');
             btn.classList.remove('active');
         });
+    });
+
+    // Reschedule Model Open
+    function openRescheduleModal(id, doctorName, specialization, date, time, reason) {
+        document.getElementById('rescheduleId').value = id;
+        document.getElementById('rescheduleDoctor').value = "Dr. " + doctorName + " - " + specialization;
+        document.getElementById('rescheduleDate').value = date;
+
+        // Ensure time is in HH:mm format for the input
+        document.getElementById('rescheduleTime').value = time;
+        document.getElementById('rescheduleReason').value = reason;
+
+        // Use 'flex' to align center based on CSS
+        document.getElementById('rescheduleModal').style.display = 'flex';
+    }
+
+    // Reschedule Model Close
+    function closeModal() {
+        document.getElementById('rescheduleModal').style.display = 'none';
+    }
+
+    // Close Reschedule Modal if clicking outside
+    window.addEventListener('click', (e) => {
+        const reschedModal = document.getElementById('rescheduleModal');
+        if (e.target === reschedModal) {
+            closeModal();
+        }
     });
 </script>
 </body>

@@ -24,7 +24,9 @@ public class AppointmentController {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    // Create Appointment
+    /**
+     * Create a new Appointment
+     */
     @PostMapping("/patient/appointment/create")
     public String createAppointment(
             @RequestParam Long doctorId,
@@ -40,21 +42,55 @@ public class AppointmentController {
             return "redirect:/login";
         }
 
-        List<String> errors = appointmentService.createAppointment(doctorId, reason, appointmentDate, startTime, patient);
-
-        // Call service to save
-        appointmentService.createAppointment(doctorId, reason, appointmentDate, startTime, patient);
+        // Fixed: We only call the service ONCE.
+        // The service internally handles the save if there are no errors.
+        List<String> errors = appointmentService.createAppointment(
+                doctorId, reason, appointmentDate, startTime, patient);
 
         if (!errors.isEmpty()) {
-            // Flash attributes survive the redirect once
             redirectAttributes.addFlashAttribute("errorList", errors);
             return "redirect:/patient/appointment";
         }
 
-        // Redirect back to the View Controller mapping
         return "redirect:/patient/appointment?success=true";
     }
 
+    /**
+     * Reschedule an existing Appointment
+     * Note: We don't take a doctorId here because rescheduling
+     * should not allow changing the doctor.
+     */
+    @PostMapping("/patient/appointment/reschedule")
+    public String rescheduleAppointment(
+            @RequestParam Long appointmentId,
+            @RequestParam String reason,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate appointmentDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+        if (patient == null) {
+            return "redirect:/login";
+        }
+
+        // Call service to validate and update the existing record
+        List<String> errors = appointmentService.rescheduleAppointment(
+                appointmentId, appointmentDate, startTime, reason);
+
+        if (!errors.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorList", errors);
+            // Optionally pass a flag to reopen the edit modal if your UI supports it
+            return "redirect:/patient/appointment?editError=true";
+        }
+
+        redirectAttributes.addFlashAttribute("successMessage", "Appointment updated successfully!");
+        return "redirect:/patient/appointment?rescheduled=true";
+    }
+
+    /**
+     * Cancel/Delete an Appointment
+     */
     @PostMapping("/patient/appointment/cancel")
     public String cancelAppointment(@RequestParam Long id) {
         appointmentRepository.deleteById(id);

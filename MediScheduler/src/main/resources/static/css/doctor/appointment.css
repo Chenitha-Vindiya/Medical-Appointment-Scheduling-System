@@ -391,15 +391,16 @@ main {
     color: var(--primary);
 }
 
-.status-pill.in-progress {
+.status-pill.pending {
     background: var(--accent-orange-light);
     color: #92400e;
 }
 
-.status-pill.arrived {
-    background: var(--accent-slate-light);
-    color: #475569;
+.status-pill.cancelled {
+    background: #fee2e2;
+    color: #ef4444;
 }
+
 
 .empty-slot-btn {
     flex: 1;
@@ -423,22 +424,6 @@ main {
     background: #f0f9ff;
     border-color: #bae6fd;
     border-style: solid;
-}
-
-.card-actions {
-    background: none;
-    border: none;
-    color: #94a3b8;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 50%;
-    display: flex;
-    transition: background 0.2s;
-}
-
-.card-actions:hover {
-    background: #f1f5f9;
-    color: var(--on-surface);
 }
 
 .timeline-marker {

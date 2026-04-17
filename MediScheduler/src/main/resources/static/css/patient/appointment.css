@@ -12,6 +12,7 @@
     --slate-50: #f8fafc;
     --slate-100: #f1f5f9;
     --slate-200: #e2e8f0;
+    --slate-300: #fdfdfd;
     --slate-400: #94a3b8;
     --slate-500: #64748b;
     --slate-600: #475569;
@@ -598,4 +599,40 @@ body::-webkit-scrollbar {
 
 .error-alert .material-symbols-outlined {
     font-size: 1.2rem;
+}
+
+/* Ensure both modals center correctly */
+.modal-overlay {
+    display: none; /* JS will toggle this */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.7); /* Darker glass effect */
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+/* Helper class for JS */
+.modal-overlay.show-flex {
+    display: flex !important;
+}
+
+/* Fix for the Reschedule labels and inputs */
+#rescheduleModal .form-group label {
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--slate-500);
+}
+
+#rescheduleModal textarea,
+#rescheduleModal input {
+    border: 1px solid var(--slate-200);
+    transition: border-color 0.2s;
+}
+
+#rescheduleModal input:focus,
+#rescheduleModal textarea:focus {
+    outline: none;
+    border-color: var(--primary);
 }

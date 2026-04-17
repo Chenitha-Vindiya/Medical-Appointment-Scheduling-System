@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,39 +48,62 @@ public class ViewController {
         Patient patient = (Patient) session.getAttribute("loggedInPatient");
 
         if (patient == null) {
-            return "redirect:/login"; // Redirect to login if not authenticated
+            return "redirect:/login";
         }
 
-        // Fetch upcoming appointments starting from today
-        List<Appointment> upcoming = appointmentRepository
-                .findByPatientIdAndAppointmentDateGreaterThanEqualOrderByAppointmentDateAsc(patient.getId(), LocalDate.now());
+        // 1. Get Current Point in Time
+        LocalDate today = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
 
-        // Pass the first one to the model if it exists
-        if (!upcoming.isEmpty()) {
-            model.addAttribute("nextAppointment", upcoming.get(0));
+        // 2. Fetch all potential appointments from today onwards
+        List<Appointment> allUpcoming = appointmentRepository
+                .findByPatientIdAndAppointmentDateGreaterThanEqualOrderByAppointmentDateAsc(patient.getId(), today);
+
+        // 3. Filter precisely by Time
+        // This ensures we exclude appointments that were at 10:00 AM if it's currently 2:00 PM
+        List<Appointment> filteredUpcoming = allUpcoming.stream()
+                .filter(app -> {
+                    LocalDateTime appDateTime = LocalDateTime.of(app.getAppointmentDate(), app.getStartTime());
+                    return !appDateTime.isBefore(now);
+                })
+                .collect(Collectors.toList());
+
+        // 4. Set "Next Appointment" Card (The single soonest one)
+        if (!filteredUpcoming.isEmpty()) {
+            model.addAttribute("nextAppointment", filteredUpcoming.get(0));
         }
 
+        // 5. Set "Upcoming Appointments" Table (Top 5 items)
+        List<Appointment> tableData = filteredUpcoming.stream()
+                .limit(5)
+                .collect(Collectors.toList());
+
+        model.addAttribute("upcomingAppointments", tableData);
         model.addAttribute("patientName", patient.getFirstName());
+
         return "patient/dashboard";
     }
 
     @GetMapping("/patient/appointment")
     public String appointment(HttpSession session, Model model) {
         Patient patient = (Patient) session.getAttribute("loggedInPatient");
+        if (patient == null) return "redirect:/login";
 
-        if (patient == null) {
-            return "redirect:/login";
-        }
+        // 1. Fetch active doctors for the "New Appointment" modal
+        model.addAttribute("doctors", doctorRepository.findByActiveTrue());
 
-        // 1. Fetch ONLY active doctors for the Modal dropdown
-        List<Doctor> activeDoctors = doctorRepository.findByActiveTrue();
-        // 2. Add them to the model so Thymeleaf can see them
-        model.addAttribute("doctors", activeDoctors);
+        // 2. Fetch future appointments ONLY
+        LocalDateTime now = LocalDateTime.now();
+        List<Appointment> futureAppointments = appointmentRepository.findByPatientId(patient.getId())
+                .stream()
+                .filter(app -> {
+                    LocalDateTime appTime = LocalDateTime.of(app.getAppointmentDate(), app.getStartTime());
+                    return !appTime.isBefore(now);
+                })
+                .sorted(Comparator.comparing(Appointment::getAppointmentDate))
+                .collect(Collectors.toList());
 
-        // 2. Fetch the logged-in patient's appointments for the Card Grid
-        // We use the patient's ID to filter only their data
-        List<Appointment> appointments = appointmentRepository.findByPatientId(patient.getId());
-        model.addAttribute("appointments", appointments);
+        model.addAttribute("appointments", futureAppointments);
 
         return "patient/appointment";
     }
@@ -176,6 +201,12 @@ public class ViewController {
             totalHours = minutes / 60.0;
         }
 
+        // 2. Filter today's appointments for ONLY those starting from now onwards
+        List<Appointment> futureAppointments = todayAppointments.stream()
+                .filter(app -> !app.getStartTime().isBefore(now)) // same as isAfter or isEqual
+                .collect(Collectors.toList());
+
+        model.addAttribute("upcomingTable", futureAppointments);
         model.addAttribute("todayCount", todayAppointments.size());
         model.addAttribute("nextTime", nextTime);
         model.addAttribute("consultationHours", totalHours);
