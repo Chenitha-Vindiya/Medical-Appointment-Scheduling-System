@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Patient Profile Settings - MediScheduler</title>
-    <link rel="stylesheet" th:href="@{/css/patient/profile.css}">
+    <title>Doctor Profile - MediScheduler</title>
+    <link rel="stylesheet" th:href="@{/css/doctor/profile.css}"/>
     <link rel="icon" type="image/svg+xml"
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
-
 </head>
-
-<body class="page-body">
-
+<body>
 <!-- Scroll to Top Button -->
 <button id="scrollTopBtn" title="Go to top">▲</button>
 
@@ -40,8 +37,9 @@
 <header class="header-wrapper">
     <nav class="navbar">
         <div class="user-profile">
-            <span class="material-symbols-outlined logo-icon">patient_list</span>
-            <span class="logo-text">Patient Profile</span>
+            <span class="material-symbols-outlined logo-icon">stethoscope</span>
+            <span class="logo-text"
+                  th:text="'Welcome, Dr. ' + ${doctor.lastName}">Welcome, Doctor</span>
         </div>
 
         <!-- Hamburger (mobile) -->
@@ -50,15 +48,17 @@
         </button>
 
         <ul class="nav-links" id="navLinks">
-            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
-            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
-            <li><a th:href="@{/patient/history}">History</a></li>
-            <li><a th:href="@{/patient/payment}">Payment</a></li>
-            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
-            <li><a th:href="@{/patient/profile}">Profile</a></li>
-            <!-- <li><a href="#portals">Portals</a></li>
-    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
-            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
+            <li><a th:href="@{/doctor/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/doctor/appointment}">Appointments</a></li>
+            <li><a th:href="@{/doctor/patient}">Patient</a></li>
+            <li><a th:href="@{/doctor/payment}">Payment</a></li>
+            <li><a th:href="@{/doctor/feedback}">Feedback</a></li>
+            <li><a th:href="@{/doctor/profile}">Profile</a></li>
+            <li>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
             <li>
                 <button class="btn-primary" onclick="window.location.href='/logout'">Logout</button>
             </li>
@@ -71,7 +71,7 @@
         <span class="material-symbols-outlined toast-icon">check_circle</span>
         <div class="toast-message">
             <span class="toast-title">Success</span>
-            <p>Your profile has been updated successfully.</p>
+            <p>Doctor profile has been updated successfully.</p>
         </div>
     </div>
     <button class="toast-close" onclick="closeToast()">
@@ -108,9 +108,10 @@
     <div class="toast-progress" style="background: #ef4444;"></div>
 </div>
 
+<!-- Main Content Area -->
 <main class="main-content" data-purpose="main-content">
-    <form class="profile-form" th:action="@{/patient/update-profile}" method="post">
-        <input type="hidden" name="id" th:value="${patient.id}"/>
+    <form class="profile-form" th:action="@{/doctor/update-profile}" method="post">
+        <input type="hidden" name="id" th:value="${doctor.id}"/>
 
         <section class="form-card" data-purpose="personal-info">
             <h3 class="section-title">Personal Information</h3>
@@ -118,7 +119,7 @@
                 <div class="profile-pic-section">
                     <div class="avatar-container group">
                         <img alt="Profile avatar" class="avatar-image"
-                             th:src="'https://ui-avatars.com/api/?name=' + ${patient.firstName} + '+' + ${patient.lastName} + '&background=0ea5e9&color=fff'"/>
+                             th:src="'https://ui-avatars.com/api/?name=' + ${doctor.firstName} + '+' + ${doctor.lastName} + '&background=0ea5e9&color=fff'"/>
                         <div class="avatar-overlay">
                             <svg class="camera-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -134,66 +135,45 @@
                 <div class="fields-grid">
                     <div class="input-group">
                         <label class="input-label">First Name</label>
-                        <input class="form-input" name="firstName" type="text" th:value="${patient.firstName}" required/>
+                        <input class="form-input" name="firstName" type="text" th:value="${doctor.firstName}" required/>
                     </div>
                     <div class="input-group">
                         <label class="input-label">Last Name</label>
-                        <input class="form-input" name="lastName" type="text" th:value="${patient.lastName}" required/>
+                        <input class="form-input" name="lastName" type="text" th:value="${doctor.lastName}" required/>
                     </div>
-                    <div class="input-group">
-                        <label class="input-label">Date of Birth</label>
-                        <input class="form-input" name="dateOfBirth" type="date" th:value="${patient.dateOfBirth}" required/>
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Gender</label>
-                        <select class="form-input" name="gender">
-                            <option th:selected="${patient.gender == 'Male'}">Male</option>
-                            <option th:selected="${patient.gender == 'Female'}">Female</option>
-                            <option th:selected="${patient.gender == 'Other'}">Other</option>
-                        </select>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input class="form-input" name="phoneNumber" type="text" th:value="${doctor.phoneNumber}"
+                               required/>
                     </div>
                     <div class="input-group">
                         <label class="input-label">National ID</label>
-                        <input class="form-input" name="nationalId" type="text" th:value="${patient.nationalId}" required/>
+                        <input class="form-input" name="nationalId" type="text" th:value="${doctor.nationalId}"
+                               required/>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Work Email</label>
+                        <input class="form-input" name="email" type="text" th:value="${doctor.email}" required/>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="form-card" data-purpose="contact-details">
-            <h3 class="section-title">Contact Details</h3>
-            <div class="contact-grid">
+        <section class="form-card" data-purpose="professional-info">
+            <h3 class="section-title">Professional Details</h3>
+            <div class="fields-grid">
                 <div class="input-group">
-                    <label class="input-label">Email Address</label>
-                    <input class="form-input" name="email" type="email" th:value="${patient.email}" required/>
+                    <label class="input-label">Specialization</label>
+                    <input class="form-input" name="specialization" type="text" th:value="${doctor.specialization}"/>
                 </div>
                 <div class="input-group">
-                    <label class="input-label">Phone Number</label>
-                    <input class="form-input" name="phoneNumber" type="tel" th:value="${patient.phoneNumber}" required/>
-                </div>
-                <div class="input-group full-width">
-                    <label class="input-label">Home Address</label>
-                    <textarea class="form-input" name="homeAddress" rows="3"
-                              th:text="${patient.homeAddress}"></textarea>
-                </div>
-            </div>
-        </section>
-
-        <section class="form-card" data-purpose="emergency-contact">
-            <h3 class="section-title">Emergency Contact</h3>
-            <div class="emergency-grid">
-                <div class="input-group">
-                    <label class="input-label">Contact Name</label>
-                    <input class="form-input" name="emergencyContactName" type="text"
-                           th:value="${patient.emergencyContactName}"/>
+                    <label class="input-label">Department</label>
+                    <input class="form-input" name="department" type="text" th:value="${doctor.department}"/>
                 </div>
                 <div class="input-group">
-                    <label class="input-label">Relationship</label>
-                    <input class="form-input" name="relationship" type="text" th:value="${patient.relationship}"/>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Phone Number</label>
-                    <input class="form-input" name="emergencyPhone" type="tel" th:value="${patient.emergencyPhone}"/>
+                    <label class="input-label">Consultation Fees / Notes</label>
+                    <input class="form-input" name="consultationFees" type="text"
+                           th:value="${doctor.consultationFees}"/>
                 </div>
             </div>
         </section>
@@ -212,6 +192,52 @@
             </div>
         </footer>
     </form>
+    <!-- Office Hours Section -->
+    <section class="form-card office-hours-card">
+        <form th:action="@{/doctor/update-working-hours}" th:object="${doctor}" method="post">
+            <input type="hidden" th:field="*{id}" />
+            <h3 class="section-title">Office Hours</h3>
+
+            <div class="hours-container">
+                <div th:each="wh, iStat : *{workingHours}" class="hour-card-mobile">
+                    <input type="hidden" th:field="*{workingHours[__${iStat.index}__].id}" />
+                    <input type="hidden" th:field="*{workingHours[__${iStat.index}__].day}" />
+
+                    <div class="card-top-row">
+                        <span class="day-name" th:text="${wh.day}">Monday</span>
+
+                        <div class="time-group-wrapper">
+                            <div class="time-input-container">
+                                <input type="time" class="time-input-clean" th:field="*{workingHours[__${iStat.index}__].startTime}" />
+                                <span class="material-symbols-outlined time-icon-small">schedule</span>
+                            </div>
+
+                            <span class="to-label-small">TO</span>
+
+                            <div class="time-input-container">
+                                <input type="time" class="time-input-clean" th:field="*{workingHours[__${iStat.index}__].endTime}" />
+                                <span class="material-symbols-outlined time-icon-small">schedule</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-bottom-row">
+                        <span class="status-label-small">ACTIVE</span>
+                        <label class="switch">
+                            <input type="checkbox"
+                                   th:field="*{workingHours[__${iStat.index}__].active}"
+                                   class="active-checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions no-border-top">
+                <button type="submit" class="btn btn-save">Save Office Hours</button>
+            </div>
+        </form>
+    </section>
 
     <section class="form-card danger-zone">
         <h3 class="section-title danger-title">Danger Zone</h3>
@@ -230,7 +256,7 @@
                     <strong>Deactivate Account</strong>
                     <p>This will temporarily disable your account and log you out.</p>
                 </div>
-                <form th:action="@{/patient/deactivate-account}" method="post" style="display:inline;">
+                <form th:action="@{/doctor/deactivate-account}" method="post" style="display:inline;">
                     <button type="submit" class="btn btn-danger"
                             onclick="return confirm('Are you sure you want to deactivate your account? You will be logged out.')">
                         Deactivate
@@ -247,7 +273,7 @@
         <h3 class="modal-title">Change Password</h3>
         <p class="modal-desc">Please verify your identity before changing your password.</p>
 
-        <form th:action="@{/patient/change-password}" method="post">
+        <form th:action="@{/doctor/change-password}" method="post">
             <div class="input-group">
                 <label class="input-label">Current Password</label>
                 <input type="password" name="currentPassword" required class="form-input"
@@ -362,7 +388,28 @@
         const modal = document.getElementById('passwordModal');
         if (modal) modal.style.display = 'none';
     }
-</script>
-</body>
 
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Check for saved user preference on load
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode'; // Changes icon to moon
+    } else {
+        themeIcon.innerText = 'light_mode'; // Changes icon to sun
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+
+        // Update icon text and save preference
+        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+</script>
+
+</body>
 </html>

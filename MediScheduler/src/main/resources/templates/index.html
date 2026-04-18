@@ -2,274 +2,178 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>MedScheduler - Modern Medical Appointment Scheduling</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" th:href="@{/css/index-style.css}">
-  <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>MedScheduler - Modern Medical Appointment Scheduling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/index-style.css}">
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
 
 </head>
 
 <body>
 
-  <!-- Scroll to Top Button -->
-  <button id="scrollTopBtn" title="Go to top">▲</button>
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
 
 
-  <script>
+<script>
     //Scroll to Top Button
     const scrollTopBtn = document.getElementById('scrollTopBtn');
 
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 75) {
-        scrollTopBtn.classList.add('show');
-      } else {
-        scrollTopBtn.classList.remove('show');
-      }
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
     });
 
     scrollTopBtn.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
-  </script>
+</script>
 
-  <!-- HEADER -->
-  <header class="header-wrapper">
+<!-- HEADER -->
+<header class="header-wrapper">
     <nav class="navbar">
-      <div class="user-profile">
-        <span class="material-symbols-outlined logo-icon">medical_services</span>
-        <span class="logo-text">MediScheduler</span>
-      </div>
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">medical_services</span>
+            <span class="logo-text">MediScheduler</span>
+        </div>
 
-      <!-- Hamburger (mobile) -->
-      <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-
-      <ul class="nav-links" id="navLinks">
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-          <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
         </button>
-        <li><a th:href="@{/dashboard}">Dashboard</a></li>
-        <li><button class="btn-login" onclick="window.location.href='/login'">Login</button></li>
-        <li><button class="btn-primary" onclick="window.location.href='/login?tab=register'">Get Started</button></li>
-      </ul>
-    </nav>
-  </header>
 
-  <main>
+        <ul class="nav-links" id="navLinks">
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+            </button>
+            <li>
+                <button class="btn-login" onclick="window.location.href='/login'">Login</button>
+            </li>
+            <li>
+                <button class="btn-primary" onclick="window.location.href='/login?tab=register'">Get Started</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main>
     <!-- HERO -->
     <section class="hero-section">
-      <div class="container-custom">
-        <div class="hero-grid">
-          <div class="hero-content-wrapper">
-            <div>
-              <span class="hero-badge">✦ Trusted by 2,000+ Clinics</span>
-              <h1 class="hero-title">
-                Healthcare scheduling <br /><span>made simple.</span>
-              </h1>
-              <p class="hero-desc">
-                Book appointments with top-rated doctors in minutes. Secure, fast, and reliable healthcare management at
-                your fingertips.
-              </p>
-            </div>
-            <div class="hero-btns">
-              <button class="hero-btn-book" onclick="window.location.href='/login?type=patient'">
-                <span class="material-symbols-outlined">patient_list</span>Patient Login
-              </button>
-              <button class="hero-btn-book hero-btn-secondary" onclick="window.location.href='/login?type=doctor'">
-                <span class="material-symbols-outlined">stethoscope</span>Doctor Login
-              </button>
-            </div>
-
-            <!-- <div class="hero-stats-row">
-              <div class="hero-stat-item">
-                <span class="material-symbols-outlined hero-stat-icon">verified</span>
-                <span class="hero-stat-text">HIPAA Compliant</span>
-              </div>
-              <div class="hero-stat-item">
-                <span class="material-symbols-outlined hero-stat-icon">support_agent</span>
-                <span class="hero-stat-text">24/7 Support</span>
-              </div>
-              <div class="hero-stat-item">
-                <span class="material-symbols-outlined hero-stat-icon">lock</span>
-                <span class="hero-stat-text">256-bit Encryption</span>
-              </div>
-            </div> -->
-          </div>
-          <div class="hero-image-container">
-            <div class="hero-image-card">
-              <div class="hero-image-main"></div>
-              <div class="hero-floating-card">
-                <div class="floating-card-info">
-                  <div class="floating-icon-box">
-                    <span class="material-symbols-outlined">person_search</span>
-                  </div>
-                  <div>
-                    <p class="floating-text-primary">Find a Specialist</p>
-                    <p class="floating-text-secondary">Search by location or specialty</p>
-                  </div>
+        <div class="container-custom">
+            <div class="hero-grid">
+                <div class="hero-content-wrapper">
+                    <div>
+                        <span class="hero-badge">✦ Trusted by 2,000+ Clinics</span>
+                        <h1 class="hero-title">
+                            Healthcare scheduling <br/><span>made simple.</span>
+                        </h1>
+                        <p class="hero-desc">
+                            Book appointments with top-rated doctors in minutes. Secure, fast, and reliable healthcare
+                            management at
+                            your fingertips.
+                        </p>
+                    </div>
+                    <div class="hero-btns">
+                        <button class="hero-btn-book" onclick="window.location.href='/login?type=patient'">
+                            <span class="material-symbols-outlined">patient_list</span>Patient Login
+                        </button>
+                        <button class="hero-btn-book hero-btn-secondary"
+                                onclick="window.location.href='/login?type=doctor'">
+                            <span class="material-symbols-outlined">stethoscope</span>Doctor Login
+                        </button>
+                    </div>
                 </div>
-                <span class="material-symbols-outlined" style="color: var(--primary)">arrow_forward</span>
-              </div>
+                <div class="hero-image-container">
+                    <div class="hero-image-card">
+                        <div class="hero-image-main"></div>
+                        <div class="hero-floating-card">
+                            <div class="floating-card-info">
+                                <div class="floating-icon-box">
+                                    <span class="material-symbols-outlined">person_search</span>
+                                </div>
+                                <div>
+                                    <p class="floating-text-primary">Find a Specialist</p>
+                                    <p class="floating-text-secondary">Search by location or specialty</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined" style="color: var(--primary)">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </section>
-
-    <!-- PORTALS -->
-    <!-- <section class="portal-section" id="portals">
-      <div class="container-custom">
-        <div class="portal-header">
-          <h2>Access Your Portal</h2>
-          <p>Choose your entry point to manage appointments and records</p>
-        </div>
-        <div class="portal-grid">
-          <div class="portal-card">
-            <div class="portal-icon-container">
-              <span class="material-symbols-outlined" style="font-size:1.875rem">patient_list</span>
-            </div>
-            <h3>Patient Portal</h3>
-            <p>Manage your health history, book new appointments, and contact your doctors.</p>
-            <div class="portal-btn-group">
-              <button class="btn-primary" style="padding:.75rem"
-                onclick="window.location.href='login.html?type=patient'">Login</button>
-              <button class="hero-btn-outline" style="padding:.75rem;font-size:.875rem;border-width:1px"
-                onclick="window.location.href='login.html?tab=register&type=patient'">Register</button>
-            </div>
-          </div>
-          <div class="portal-card">
-            <div class="portal-icon-container">
-              <span class="material-symbols-outlined" style="font-size:1.875rem">stethoscope</span>
-            </div>
-            <h3>Medical Provider</h3>
-            <p>Access patient schedules, manage clinic availability, and review medical records.</p>
-            <div class="portal-btn-group">
-              <button class="btn-primary" style="padding:.75rem"
-                onclick="window.location.href='login.html?type=doctor'">Login</button>
-              <button class="hero-btn-outline" style="padding:.75rem;font-size:.875rem;border-width:1px"
-                onclick="window.location.href='login.html?tab=register&type=doctor'">Register</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
 
     <!-- FEATURES -->
     <section class="features-section" id="features">
-      <div class="container-custom">
-        <div class="features-header">
-          <div>
-            <h2 class="features-label">Our Platform</h2>
-            <h3 class="features-title">Designed for efficient care</h3>
-          </div>
+        <div class="container-custom">
+            <div class="features-header">
+                <div>
+                    <h2 class="features-label">Our Platform</h2>
+                    <h3 class="features-title">Designed for efficient care</h3>
+                </div>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <span class="material-symbols-outlined">event_available</span>
+                    </div>
+                    <h4>Easy Booking</h4>
+                    <p>Schedule appointments with just a few clicks. Real-time availability ensures no
+                        double-booking.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <span class="material-symbols-outlined">history_edu</span>
+                    </div>
+                    <h4>Medical History</h4>
+                    <p>Centralized access to your records. Securely share history with specialists.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <span class="material-symbols-outlined">shield_with_heart</span>
+                    </div>
+                    <h4>Privacy First</h4>
+                    <p>Enterprise-grade encryption protecting all your medical data at every level.</p>
+                </div>
+            </div>
         </div>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon-box">
-              <span class="material-symbols-outlined">event_available</span>
-            </div>
-            <h4>Easy Booking</h4>
-            <p>Schedule appointments with just a few clicks. Real-time availability ensures no double-booking.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon-box">
-              <span class="material-symbols-outlined">history_edu</span>
-            </div>
-            <h4>Medical History</h4>
-            <p>Centralized access to your records. Securely share history with specialists.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon-box">
-              <span class="material-symbols-outlined">shield_with_heart</span>
-            </div>
-            <h4>Privacy First</h4>
-            <p>Enterprise-grade encryption protecting all your medical data at every level.</p>
-          </div>
-        </div>
-      </div>
     </section>
+</main>
 
-    <!-- CTA -->
-    <!-- <section class="cta-section">
-      <div class="cta-container">
-        <h2 class="cta-title">Ready to improve your patient experience?</h2>
-        <p class="cta-desc">Join thousands of healthcare providers and millions of patients already using MediScheduler.
-        </p>
-        <div class="hero-btns" style="justify-content:center; flex-wrap:wrap;">
-          <button class="hero-btn-outline" style="background:white;color:var(--primary);border:none"
-            onclick="window.location.href='login.html?tab=register'">Start Free Trial</button>
-          <button class="hero-btn-outline" style="color:white;border-color:rgba(255,255,255,0.3)">Schedule Demo</button>
-        </div>
-      </div>
-    </section> -->
-  </main>
 
-  <!-- FOOTER -->
-  <footer class="footer-main">
-    <div class="container-custom">
-      <div class="footer-grid">
-        <div>
-          <div class="logo-area footer-logo-block">
-            <span class="material-symbols-outlined" style="color:var(--primary)">medical_services</span>
-            <span class="logo-text" style="color:white">MediScheduler</span>
-          </div>
-          <p style="font-size:.875rem">Modernizing healthcare scheduling for a better world. Secure, fast, and easy.</p>
-        </div>
-        <div>
-          <h5 class="footer-heading">Product</h5>
-          <ul class="footer-list">
-            <li><a href="#features">Features</a></li>
-            <li><a href="#">Pricing</a></li>
-            <li><a href="#">Security</a></li>
-          </ul>
-        </div>
-        <div>
-          <h5 class="footer-heading">Company</h5>
-          <ul class="footer-list">
-            <li><a href="#">About</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <h5 class="footer-heading">Legal</h5>
-          <ul class="footer-list">
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 2024 MediScheduler Systems Inc. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
+<div class="footer-bottom">
+    <p>© 2026 MediScheduler Systems Inc. All rights reserved.</p>
+</div>
 
-  <script>
+
+<script>
     // Mobile hamburger menu
     const btn = document.getElementById('hamburgerBtn');
     const nav = document.getElementById('navLinks');
     btn.addEventListener('click', () => {
-      nav.classList.toggle('open');
-      btn.classList.toggle('active');
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
     });
 
     // Close menu on link click
     nav.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('click', () => {
-        nav.classList.remove('open');
-        btn.classList.remove('active');
-      });
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
     });
 
     //mode icon toggle
@@ -279,23 +183,23 @@
 
     // Check for saved user preference
     if (localStorage.getItem('theme') === 'dark') {
-      body.classList.add('dark-mode');
-      themeIcon.innerText = 'dark_mode';
+        body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode';
     }
 
     themeToggle.addEventListener('click', () => {
-      body.classList.toggle('dark-mode');
+        body.classList.toggle('dark-mode');
 
-      // Toggle the icon text and save preference
-      if (body.classList.contains('dark-mode')) {
-        themeIcon.innerText = 'dark_mode';
-        localStorage.setItem('theme', 'dark');
-      } else {
-        themeIcon.innerText = 'light_mode';
-        localStorage.setItem('theme', 'light');
-      }
+        // Toggle the icon text and save preference
+        if (body.classList.contains('dark-mode')) {
+            themeIcon.innerText = 'dark_mode';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            themeIcon.innerText = 'light_mode';
+            localStorage.setItem('theme', 'light');
+        }
     });
-  </script>
+</script>
 </body>
 
 </html>

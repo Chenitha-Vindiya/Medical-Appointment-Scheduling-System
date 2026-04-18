@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Doctor's Patient - MediScheduler</title>
+    <link rel="stylesheet" th:href="@{/css/doctor/patient.css}"/>
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg
+          xmlns='http://www.w3.org/2000/svg'
+          viewBox='0 0 24 24'
+          fill='%23007bff'%3E%3Cpath
+          d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
+
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">stethoscope</span>
+            <span class="logo-text" th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a th:href="@{/doctor/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/doctor/appointment}">Appointments</a></li>
+            <li><a th:href="@{/doctor/patient}">Patient</a></li>
+            <li><a th:href="@{/doctor/payment}">Payment</a></li>
+            <li><a th:href="@{/doctor/feedback}">Feedback</a></li>
+            <li><a th:href="@{/doctor/profile}">Profile</a></li>
+            <li>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="main-content">
+    <div class="container">
+        <div class="grid">
+            <!-- Card 1 -->
+            <div class="card" data-patient-id="#CL-88291">
+                <div class="patient-info-main"
+                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
+                        alt="Patient Avatar" class="patient-img"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjkiRthbdmS9h6Vwz_S0qkJagGrAN-QIlI9uVBE5-IV96RVaczL9enkRPssHxddepmbQ9jHWIy_2u4uYe9frqUrfD0mlcJOROqHGY7KxsgP24XrOcS9p0PhGujWOhhNNBwQS6QIaF5TDacIO_v0fvULLhcEfagcPzLUhuRnCDo8kzMym5bSIaalRTzdcHVr7yy4yJLA7JC1ZgyQCsYC7wFlpONxJNr081aaFbevmjW3dEIb5M9VZfih6YWgQrawhsbPEDTZLfh35ht"/>
+                    <div class="patient-text-group" style="text-align: left;"><h3>Sarah Henderson</h3>
+                        <p class="patient-id" style="justify-content: flex-start;"><span
+                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
+                            #CL-88291</p></div>
+                </div>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Last Visit</span>
+                        <span class="info-value">Oct 12, 2023</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Next Appt.</span>
+                        <span class="text-primary">In 3 Days</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Condition</span>
+                        <span class="text-tertiary">Post-Op Recovery</span>
+                    </div>
+                </div>
+                <button class="btn-action open-modal">
+                    View Details
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+            <!-- Card 2 -->
+            <div class="card" data-patient-id="#CL-10442">
+                <div class="patient-info-main"
+                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
+                        alt="Patient Avatar" class="patient-img"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvk74s9Qd3uWZZmaDCK9vywbY1-LJH07-bLkvWDJN9vPyHEZAC4hX4-u_VPKII7VTXzTG34Dk1kSlgqnYkpklj1k4to1kFAZxLHnWq_gvdL2av6tIE9iuTJ64rlFXeJTEfK_6C7FgcLSg0900kg9fY735BAFAX8g8eYakYko50YcXMnfCO9FE7Ls4_D_qx2zwpXRZmWOI9AdMcMj5tx-BAGyhadXBY5JuDoXI87qGCHOpppHESn908bHxPHeyB4uKDCf8xlBl2heID"/>
+                    <div class="patient-text-group" style="text-align: left;"><h3>Robert Chen</h3>
+                        <p class="patient-id" style="justify-content: flex-start;"><span
+                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
+                            #CL-10442</p></div>
+                </div>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Last Visit</span>
+                        <span class="info-value">Sep 28, 2023</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Next Appt.</span>
+                        <span class="info-value">TBD</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Condition</span>
+                        <span class="text-tertiary">Hypertension</span>
+                    </div>
+                </div>
+                <button class="btn-action open-modal">
+                    View Details
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+            <!-- Card 3 -->
+            <div class="card" data-patient-id="#CL-99012">
+                <div class="patient-info-main"
+                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
+                        alt="Patient Avatar" class="patient-img"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZLQmalXTDF2Bk9PtfUUMZowpdf6imk83XHDN2bKWQTn3hN89qirer1Umg-dRuIr8HYJF4alXzBeb6ldmzh9JbSAFCvYstYm1CUqxY2EuzNRe8S87agZbVm11e4jMuDAT9XDs6N2V_CDhuRAzgnzrVxarTyhCBo56lCOE8l2_v9QylaT_7zjqrZ1jMsKJpdeiTQLJsZD7XVxgX1JKF0-Uh8KypVs0xAtOvXS9pfXCBsa70JT5VQQEfM5JIBWwQ3tXaOR7hHfufGgi1"/>
+                    <div class="patient-text-group" style="text-align: left;"><h3>Amara Okafor</h3>
+                        <p class="patient-id" style="justify-content: flex-start;"><span
+                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
+                            #CL-99012</p></div>
+                </div>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Last Visit</span>
+                        <span class="info-value">Aug 05, 2023</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Next Appt.</span>
+                        <span class="text-primary">Tomorrow</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Condition</span>
+                        <span class="text-tertiary">Annual Checkup</span>
+                    </div>
+                </div>
+                <button class="btn-action open-modal">
+                    View Details
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+            <!-- Card 4 (Archived) -->
+            <div class="card card-archived" data-patient-id="#CL-77123">
+                <div class="patient-info-main"
+                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
+                        alt="Patient Avatar" class="patient-img"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0QBHLIh6HLulk5NJP8QMRql_eiHNDEsZ8og6SDqG8tB2PbAouKYtGgZJ7r80-bUtMmACm69MvrKqf1WscoSQkFu9Q1MBcvjinclO6NecwPg_UldYPPIstKTVYxwOeUW_HXombthI0rz973pOImGstLMX4pzr3jAztg2N0mo71zE-INRy837rms4RXA1Gm-JO4O0BqhnYaCWXAWoZwpx1iDvKo44xQGDe1ZqW324vkHdHdg8gsghzHJJuOLJeqdI7A9WV84Nak0NIt"/>
+                    <div class="patient-text-group" style="text-align: left;"><h3>Marcus Thorne</h3>
+                        <p class="patient-id" style="justify-content: flex-start;"><span
+                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
+                            #CL-77123</p></div>
+                </div>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Last Visit</span>
+                        <span class="info-value">Dec 12, 2022</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Status</span>
+                        <span class="info-value">Case Closed</span>
+                    </div>
+                </div>
+                <button class="btn-action open-modal">
+                    View Details
+                    <span class="material-symbols-outlined">history</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Patient Details Modal -->
+<div class="modal-overlay" id="patientModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalPatientName">Patient Profile</h2>
+            <button class="modal-close-btn" id="closeModal">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-section">
+                <span class="modal-section-title">Personal Information</span>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <p>Phone Number</p>
+                        <span id="modalPhone">+1 (555) 012-3456</span>
+                    </div>
+                    <div class="info-box">
+                        <p>Email Address</p>
+                        <span id="modalEmail">patient@email.com</span>
+                    </div>
+                    <div class="info-box" id="addressBox" style="grid-column: span 2;">
+                        <p>Home Address</p>
+                        <span id="modalAddress">123 Medical Plaza, Suite 400, North Springfield, IL 62704</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-section">
+                <span class="modal-section-title">Recent Medical Notes</span>
+                <div class="notes-content" id="modalNotes">
+                    Patient is showing steady improvement since last consultation.
+                </div>
+            </div>
+            <div class="modal-section">
+                <span class="modal-section-title">Upcoming Medications</span>
+                <ul class="med-list" id="modalMeds">
+                    <li class="med-item">
+                        <span class="material-symbols-outlined med-icon">pill</span>
+                        <div class="med-details">
+                            <h4>Lisinopril 10mg</h4>
+                            <p>Take 1 tablet daily every morning</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" id="footerClose">Close Details</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+
+    // Dark mode toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Check for saved user preference on load
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode'; // Changes icon to moon
+    } else {
+        themeIcon.innerText = 'light_mode'; // Changes icon to sun
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+
+        // Update icon text and save preference
+        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+</script>
+
+
+</body>
+</html>

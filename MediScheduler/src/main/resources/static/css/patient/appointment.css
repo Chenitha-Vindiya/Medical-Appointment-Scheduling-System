@@ -12,6 +12,7 @@
     --slate-50: #f8fafc;
     --slate-100: #f1f5f9;
     --slate-200: #e2e8f0;
+    --slate-300: #fdfdfd;
     --slate-400: #94a3b8;
     --slate-500: #64748b;
     --slate-600: #475569;
@@ -255,11 +256,22 @@ body::-webkit-scrollbar {
     gap: 0.75rem;
 }
 
+.card-actions form {
+    display: contents; /* This makes the button inside behave as the grid item */
+}
+
+.card-actions form {
+    display: block;
+    width: 100%;
+}
+
 /* 6. Buttons */
 .btn {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
     gap: 0.4rem;
     padding: 0.6rem;
     border-radius: 8px;
@@ -486,4 +498,141 @@ body::-webkit-scrollbar {
   .card-header { padding: 1.25rem; }
   .data-table th, .data-table td { padding: 1rem; }
   .specialty-cell { display: none; } /* Hide specialty to fit mobile */
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none; /* Hidden by default */
+    align-items: center; justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.show { display: flex; }
+
+/* Modal Container */
+.modal-container {
+    background: white;
+    width: 90%; max-width: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header-blue {
+    background: #008ecc; /* Matches your image */
+    color: white;
+    padding: 1.5rem;
+}
+
+.modal-header-blue h2 { margin: 0; font-size: 1.5rem; }
+.modal-header-blue p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.9; }
+
+/* Form Styling */
+.modal-form { padding: 1.5rem; }
+
+.form-group { margin-bottom: 1.2rem; }
+.form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #666;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.modal-select, .modal-form textarea, .modal-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    font-size: 0.9rem;
+}
+
+.modal-form textarea { height: 100px; resize: none; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* Footer Buttons */
+.modal-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-cancel {
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 12px; border-radius: 25px;
+    cursor: pointer; font-weight: 600;
+}
+
+.btn-confirm {
+    background: #008ecc;
+    color: white; border: none;
+    padding: 12px; border-radius: 25px;
+    cursor: pointer; font-weight: 600;
+}
+
+.error-alert {
+    background-color: #fff5f5;
+    border: 1px solid #feb2b2;
+    color: #c53030;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.error-alert .material-symbols-outlined {
+    font-size: 1.2rem;
+}
+
+/* Ensure both modals center correctly */
+.modal-overlay {
+    display: none; /* JS will toggle this */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.7); /* Darker glass effect */
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+/* Helper class for JS */
+.modal-overlay.show-flex {
+    display: flex !important;
+}
+
+/* Fix for the Reschedule labels and inputs */
+#rescheduleModal .form-group label {
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--slate-500);
+}
+
+#rescheduleModal textarea,
+#rescheduleModal input {
+    border: 1px solid var(--slate-200);
+    transition: border-color 0.2s;
+}
+
+#rescheduleModal input:focus,
+#rescheduleModal textarea:focus {
+    outline: none;
+    border-color: var(--primary);
 }

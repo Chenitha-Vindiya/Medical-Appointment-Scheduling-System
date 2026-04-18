@@ -1,0 +1,686 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+:root {
+    --primary-light: #e0f2fe;
+    --primary-container: #0ea5e9;
+    --on-primary: #ffffff;
+    --surface: #f7f9fb;
+    --surface-container: #eceef0;
+    --surface-container-low: #f1f5f9;
+    --surface-container-lowest: #ffffff;
+    --on-surface: #191c1e;
+    --on-surface-variant: #64748b;
+    --outline-variant: #cbd5e1;
+    --accent-orange: #f59e0b;
+    --accent-orange-light: #fef3c7;
+    --accent-slate: #64748b;
+    --accent-slate-light: #f1f5f9;
+    --radius-md: 12px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --primary: #0ea5e9;
+    --primary-hover: #238dc2;
+    --slate-100: #f1f5f9;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--surface);
+    color: var(--on-surface);
+    line-height: 1.5;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Hide scrollbar but allow scrolling */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Scroll to Top Button ---------------------------------*/
+#scrollTopBtn {
+    position: fixed;
+    bottom: 35px;
+    right: 35px;
+    background-color: var(--primary);
+    font-weight: bolder;
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.3s ease;
+    z-index: 1001;
+}
+
+#scrollTopBtn:hover {
+    transform: scale(1.07);
+    background-color: var(--primary-hover);
+}
+
+/* When visible */
+#scrollTopBtn.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* =====================
+   HEADER & NAVBAR
+   ===================== */
+.header-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 1000;
+    padding-top: 1rem;
+}
+
+.navbar {
+    width: 92%;
+    max-width: 1200px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    padding: 12px 24px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    color: var(--primary);
+    font-size: 28px;
+}
+
+.logo-text {
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--slate-600);
+    font-weight: 500;
+    font-size: 0.93rem;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+/* Hamburger button */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 10;
+}
+
+.hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--slate-700);
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Buttons */
+.btn-login {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--slate-700);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.875rem;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    padding: 96px 32px 48px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Timeline Section */
+.timeline-container {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f1f5f9;
+    min-height: 600px;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.timeline-header h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* View Content Management */
+.view-content {
+    display: none;
+}
+
+.view-content.active {
+    display: block;
+}
+
+/* Day View Styles */
+.schedule-list {
+    position: relative;
+    padding-left: 100px;
+}
+
+.schedule-list::before {
+    content: '';
+    position: absolute;
+    left: 88px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #f1f5f9;
+}
+
+.schedule-item {
+    position: relative;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+}
+
+.time-label {
+    position: absolute;
+    left: -100px;
+    width: 80px;
+    text-align: right;
+}
+
+.time-label .hour {
+    font-size: 16px;
+    font-weight: 800;
+    display: block;
+    color: #1e293b;
+    line-height: 1;
+}
+
+.time-label .period {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #94a3b8;
+    letter-spacing: 0.05em;
+}
+
+.appointment-card {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.appointment-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.04);
+    border-color: #e2e8f0;
+}
+
+.appointment-card::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+.appointment-card.confirmed::after {
+    background: var(--primary);
+}
+
+.appointment-card.in-progress::after {
+    background: var(--accent-orange);
+}
+
+.appointment-card.arrived::after {
+    background: var(--accent-slate);
+}
+
+.patient-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    object-fit: cover;
+    background-color: #f8fafc;
+    flex-shrink: 0;
+}
+
+.patient-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.patient-name {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.appointment-details {
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.room-tag {
+    background: #f8fafc;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-pill {
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.status-pill.confirmed {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.status-pill.pending {
+    background: var(--accent-orange-light);
+    color: #92400e;
+}
+
+.status-pill.cancelled {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+
+.empty-slot-btn {
+    flex: 1;
+    border: 2px dashed var(--outline-variant);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    font-family: inherit;
+}
+
+.empty-slot-btn:hover {
+    background: #f0f9ff;
+    border-color: #bae6fd;
+    border-style: solid;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -17px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid var(--primary);
+    z-index: 5;
+    box-shadow: 0 0 0 4px white;
+}
+
+.timeline-marker.inactive {
+    border-color: var(--outline-variant);
+}
+
+.timeline-marker.orange {
+    border-color: var(--accent-orange);
+}
+
+.timeline-marker.slate {
+    border-color: var(--accent-slate);
+}
+
+@media (max-width: 1024px) {
+    /* Hamburger visible */
+    .hamburger {
+        display: flex;
+    }
+
+    /* Nav links hidden by default, dropdown on open */
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        background: #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        z-index: 999;
+    }
+
+    .nav-links .btn-login,
+    .nav-links .btn-primary {
+        width: 100%;
+        margin: 0.3rem 0;
+        text-align: center;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 0.6rem 0.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        width: 100%;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Day View Scaled for Mobile */
+    .schedule-list {
+        padding-left: 54px;
+    }
+
+    .schedule-list::before {
+        left: 42px;
+    }
+
+    .time-label {
+        left: -60px;
+        width: 50px;
+        text-align: right;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .time-label .hour {
+        font-size: 13px;
+    }
+
+    .time-label .period {
+        font-size: 9px;
+    }
+
+    .timeline-marker {
+        left: -17px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .appointment-card {
+        flex-direction: row; /* Keep horizontal but wrap text */
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .patient-avatar {
+        width: 44px;
+        height: 44px;
+    }
+
+    .patient-name {
+        font-size: 14px;
+    }
+
+    .appointment-details {
+        font-size: 12px;
+    }
+
+    .room-tag, .status-pill {
+        display: none; /* Hide non-essential info on tiny screens or move to bottom */
+    }
+
+    .schedule-item {
+        margin-bottom: 24px;
+    }
+
+    .empty-slot-btn {
+        padding: 16px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .timeline-header h3 {
+        font-size: 18px;
+        width: 100%;
+    }
+}
+
+/* Theme toggle — icon button inside nav */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--slate-500);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, background 0.2s;
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    color: var(--primary);
+    background: var(--slate-100);
+}
+
+.theme-toggle .material-symbols-outlined {
+    font-size: 22px;
+    transition: transform 0.35s ease;
+}
+
+.theme-toggle:hover .material-symbols-outlined {
+    transform: rotate(20deg);
+}
+
+/* =====================
+   DARK MODE OVERRIDES
+   ===================== */
+body.dark-mode {
+    --surface: #0c1322;
+    --on-surface: #f1f5f9;
+    --on-surface-variant: #94a3b8;
+    --outline-variant: #1e293b;
+    --slate-100: #1e2d40;
+    --slate-600: #cbd5e1;
+    --slate-700: #f1f5f9;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .timeline-container,
+body.dark-mode .appointment-card {
+    background-color: #182030;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--on-surface);
+}
+
+body.dark-mode .timeline-header h3,
+body.dark-mode .time-label .hour,
+body.dark-mode .patient-name {
+    color: #ffffff;
+}
+
+body.dark-mode .schedule-list::before {
+    background: #1e2d40;
+}
+
+body.dark-mode .room-tag {
+    background: #1e2d40;
+    color: #94a3b8;
+}
+
+body.dark-mode .empty-slot-btn {
+    border-color: #1e2d40;
+}
+
+body.dark-mode .empty-slot-btn:hover {
+    background: rgba(14, 165, 233, 0.05);
+}
+
+body.dark-mode .timeline-marker {
+    background: #182030;
+    box-shadow: 0 0 0 4px #182030;
+}
+
+.date-navigator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--slate-100);
+    color: var(--slate-600);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.today-jump {
+    font-size: 0.85rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    display: inline-block;
+}
