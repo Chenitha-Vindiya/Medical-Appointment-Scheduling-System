@@ -71,122 +71,60 @@
 <main class="main-content">
     <div class="container">
         <div class="grid">
-            <!-- Card 1 -->
-            <div class="card" data-patient-id="#CL-88291">
-                <div class="patient-info-main"
-                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
-                        alt="Patient Avatar" class="patient-img"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjkiRthbdmS9h6Vwz_S0qkJagGrAN-QIlI9uVBE5-IV96RVaczL9enkRPssHxddepmbQ9jHWIy_2u4uYe9frqUrfD0mlcJOROqHGY7KxsgP24XrOcS9p0PhGujWOhhNNBwQS6QIaF5TDacIO_v0fvULLhcEfagcPzLUhuRnCDo8kzMym5bSIaalRTzdcHVr7yy4yJLA7JC1ZgyQCsYC7wFlpONxJNr081aaFbevmjW3dEIb5M9VZfih6YWgQrawhsbPEDTZLfh35ht"/>
-                    <div class="patient-text-group" style="text-align: left;"><h3>Sarah Henderson</h3>
-                        <p class="patient-id" style="justify-content: flex-start;"><span
-                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
-                            #CL-88291</p></div>
+
+            <div th:each="patient : ${patients}"
+                 class="card"
+                 th:classappend="${!patient.active} ? 'card-archived' : ''"
+                 th:attr="data-patient-id=${patient.nationalId}">
+
+                <div class="patient-info-main" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <img alt="Patient Avatar" class="patient-img"
+                         th:src="'https://ui-avatars.com/api/?name=' + ${patient.firstName} + '+' + ${patient.lastName} + '&background=random'"/>
+
+                    <div class="patient-text-group" style="text-align: left;">
+                        <h3 th:text="${patient.firstName + ' ' + patient.lastName}">Name</h3>
+                        <p class="patient-id" style="justify-content: flex-start;">
+                            <span class="material-symbols-outlined" style="font-size: 14px">fingerprint</span>
+                            ID: <span th:text="'#PAT-' + ${patient.id}">#123</span>
+                        </p>
+                    </div>
                 </div>
+
                 <div class="info-list">
                     <div class="info-item">
                         <span class="info-label">Last Visit</span>
-                        <span class="info-value">Oct 12, 2023</span>
+                        <span class="info-value"
+                              th:text="${lastVisits[patient.id] != null ? #temporals.format(lastVisits[patient.id], 'MMM dd, yyyy') : '-'}">
+                        </span>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label">Next Appt.</span>
-                        <span class="text-primary">In 3 Days</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Condition</span>
-                        <span class="text-tertiary">Post-Op Recovery</span>
-                    </div>
+
+                    <th:block th:if="${patient.active}">
+                        <div class="info-item">
+                            <span class="info-label">Next Appt.</span>
+                            <span th:classappend="${nextAppts[patient.id] != 'TBD'} ? 'text-primary' : 'info-value'"
+                                  th:text="${nextAppts[patient.id]}"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Condition</span>
+                            <span class="text-tertiary" th:text="${conditions[patient.id]}"></span>
+                        </div>
+                    </th:block>
+
+                    <th:block th:unless="${patient.active}">
+                        <div class="info-item">
+                            <span class="info-label">Status</span>
+                            <span class="info-value" style="font-weight: 700; color: var(--slate-600);">Case Closed</span>
+                        </div>
+                    </th:block>
                 </div>
+
                 <button class="btn-action open-modal">
                     View Details
-                    <span class="material-symbols-outlined">arrow_forward</span>
+                    <span class="material-symbols-outlined"
+                          th:text="${patient.active ? 'arrow_forward' : 'history'}">arrow_forward</span>
                 </button>
             </div>
-            <!-- Card 2 -->
-            <div class="card" data-patient-id="#CL-10442">
-                <div class="patient-info-main"
-                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
-                        alt="Patient Avatar" class="patient-img"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvk74s9Qd3uWZZmaDCK9vywbY1-LJH07-bLkvWDJN9vPyHEZAC4hX4-u_VPKII7VTXzTG34Dk1kSlgqnYkpklj1k4to1kFAZxLHnWq_gvdL2av6tIE9iuTJ64rlFXeJTEfK_6C7FgcLSg0900kg9fY735BAFAX8g8eYakYko50YcXMnfCO9FE7Ls4_D_qx2zwpXRZmWOI9AdMcMj5tx-BAGyhadXBY5JuDoXI87qGCHOpppHESn908bHxPHeyB4uKDCf8xlBl2heID"/>
-                    <div class="patient-text-group" style="text-align: left;"><h3>Robert Chen</h3>
-                        <p class="patient-id" style="justify-content: flex-start;"><span
-                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
-                            #CL-10442</p></div>
-                </div>
-                <div class="info-list">
-                    <div class="info-item">
-                        <span class="info-label">Last Visit</span>
-                        <span class="info-value">Sep 28, 2023</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Next Appt.</span>
-                        <span class="info-value">TBD</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Condition</span>
-                        <span class="text-tertiary">Hypertension</span>
-                    </div>
-                </div>
-                <button class="btn-action open-modal">
-                    View Details
-                    <span class="material-symbols-outlined">arrow_forward</span>
-                </button>
-            </div>
-            <!-- Card 3 -->
-            <div class="card" data-patient-id="#CL-99012">
-                <div class="patient-info-main"
-                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
-                        alt="Patient Avatar" class="patient-img"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZLQmalXTDF2Bk9PtfUUMZowpdf6imk83XHDN2bKWQTn3hN89qirer1Umg-dRuIr8HYJF4alXzBeb6ldmzh9JbSAFCvYstYm1CUqxY2EuzNRe8S87agZbVm11e4jMuDAT9XDs6N2V_CDhuRAzgnzrVxarTyhCBo56lCOE8l2_v9QylaT_7zjqrZ1jMsKJpdeiTQLJsZD7XVxgX1JKF0-Uh8KypVs0xAtOvXS9pfXCBsa70JT5VQQEfM5JIBWwQ3tXaOR7hHfufGgi1"/>
-                    <div class="patient-text-group" style="text-align: left;"><h3>Amara Okafor</h3>
-                        <p class="patient-id" style="justify-content: flex-start;"><span
-                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
-                            #CL-99012</p></div>
-                </div>
-                <div class="info-list">
-                    <div class="info-item">
-                        <span class="info-label">Last Visit</span>
-                        <span class="info-value">Aug 05, 2023</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Next Appt.</span>
-                        <span class="text-primary">Tomorrow</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Condition</span>
-                        <span class="text-tertiary">Annual Checkup</span>
-                    </div>
-                </div>
-                <button class="btn-action open-modal">
-                    View Details
-                    <span class="material-symbols-outlined">arrow_forward</span>
-                </button>
-            </div>
-            <!-- Card 4 (Archived) -->
-            <div class="card card-archived" data-patient-id="#CL-77123">
-                <div class="patient-info-main"
-                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
-                        alt="Patient Avatar" class="patient-img"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0QBHLIh6HLulk5NJP8QMRql_eiHNDEsZ8og6SDqG8tB2PbAouKYtGgZJ7r80-bUtMmACm69MvrKqf1WscoSQkFu9Q1MBcvjinclO6NecwPg_UldYPPIstKTVYxwOeUW_HXombthI0rz973pOImGstLMX4pzr3jAztg2N0mo71zE-INRy837rms4RXA1Gm-JO4O0BqhnYaCWXAWoZwpx1iDvKo44xQGDe1ZqW324vkHdHdg8gsghzHJJuOLJeqdI7A9WV84Nak0NIt"/>
-                    <div class="patient-text-group" style="text-align: left;"><h3>Marcus Thorne</h3>
-                        <p class="patient-id" style="justify-content: flex-start;"><span
-                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
-                            #CL-77123</p></div>
-                </div>
-                <div class="info-list">
-                    <div class="info-item">
-                        <span class="info-label">Last Visit</span>
-                        <span class="info-value">Dec 12, 2022</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Status</span>
-                        <span class="info-value">Case Closed</span>
-                    </div>
-                </div>
-                <button class="btn-action open-modal">
-                    View Details
-                    <span class="material-symbols-outlined">history</span>
-                </button>
-            </div>
+
         </div>
     </div>
 </main>
@@ -195,55 +133,136 @@
 <div class="modal-overlay" id="patientModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 id="modalPatientName">Patient Profile</h2>
+            <div class="modal-header-info">
+                <img alt="Patient Profile" class="modal-patient-img" id="modalPatientImg" src=""/>
+                <div class="modal-header-text">
+                    <h2 id="modalPatientName">Patient Name</h2>
+                    <p class="patient-id" id="modalPatientId"><span class="material-symbols-outlined" style="font-size: 14px;">fingerprint</span> ID: #00000</p>
+                </div>
+            </div>
             <button class="modal-close-btn" id="closeModal">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
         <div class="modal-body">
-            <div class="modal-section">
-                <span class="modal-section-title">Personal Information</span>
-                <div class="info-grid">
-                    <div class="info-box">
-                        <p>Phone Number</p>
-                        <span id="modalPhone">+1 (555) 012-3456</span>
+            <div class="modal-grid">
+                <!-- Left Column: Last Visit -->
+                <div class="modal-column">
+<span class="column-title">
+<span class="material-symbols-outlined" style="font-size: 18px; color: var(--on-surface-variant);">history</span>
+                        Last Visit
+                    </span>
+                    <div class="visit-detail-item">
+                        <span class="visit-detail-label">Date</span>
+                        <span class="visit-detail-value" id="lastVisitDate">--</span>
                     </div>
-                    <div class="info-box">
-                        <p>Email Address</p>
-                        <span id="modalEmail">patient@email.com</span>
+                    <div class="visit-detail-item">
+                        <span class="visit-detail-label">Time</span>
+                        <span class="visit-detail-value" id="lastVisitTime">--</span>
                     </div>
-                    <div class="info-box" id="addressBox" style="grid-column: span 2;">
-                        <p>Home Address</p>
-                        <span id="modalAddress">123 Medical Plaza, Suite 400, North Springfield, IL 62704</span>
+                    <div class="visit-detail-item">
+                        <span class="visit-detail-label">Reason</span>
+                        <div class="visit-detail-value reason" id="lastVisitReason">--</div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-section">
-                <span class="modal-section-title">Recent Medical Notes</span>
-                <div class="notes-content" id="modalNotes">
-                    Patient is showing steady improvement since last consultation.
+                <!-- Right Column: Next Visit -->
+                <div class="modal-column">
+<span class="column-title">
+<span class="material-symbols-outlined" style="font-size: 18px; color: var(--primary);">event</span>
+                        Next Visit
+                    </span>
+                    <div class="visit-detail-item">
+                        <span class="visit-detail-label">Date</span>
+                        <span class="visit-detail-value" id="nextVisitDate">--</span>
+                    </div>
+                    <div class="visit-detail-item">
+                        <span class="visit-detail-label">Time</span>
+                        <span class="visit-detail-value" id="nextVisitTime">--</span>
+                    </div>
+                    <div class="visit-detail-item">
+                        <span class="visit-detail-label">Reason</span>
+                        <div class="visit-detail-value reason" id="nextVisitReason">--</div>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-section">
-                <span class="modal-section-title">Upcoming Medications</span>
-                <ul class="med-list" id="modalMeds">
-                    <li class="med-item">
-                        <span class="material-symbols-outlined med-icon">pill</span>
-                        <div class="med-details">
-                            <h4>Lisinopril 10mg</h4>
-                            <p>Take 1 tablet daily every morning</p>
-                        </div>
-                    </li>
-                </ul>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn-primary" id="footerClose">Close Details</button>
+            <button class="btn-primary" id="footerClose">Close Overview</button>
         </div>
     </div>
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('patientModal');
+        const openBtns = document.querySelectorAll('.open-modal');
+        const closeBtn = document.getElementById('closeModal');
+        const footerCloseBtn = document.getElementById('footerClose');
+
+        const patientData = {
+            "#CL-88291": {
+                name: "Sarah Henderson",
+                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBjkiRthbdmS9h6Vwz_S0qkJagGrAN-QIlI9uVBE5-IV96RVaczL9enkRPssHxddepmbQ9jHWIy_2u4uYe9frqUrfD0mlcJOROqHGY7KxsgP24XrOcS9p0PhGujWOhhNNBwQS6QIaF5TDacIO_v0fvULLhcEfagcPzLUhuRnCDo8kzMym5bSIaalRTzdcHVr7yy4yJLA7JC1ZgyQCsYC7wFlpONxJNr081aaFbevmjW3dEIb5M9VZfih6YWgQrawhsbPEDTZLfh35ht",
+                lastVisit: { date: "Oct 12, 2023", time: "09:30 AM", reason: "Follow-up consultation after minor surgical procedure on upper left forearm." },
+                nextVisit: { date: "Oct 25, 2023", time: "11:00 AM", reason: "Stitch removal and assessment of healing progress. Mobility testing required." }
+            },
+            "#CL-10442": {
+                name: "Robert Chen",
+                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCvk74s9Qd3uWZZmaDCK9vywbY1-LJH07-bLkvWDJN9vPyHEZAC4hX4-u_VPKII7VTXzTG34Dk1kSlgqnYkpklj1k4to1kFAZxLHnWq_gvdL2av6tIE9iuTJ64rlFXeJTEfK_6C7FgcLSg0900kg9fY735BAFAX8g8eYakYko50YcXMnfCO9FE7Ls4_D_qx2zwpXRZmWOI9AdMcMj5tx-BAGyhadXBY5JuDoXI87qGCHOpppHESn908bHxPHeyB4uKDCf8xlBl2heID",
+                lastVisit: { date: "Sep 28, 2023", time: "02:15 PM", reason: "Hypertension check-up. Blood pressure reading was slightly elevated (145/90)." },
+                nextVisit: { date: "TBD", time: "N/A", reason: "Wait for lab results for lipid panel and potassium levels before scheduling." }
+            },
+            "#CL-99012": {
+                name: "Amara Okafor",
+                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZLQmalXTDF2Bk9PtfUUMZowpdf6imk83XHDN2bKWQTn3hN89qirer1Umg-dRuIr8HYJF4alXzBeb6ldmzh9JbSAFCvYstYm1CUqxY2EuzNRe8S87agZbVm11e4jMuDAT9XDs6N2V_CDhuRAzgnzrVxarTyhCBo56lCOE8l2_v9QylaT_7zjqrZ1jMsKJpdeiTQLJsZD7XVxgX1JKF0-Uh8KypVs0xAtOvXS9pfXCBsa70JT5VQQEfM5JIBWwQ3tXaOR7hHfufGgi1",
+                lastVisit: { date: "Aug 05, 2023", time: "10:00 AM", reason: "Standard wellness screening. Patient reported fatigue during exercise." },
+                nextVisit: { date: "Oct 23, 2023", time: "08:45 AM", reason: "Annual physical exam. Focus on nutritional deficiencies and Vitamin D optimization." }
+            },
+            "#CL-77123": {
+                name: "Marcus Thorne",
+                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC0QBHLIh6HLulk5NJP8QMRql_eiHNDEsZ8og6SDqG8tB2PbAouKYtGgZJ7r80-bUtMmACm69MvrKqf1WscoSQkFu9Q1MBcvjinclO6NecwPg_UldYPPIstKTVYxwOeUW_HXombthI0rz973pOImGstLMX4pzr3jAztg2N0mo71zE-INRy837rms4RXA1Gm-JO4O0BqhnYaCWXAWoZwpx1iDvKo44xQGDe1ZqW324vkHdHdg8gsghzHJJuOLJeqdI7A9WV84Nak0NIt",
+                lastVisit: { date: "Dec 12, 2022", time: "03:45 PM", reason: "Final clearance for full return to sports activity after physiotherapy course." },
+                nextVisit: { date: "Archived", time: "N/A", reason: "Case closed. Patient moved to inactive directory but records remain on file." }
+            }
+        };
+
+        const openModal = (id) => {
+            const data = patientData[id];
+            if (data) {
+                document.getElementById('modalPatientImg').src = data.img;
+                document.getElementById('modalPatientName').innerText = data.name;
+                document.getElementById('modalPatientId').innerHTML = `<span class="material-symbols-outlined" style="font-size: 14px;">fingerprint</span> ID: ${id}`;
+
+                document.getElementById('lastVisitDate').innerText = data.lastVisit.date;
+                document.getElementById('lastVisitTime').innerText = data.lastVisit.time;
+                document.getElementById('lastVisitReason').innerText = data.lastVisit.reason;
+
+                document.getElementById('nextVisitDate').innerText = data.nextVisit.date;
+                document.getElementById('nextVisitTime').innerText = data.nextVisit.time;
+                document.getElementById('nextVisitReason').innerText = data.nextVisit.reason;
+            }
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeModal = () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        openBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('.card');
+                const patientId = card.getAttribute('data-patient-id');
+                openModal(patientId);
+            });
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        footerCloseBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    });
+
     // Mobile hamburger menu
     const btn = document.getElementById('hamburgerBtn');
     const nav = document.getElementById('navLinks');

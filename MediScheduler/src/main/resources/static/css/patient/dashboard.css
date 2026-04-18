@@ -731,7 +731,7 @@ body.dark-mode .data-table tbody tr {
 }
 
 body.dark-mode .data-table tbody tr:hover {
-  background: var(--slate-100);
+  background: var(--slate-200);
 }
 
 body.dark-mode .icon-blue   { background: rgba(43,173,238,0.12); }

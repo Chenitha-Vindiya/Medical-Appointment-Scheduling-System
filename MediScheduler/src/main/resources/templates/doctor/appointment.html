@@ -38,7 +38,8 @@
     <nav class="navbar">
         <div class="user-profile">
             <span class="material-symbols-outlined logo-icon">stethoscope</span>
-            <span class="logo-text" th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
+            <span class="logo-text"
+                  th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
         </div>
 
         <!-- Hamburger (mobile) -->
@@ -58,7 +59,9 @@
                     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
                 </button>
             </li>
-            <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
+            <li>
+                <button class="btn-primary" onclick="window.location.href='/logout'">Logout</button>
+            </li>
         </ul>
     </nav>
 </header>
@@ -97,22 +100,35 @@
                             <span class="period" th:text="${#temporals.format(booking.startTime, 'a')}">AM</span>
                         </div>
 
-                        <div class="timeline-marker"
-                             th:classappend="${booking.status == 'IN_PROGRESS'} ? 'orange' :
-                                            (${booking.status == 'ARRIVED'} ? 'slate' : '')">
+                        <div class="timeline-marker" th:classappend="${#strings.toLowerCase(booking.status)}">
                         </div>
 
-                        <div style="width: 100%;">
-                            <div class="appointment-card" th:classappend="${booking.status.toLowerCase()}">
+                        <div style="width: 100%; cursor: pointer;">
+                            <div class="appointment-card"
+                                 th:classappend="${booking.status.toLowerCase()}"
+                                 th:attr="data-id=${booking.id},
+                                          data-status=${booking.status},
+                                          data-loc=${booking.location},
+                                          data-pname=${booking.patient.firstName + ' ' + booking.patient.lastName},
+                                          data-pphone=${booking.patient.phoneNumber},
+                                          data-pemail=${booking.patient.email},
+                                          data-paddr=${booking.patient.homeAddress},
+                                          data-date=${#temporals.format(booking.appointmentDate, 'dd MMM yyyy') + ' at ' + #temporals.format(booking.startTime, 'hh:mm a')},
+                                          data-reason=${booking.reason}"
+                                          onclick="openDoctorModal(this)">
+
                                 <img class="patient-avatar"
                                      th:src="'https://ui-avatars.com/api/?name=' + ${booking.patient.firstName} + '+' + ${booking.patient.lastName} + '&background=random'"/>
 
                                 <div class="patient-info">
-                                    <h4 class="patient-name" th:text="${booking.patient.firstName} + ' ' + ${booking.patient.lastName}">Name</h4>
+                                    <h4 class="patient-name"
+                                        th:text="${booking.patient.firstName} + ' ' + ${booking.patient.lastName}">
+                                        Name</h4>
                                     <p class="appointment-details" th:text="${booking.reason} + ' • 30 mins'">Reason</p>
                                 </div>
 
-                                <span class="status-pill" th:classappend="${booking.status.toLowerCase()}" th:text="${booking.status}">Status</span>
+                                <span class="status-pill" th:classappend="${booking.status.toLowerCase()}"
+                                      th:text="${booking.status}">Status</span>
                             </div>
                         </div>
                     </div>
@@ -127,7 +143,97 @@
     </div>
 </main>
 
+<div id="doctorModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header-blue">
+            <h2>Manage Appointment</h2>
+        </div>
+        <form th:action="@{/doctor/appointment/update-status}" method="post" class="modal-form">
+            <input type="hidden" name="appointmentId" id="docAppId">
+
+            <div class="info-section">
+                <label>PATIENT DETAILS</label>
+                <p id="docPatientName" style="font-weight: 600;"></p>
+                <p id="docPatientContact" style="font-size: 0.85rem; color: var(--slate-500);"></p>
+                <p id="docPatientAddress" style="font-size: 0.85rem; color: var(--slate-500);"></p>
+            </div>
+
+            <div class="info-section section-divider">
+                <label>APPOINTMENT</label>
+                <p id="docAppDateTime" style="font-size: 0.85rem;"></p>
+                <p id="docAppReason" style="font-size: 0.75rem;"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status" id="statusSelect" class="modal-select">
+                    <option value="CONFIRMED">Confirmed</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="CANCELLED">Cancelled</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Room / Location</label>
+                <input type="text" name="location" id="docLocation" class="modal-select" placeholder="e.g. Room 101">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeDoctorModal()">Cancel</button>
+                <button type="submit" class="btn-confirm">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
+    function openDoctorModal(element) {
+        const modal = document.getElementById('doctorModal');
+
+        // Extract data
+        const id = element.getAttribute('data-id');
+        const status = element.getAttribute('data-status');
+        const loc = element.getAttribute('data-loc');
+        const pName = element.getAttribute('data-pname');
+        const pPhone = element.getAttribute('data-pphone');
+        const pEmail = element.getAttribute('data-pemail');
+        const pAddr = element.getAttribute('data-paddr');
+        const appDate = element.getAttribute('data-date');
+        const reason = element.getAttribute('data-reason');
+
+        // Set values
+        document.getElementById('docAppId').value = id;
+        document.getElementById('statusSelect').value = status;
+        document.getElementById('docLocation').value = (loc === 'null' || !loc) ? '' : loc;
+
+        // Fill Read-Only fields with Null-Safety
+        document.getElementById('docPatientName').innerText = pName || 'N/A';
+        document.getElementById('docPatientContact').innerText = (pPhone || 'N/A') + ' | ' + (pEmail || 'N/A');
+
+        // Check if Address is literally "null" or empty
+        document.getElementById('docPatientAddress').innerText = (pAddr === 'null' || !pAddr) ? 'No address provided' : pAddr;
+
+        document.getElementById('docAppDateTime').innerText = appDate;
+        document.getElementById('docAppReason').innerText = reason;
+
+        modal.style.display = 'flex';
+        modal.classList.add('show-flex');
+    }
+
+    function closeDoctorModal() {
+        const modal = document.getElementById('doctorModal');
+        modal.style.display = 'none';
+        modal.classList.remove('show-flex');
+    }
+
+    // Close when clicking the dark background
+    window.addEventListener('click', (e) => {
+        const modal = document.getElementById('doctorModal');
+        if (e.target === modal) {
+            closeDoctorModal();
+        }
+    });
+
     // Mobile hamburger menu
     const btn = document.getElementById('hamburgerBtn');
     const nav = document.getElementById('navLinks');

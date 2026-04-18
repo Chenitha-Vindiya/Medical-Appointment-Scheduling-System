@@ -387,7 +387,7 @@ body::-webkit-scrollbar {
 .modal-content {
     background-color: var(--surface-container-lowest);
     width: 100%;
-    max-width: 36rem;
+    max-width: 42rem;
     max-height: 90vh;
     border-radius: 1.25rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -411,10 +411,32 @@ body::-webkit-scrollbar {
     background-color: var(--surface-container-low);
 }
 
-.modal-header h2 {
+.modal-header-info {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.modal-patient-img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.modal-header-text h2 {
     font-size: 1.25rem;
     font-weight: 800;
     color: var(--on-surface);
+    margin-bottom: 0.125rem;
+}
+
+.modal-header-text .patient-id {
+    justify-content: flex-start;
+    color: var(--primary);
+    font-weight: 600;
 }
 
 .modal-close-btn {
@@ -432,86 +454,65 @@ body::-webkit-scrollbar {
 }
 
 .modal-body {
-    padding: 2rem;
+    padding: 0;
     overflow-y: auto;
     flex: 1;
 }
 
-.modal-section {
-    margin-bottom: 2rem;
+.modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100%;
 }
 
-.modal-section:last-child {
-    margin-bottom: 0;
+.modal-column {
+    padding: 2rem;
 }
 
-.modal-section-title {
+.modal-column:first-child {
+    border-right: 1px solid var(--outline-variant);
+}
+
+.column-title {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 1rem;
-    display: block;
+    color: var(--on-surface-variant);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
+.visit-detail-item {
+    margin-bottom: 1.5rem;
 }
 
-.info-box p {
+.visit-detail-label {
     font-size: 0.75rem;
     color: var(--on-surface-variant);
     margin-bottom: 0.25rem;
+    display: block;
 }
 
-.info-box span {
-    font-size: 0.9375rem;
+.visit-detail-value {
+    font-size: 1rem;
     font-weight: 600;
     color: var(--on-surface);
-}
-
-.notes-content {
-    background-color: var(--surface-container-low);
-    padding: 1rem;
-    border-radius: 0.75rem;
-    font-size: 0.875rem;
-    color: var(--on-surface-variant);
-    line-height: 1.6;
-    border-left: 3px solid var(--primary);
-}
-
-.med-list {
-    list-style: none;
-}
-
-.med-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--outline-variant);
+    gap: 0.5rem;
 }
 
-.med-item:last-child {
-    border-bottom: none;
-}
-
-.med-icon {
-    color: var(--primary-container);
-    font-size: 1.25rem;
-}
-
-.med-details h4 {
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-
-.med-details p {
-    font-size: 0.75rem;
+.visit-detail-value.reason {
+    line-height: 1.5;
+    font-weight: 500;
     color: var(--on-surface-variant);
+    background: var(--surface-container-low);
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    margin-top: 0.5rem;
 }
 
 .modal-footer {
@@ -520,6 +521,22 @@ body::-webkit-scrollbar {
     display: flex;
     justify-content: flex-end;
     background-color: var(--surface-container-low);
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
 }
 
 /* Responsive Styles */
@@ -565,18 +582,10 @@ body::-webkit-scrollbar {
         grid-template-columns: 1fr;
     }
 
-    .modal-content {
-        max-height: 85vh;
-        margin: 0.5rem;
-    }
-
-    .modal-body {
-        padding: 1.25rem;
-    }
-
-    .modal-header {
-        padding: 1rem 1.25rem;
-    }
+    .modal-content { max-height: 85vh; margin: 0.5rem; }
+    .modal-grid { grid-template-columns: 1fr; }
+    .modal-column:first-child { border-right: none; border-bottom: 1px solid var(--outline-variant); }
+    .modal-column { padding: 1.5rem; }
 }
 
 

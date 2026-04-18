@@ -5,6 +5,7 @@ import com.medischeduler.model.WorkingHours;
 import com.medischeduler.repository.AppointmentRepository;
 import com.medischeduler.repository.DoctorRepository;
 import com.medischeduler.repository.PatientRepository;
+import com.medischeduler.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
@@ -32,6 +33,9 @@ public class ViewController {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private PatientService patientService;
 
     @GetMapping("/")
     public String index() {
@@ -258,9 +262,20 @@ public class ViewController {
     //Doctor's Patient
     @GetMapping("/doctor/patient")
     public String doctorPatient(HttpSession session, Model model) {
-        if (session.getAttribute("loggedInDoctor") == null) {
-            return "redirect:/login"; // Redirect to login if not authenticated
+        Doctor sessionDoc = (Doctor) session.getAttribute("loggedInDoctor");
+        if (sessionDoc == null) {
+            return "redirect:/login";
         }
+
+        // Call the service to handle the complex business logic
+        Map<String, Object> patientDetails = patientService.getDoctorPatientDetails(sessionDoc.getId());
+
+        // Unpack the map and add to the model for Thymeleaf
+        model.addAttribute("patients", patientDetails.get("patients"));
+        model.addAttribute("lastVisits", patientDetails.get("lastVisits"));
+        model.addAttribute("nextAppts", patientDetails.get("nextAppts"));
+        model.addAttribute("conditions", patientDetails.get("conditions"));
+
         return "doctor/patient";
     }
 

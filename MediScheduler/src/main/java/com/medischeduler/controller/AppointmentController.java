@@ -1,5 +1,6 @@
 package com.medischeduler.controller;
 
+import com.medischeduler.model.Appointment;
 import com.medischeduler.model.Patient;
 import com.medischeduler.repository.AppointmentRepository;
 import com.medischeduler.service.AppointmentService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -100,5 +102,29 @@ public class AppointmentController {
     public String cancelAppointment(@RequestParam Long id) {
         appointmentRepository.deleteById(id);
         return "redirect:/patient/appointment?cancelled=true";
+    }
+
+    @PostMapping("/doctor/appointment/update-status")
+    public String updateAppointmentStatus(
+            @RequestParam Long appointmentId,
+            @RequestParam String status,
+            @RequestParam(required = false) String location,
+            RedirectAttributes redirectAttributes) {
+
+        Appointment app = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+
+        // Prevent updates if appointment is in the past
+        LocalDateTime appTime = LocalDateTime.of(app.getAppointmentDate(), app.getStartTime());
+        if (appTime.isBefore(LocalDateTime.now())) {
+            redirectAttributes.addFlashAttribute("error", "Cannot update past appointments.");
+        } else {
+            app.setStatus(status);
+            app.setLocation(location);
+            appointmentRepository.save(app);
+            redirectAttributes.addFlashAttribute("success", "Appointment updated.");
+        }
+
+        return "redirect:/doctor/appointment";
     }
 }

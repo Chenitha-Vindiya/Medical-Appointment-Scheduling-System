@@ -164,7 +164,7 @@
 
             <div class="form-group">
                 <label>REASON FOR VISIT</label>
-                <textarea name="reason" id="rescheduleReason" required placeholder="Reason for rescheduling..."></textarea>
+                <textarea name="reason" id="rescheduleReason" required placeholder="Reason for rescheduling..." minlength="10"></textarea>
             </div>
 
             <div th:if="${errorList != null}" class="error-container">
@@ -204,7 +204,7 @@
 
             <div class="form-group">
                 <label>REASON FOR VISIT</label>
-                <textarea name="reason" placeholder="Describe your symptoms or reason for the visit..."
+                <textarea name="reason" placeholder="Describe your symptoms or reason for the visit..." minlength="10"
                           required></textarea>
             </div>
 
