@@ -226,6 +226,7 @@ body::-webkit-scrollbar {
 
 .badge-confirmed { background: #dcfce7; color: #15803d; }
 .badge-pending { background: #dbeafe; color: #1d4ed8; }
+.badge-cancelled { background: #f18c82; color: #d32f1d; }
 
 .card-details {
     border-top: 1px solid var(--slate-100);

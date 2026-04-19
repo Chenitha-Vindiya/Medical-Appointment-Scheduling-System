@@ -37,7 +37,7 @@ public class ViewController {
     @Autowired
     private PatientService patientService;
 
-    @GetMapping("/")
+    @GetMapping("/index")
     public String index() {
         return "index"; // This points to src/main/resources/templates/index.html
     }

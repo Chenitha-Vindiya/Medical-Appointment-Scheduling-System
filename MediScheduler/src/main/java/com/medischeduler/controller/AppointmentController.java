@@ -107,24 +107,37 @@ public class AppointmentController {
     @PostMapping("/doctor/appointment/update-status")
     public String updateAppointmentStatus(
             @RequestParam Long appointmentId,
-            @RequestParam String status,
+            @RequestParam(required = false) String status, // Marked required=false to match hidden input
             @RequestParam(required = false) String location,
             RedirectAttributes redirectAttributes) {
 
         Appointment app = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Not found"));
 
-        // Prevent updates if appointment is in the past
         LocalDateTime appTime = LocalDateTime.of(app.getAppointmentDate(), app.getStartTime());
-        if (appTime.isBefore(LocalDateTime.now())) {
-            redirectAttributes.addFlashAttribute("error", "Cannot update past appointments.");
-        } else {
-            app.setStatus(status);
-            app.setLocation(location);
-            appointmentRepository.save(app);
-            redirectAttributes.addFlashAttribute("success", "Appointment updated.");
+        LocalDateTime now = LocalDateTime.now();
+
+        // 1. Block edits if the appointment has already started or passed
+        // Using !isBefore(now) handles both 'now' and 'past' appointments
+        if (!appTime.isAfter(now)) {
+            redirectAttributes.addFlashAttribute("error", "This appointment has already started or passed. It is now read-only.");
+            return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
         }
 
-        return "redirect:/doctor/appointment";
+        // 2. Prevent marking FUTURE appointments as COMPLETED early
+        if ("COMPLETED".equalsIgnoreCase(status)) {
+            redirectAttributes.addFlashAttribute("error", "Cannot mark future appointments as Completed. Please wait until the appointment time.");
+            return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
+        }
+
+        // 3. Success Save (Only update status if it was sent)
+        if (status != null && !status.isEmpty()) {
+            app.setStatus(status);
+        }
+        app.setLocation(location);
+        appointmentRepository.save(app);
+
+        redirectAttributes.addFlashAttribute("success", "Appointment updated successfully.");
+        return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
     }
 }

@@ -1,5 +1,6 @@
 package com.medischeduler.controller;
 
+import com.medischeduler.model.Doctor;
 import com.medischeduler.model.Patient;
 import com.medischeduler.service.PatientService;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/patient")
@@ -103,5 +105,21 @@ public class PatientController {
         }
 
         return "redirect:/patient/profile";
+    }
+
+    @GetMapping("/api/doctor-view-details")
+    @ResponseBody
+    public Map<String, Object> getPatientDetailsAPI(@RequestParam Long patientId, HttpSession session) {
+        Doctor sessionDoc = (Doctor) session.getAttribute("loggedInDoctor");
+
+        // 1. Security Check
+        if (sessionDoc == null) {
+            Map<String, Object> errorResponse = new java.util.HashMap<>();
+            errorResponse.put("error", "Unauthorized");
+            return errorResponse;
+        }
+
+        // 2. Delegate to Service Layer
+        return patientService.getPatientModalDetails(patientId, sessionDoc.getId());
     }
 }

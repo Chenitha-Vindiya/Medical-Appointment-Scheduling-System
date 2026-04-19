@@ -1,11 +1,9 @@
 package com.medischeduler.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.medischeduler.model.Appointment;
@@ -28,12 +26,84 @@ public class PatientService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    public Map<String, Object> getDoctorPatientDetails(Long doctorId) {
-        // 1. Fetch all appointments for this doctor
-        List<Appointment> allDoctorAppts = appointmentRepository.findByDoctorId(doctorId);
+    /**
+     * Fetches a specific patient's details and calculates their
+     * last and next visit for the modal overview.
+     */
+    public Map<String, Object> getPatientModalDetails(Long patientId, Long doctorId) {
+        Map<String, Object> response = new HashMap<>();
 
-        // 2. Group appointments by Patient
-        Map<Patient, List<Appointment>> apptsByPatient = allDoctorAppts.stream()
+        // 1. Fetch Patient
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+        if (patient == null) {
+            return response;
+        }
+
+        // 2. Fetch all appointments for THIS doctor and THIS patient
+        List<Appointment> appts = appointmentRepository.findByPatientId(patientId).stream()
+                .filter(a -> a.getDoctor().getId().equals(doctorId))
+                .collect(Collectors.toList());
+
+        Appointment lastVisit = null;
+        Appointment nextVisit = null;
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Appointment a : appts) {
+            LocalDateTime appDateTime = LocalDateTime.of(a.getAppointmentDate(), a.getStartTime());
+
+            // Find Last Visit
+            if (appDateTime.isBefore(now) || a.getStatus().equalsIgnoreCase("COMPLETED")) {
+                if (lastVisit == null || !appDateTime.isBefore(LocalDateTime.of(lastVisit.getAppointmentDate(), lastVisit.getStartTime()))) {
+                    lastVisit = a;
+                }
+            }
+            // Find Next Visit
+            else if (!appDateTime.isBefore(now) && (a.getStatus().equalsIgnoreCase("PENDING") || a.getStatus().equalsIgnoreCase("CONFIRMED"))) {
+                if (nextVisit == null || appDateTime.isBefore(LocalDateTime.of(nextVisit.getAppointmentDate(), nextVisit.getStartTime()))) {
+                    nextVisit = a;
+                }
+            }
+        }
+
+        // --- THE FIX: Convert raw Entities to safe Maps to prevent JSON Serialization crashes ---
+
+        Map<String, String> safeLastVisit = null;
+        if (lastVisit != null) {
+            safeLastVisit = new HashMap<>();
+            safeLastVisit.put("appointmentDate", lastVisit.getAppointmentDate().toString());
+            safeLastVisit.put("startTime", lastVisit.getStartTime().toString());
+            safeLastVisit.put("location", lastVisit.getLocation());
+            safeLastVisit.put("reason", lastVisit.getReason());
+            safeLastVisit.put("status", lastVisit.getStatus());
+        }
+
+        Map<String, String> safeNextVisit = null;
+        if (nextVisit != null) {
+            safeNextVisit = new HashMap<>();
+            safeNextVisit.put("appointmentDate", nextVisit.getAppointmentDate().toString());
+            safeNextVisit.put("startTime", nextVisit.getStartTime().toString());
+            safeNextVisit.put("location", nextVisit.getLocation());
+            safeNextVisit.put("reason", nextVisit.getReason());
+            safeNextVisit.put("status", nextVisit.getStatus());
+        }
+
+        // 3. Populate JSON Response Map
+        response.put("patient", patient);
+        response.put("lastVisit", safeLastVisit);
+        response.put("nextVisit", safeNextVisit);
+
+        return response;
+    }
+
+    public Map<String, Object> getDoctorPatientDetails(Long doctorId) {
+        // 1. Fetch appointments and FILTER OUT all cancelled ones immediately
+        List<Appointment> validDoctorAppts = appointmentRepository.findByDoctorId(doctorId)
+                .stream()
+                .filter(app -> !app.getStatus().equalsIgnoreCase("CANCELLED"))
+                .collect(Collectors.toList());
+
+        // 2. Group the remaining valid appointments by Patient
+        Map<Patient, List<Appointment>> apptsByPatient = validDoctorAppts.stream()
                 .collect(Collectors.groupingBy(Appointment::getPatient));
 
         List<Patient> patients = new ArrayList<>(apptsByPatient.keySet());
@@ -43,7 +113,9 @@ public class PatientService {
         Map<Long, String> nextAppts = new HashMap<>();
         Map<Long, String> conditions = new HashMap<>();
 
-        LocalDate today = LocalDate.now();
+        // USE LOCAL DATETIME TO TRACK THE EXACT MINUTE
+        LocalDateTime now = LocalDateTime.now();
+        LocalDate today = now.toLocalDate();
 
         for (Patient p : patients) {
             List<Appointment> appts = apptsByPatient.get(p);
@@ -53,16 +125,18 @@ public class PatientService {
 
             for (Appointment a : appts) {
                 LocalDate appDate = a.getAppointmentDate();
+                LocalDateTime appDateTime = LocalDateTime.of(appDate, a.getStartTime());
 
-                // Check Past Appointments
-                if (appDate.isBefore(today) && !a.getStatus().equals("CANCELLED")) {
-                    if (lastVisit == null || appDate.isAfter(lastVisit)) {
+                // Check Past Appointments: Time has passed OR Doctor already marked it COMPLETED
+                if (appDateTime.isBefore(now) || a.getStatus().equalsIgnoreCase("COMPLETED")) {
+                    // Use !isBefore to ensure today's appointment overrides older ones
+                    if (lastVisit == null || !appDate.isBefore(lastVisit)) {
                         lastVisit = appDate;
                         condition = a.getReason(); // Use past reason as condition
                     }
                 }
-                // Check Future Appointments
-                else if (!appDate.isBefore(today) && (a.getStatus().equals("PENDING") || a.getStatus().equals("CONFIRMED"))) {
+                // Check Future Appointments: Time is in the future AND status is Pending/Confirmed
+                else if (!appDateTime.isBefore(now) && (a.getStatus().equalsIgnoreCase("PENDING") || a.getStatus().equalsIgnoreCase("CONFIRMED"))) {
                     if (nextAppt == null || appDate.isBefore(nextAppt)) {
                         nextAppt = appDate;
                         if (lastVisit == null) {
@@ -72,13 +146,13 @@ public class PatientService {
                 }
             }
 
-            // Put data into Maps using Patient ID as the key
+            // Put Last Visit into Map
             lastVisits.put(p.getId(), lastVisit);
-            conditions.put(p.getId(), condition);
 
-            // Format next appointment text
+            // Format next appointment text AND override condition if necessary
             if (nextAppt == null) {
                 nextAppts.put(p.getId(), "TBD");
+                condition = "-"; // Override condition if no upcoming appointments
             } else {
                 long daysBetween = ChronoUnit.DAYS.between(today, nextAppt);
                 if (daysBetween == 0) nextAppts.put(p.getId(), "Today");
@@ -86,7 +160,13 @@ public class PatientService {
                 else if (daysBetween <= 7) nextAppts.put(p.getId(), "In " + daysBetween + " Days");
                 else nextAppts.put(p.getId(), nextAppt.format(java.time.format.DateTimeFormatter.ofPattern("MMM dd, yyyy")));
             }
+
+            // Put Condition into Map AFTER the check
+            conditions.put(p.getId(), condition);
         }
+
+        // Sort: Active patients first, then alphabetically by first name
+        patients.sort(Comparator.comparing(Patient::isActive).reversed().thenComparing(Patient::getFirstName));
 
         // 4. Bundle everything into a single Map to return to the controller
         Map<String, Object> result = new HashMap<>();

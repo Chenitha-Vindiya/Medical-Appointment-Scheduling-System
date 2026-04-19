@@ -67,6 +67,8 @@
 </header>
 
 <main>
+    <div th:if="${error}" class="alert-error" th:text="${error}"></div>
+    <div th:if="${success}" class="alert-success" th:text="${success}"></div>
     <div class="timeline-container">
         <div class="timeline-header">
             <div class="date-navigator">
@@ -114,8 +116,9 @@
                                           data-pemail=${booking.patient.email},
                                           data-paddr=${booking.patient.homeAddress},
                                           data-date=${#temporals.format(booking.appointmentDate, 'dd MMM yyyy') + ' at ' + #temporals.format(booking.startTime, 'hh:mm a')},
-                                          data-reason=${booking.reason}"
-                                          onclick="openDoctorModal(this)">
+                                          data-reason=${booking.reason},
+                                          data-raw-time=${booking.appointmentDate + 'T' + booking.startTime}"
+                                 onclick="openDoctorModal(this)">
 
                                 <img class="patient-avatar"
                                      th:src="'https://ui-avatars.com/api/?name=' + ${booking.patient.firstName} + '+' + ${booking.patient.lastName} + '&background=random'"/>
@@ -170,6 +173,7 @@
                     <option value="CONFIRMED">Confirmed</option>
                     <option value="PENDING">Pending</option>
                     <option value="CANCELLED">Cancelled</option>
+                    <option value="COMPLETED">Completed</option>
                 </select>
             </div>
 
@@ -201,6 +205,9 @@
         const appDate = element.getAttribute('data-date');
         const reason = element.getAttribute('data-reason');
 
+        // NEW: Extract the exact raw date/time for our calculation
+        const rawTime = element.getAttribute('data-raw-time');
+
         // Set values
         document.getElementById('docAppId').value = id;
         document.getElementById('statusSelect').value = status;
@@ -215,6 +222,42 @@
 
         document.getElementById('docAppDateTime').innerText = appDate;
         document.getElementById('docAppReason').innerText = reason;
+
+// ==========================================
+        // TIME-BASED READ-ONLY & STATUS LOGIC
+        // ==========================================
+        // NEW: Enhanced Lock Logic
+        if (rawTime) {
+            const appStart = new Date(rawTime);
+            const appEnd = new Date(appStart.getTime() + (30 * 60000)); // Start + 30 mins
+            const now = new Date();
+
+            const statusSelect = document.getElementById('statusSelect');
+            const locInput = document.getElementById('docLocation');
+            const saveBtn = document.querySelector('.btn-confirm');
+
+            // If "now" is past the appointment start time, lock it
+            if (now >= appStart) {
+                // LOCK IT DOWN
+                statusSelect.style.pointerEvents = 'none';
+                statusSelect.style.opacity = '0.6';
+                locInput.readOnly = true;
+                locInput.style.opacity = '0.6';
+                saveBtn.style.display = 'none';
+            } else {
+                // FUTURE: Keep editable
+                statusSelect.style.pointerEvents = 'auto';
+                statusSelect.style.opacity = '1';
+                locInput.readOnly = false;
+                locInput.style.opacity = '1';
+                saveBtn.style.display = 'inline-block';
+
+                // Disable 'COMPLETED' for future appointments
+                const completedOpt = Array.from(statusSelect.options).find(o => o.value === 'COMPLETED');
+                if (completedOpt) completedOpt.disabled = true;
+            }
+        }
+        // ==========================================
 
         modal.style.display = 'flex';
         modal.classList.add('show-flex');

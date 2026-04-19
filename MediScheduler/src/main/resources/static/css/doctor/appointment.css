@@ -335,6 +335,10 @@ main {
     background: var(--accent-orange-light);
 }
 
+.appointment-card.completed::after {
+     background: #0a7720;
+ }
+
 .appointment-card.cancelled::after {
     background: var(--accent-red);
 }
@@ -404,6 +408,11 @@ main {
     color: #92400e;
 }
 
+.status-pill.completed {
+    background: #abff7d;
+    color: #0a7720;
+}
+
 .status-pill.cancelled {
     background: var(--accent-red-light);
     color: var(--accent-red);
@@ -455,6 +464,10 @@ main {
 .timeline-marker.pending {
     border-color: var(--accent-orange);
 }
+
+.timeline-marker.completed {
+     border-color: #0a7720;
+ }
 
 .timeline-marker.cancelled {
     border-color: var(--accent-red);
@@ -517,6 +530,28 @@ main {
 .no-work-msg p {
     font-size: 1rem;
     font-weight: 500;
+}
+
+.alert-error {
+    background-color: #fee2e2;
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 2rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #dcfce7;
+    color: #16a34a;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 2rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-align: center;
 }
 
 /* ==================================================

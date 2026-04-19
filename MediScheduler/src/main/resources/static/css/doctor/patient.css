@@ -407,19 +407,19 @@ body::-webkit-scrollbar {
     border-bottom: 1px solid var(--outline-variant);
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* Changed from center to align top with the new extra data */
     background-color: var(--surface-container-low);
 }
 
 .modal-header-info {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Aligns avatar with the top of the text block */
     gap: 1.25rem;
 }
 
 .modal-patient-img {
-    width: 4rem;
-    height: 4rem;
+    width: 4.5rem; /* Made slightly larger to balance the extra text */
+    height: 4.5rem;
     border-radius: 0.75rem;
     object-fit: cover;
     border: 2px solid white;
@@ -434,9 +434,48 @@ body::-webkit-scrollbar {
 }
 
 .modal-header-text .patient-id {
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
     color: var(--primary);
     font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Base Meta Styles (Desktop) */
+.modal-patient-meta {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--on-surface-variant);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.meta-row {
+    display: flex;
+    align-items: center;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+}
+
+.contact-group {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Space between icon and text on desktop */
+}
+
+.meta-divider {
+    margin: 0 8px;
+    color: var(--outline-variant);
+}
+
+/* Add space after the tiny icons */
+.modal-patient-meta .material-symbols-outlined {
+    margin-right: 4px;
 }
 
 .modal-close-btn {
@@ -457,6 +496,13 @@ body::-webkit-scrollbar {
     padding: 0;
     overflow-y: auto;
     flex: 1;
+    /* Hide scrollbar for modal body but keep it scrollable */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.modal-body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
 
 .modal-grid {
@@ -515,6 +561,18 @@ body::-webkit-scrollbar {
     margin-top: 0.5rem;
 }
 
+.empty-visit-msg {
+    color: var(--on-surface-variant);
+    font-style: italic;
+    font-size: 0.9rem;
+    padding: 1.5rem;
+    text-align: center;
+    background-color: var(--surface-container-lowest);
+    border-radius: 0.75rem;
+    border: 1px dashed var(--outline-variant);
+    margin-top: 1rem;
+}
+
 .modal-footer {
     padding: 1.25rem 2rem;
     border-top: 1px solid var(--outline-variant);
@@ -523,7 +581,7 @@ body::-webkit-scrollbar {
     background-color: var(--surface-container-low);
 }
 
-.btn-primary {
+.btn-cancel-overview {
     background-color: var(--primary);
     color: white;
     padding: 0.75rem 1.5rem;
@@ -535,8 +593,85 @@ body::-webkit-scrollbar {
     transition: opacity 0.2s;
 }
 
-.btn-primary:hover {
+.btn-cancel-overview:hover {
     opacity: 0.9;
+}
+
+/* NEW: Mobile Responsiveness */
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 1rem;
+    }
+
+    .modal-close-btn {
+        display: none;
+    }
+
+    .modal-header {
+        padding: 1.25rem;
+        flex-direction: column;
+        align-items: flex-end;
+        position: relative;
+    }
+
+    .modal-header-info {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .modal-close-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .modal-grid {
+        grid-template-columns: 1fr; /* Stacks the columns vertically */
+    }
+
+    .modal-column {
+        padding: 1.5rem;
+    }
+
+    .modal-patient-meta div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .meta-divider {
+        display: none;
+    }
+
+    .modal-patient-meta {
+        margin-top: 12px;
+        gap: 1rem;
+    }
+
+    /* Extra space between Phone block and Email block */
+    .contact-row {
+        gap: 1rem;
+    }
+
+    /* THIS CREATES THE LOOK FROM YOUR SCREENSHOT */
+    /* Stacks the Icon ABOVE the text */
+    .contact-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    /* Stack items vertically inside the rows */
+    .meta-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .modal-column:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--outline-variant);
+    }
 }
 
 /* Responsive Styles */
@@ -581,11 +716,6 @@ body::-webkit-scrollbar {
     .info-grid {
         grid-template-columns: 1fr;
     }
-
-    .modal-content { max-height: 85vh; margin: 0.5rem; }
-    .modal-grid { grid-template-columns: 1fr; }
-    .modal-column:first-child { border-right: none; border-bottom: 1px solid var(--outline-variant); }
-    .modal-column { padding: 1.5rem; }
 }
 
 
