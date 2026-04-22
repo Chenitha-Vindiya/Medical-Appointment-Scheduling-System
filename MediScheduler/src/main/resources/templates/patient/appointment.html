@@ -41,7 +41,7 @@
     <nav class="navbar">
         <div class="user-profile">
             <span class="material-symbols-outlined logo-icon">patient_list</span>
-            <span class="logo-text">Patient Appointments</span>
+            <span class="logo-text">Appointments</span>
         </div>
 
         <!-- Hamburger (mobile) -->
@@ -56,11 +56,13 @@
             <li><a th:href="@{/patient/payment}">Payment</a></li>
             <li><a th:href="@{/patient/feedback}">Feedback</a></li>
             <li><a th:href="@{/patient/profile}">Profile</a></li>
-            <!-- <li><a href="#portals">Portals</a></li>
-    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
-            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
             <li>
-                <button class="btn-primary" onclick="window.location.href='/logout'">Logout</button>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li>
+                <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
             </li>
         </ul>
     </nav>
