@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Feedback & Inquiries - MediScheduler</title>
+    <title>Feedback - MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/feedback.css}">
     <link rel="icon" type="image/svg+xml"
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
@@ -54,124 +54,202 @@
             <li><a th:href="@{/patient/payment}">Payment</a></li>
             <li><a th:href="@{/patient/feedback}">Feedback</a></li>
             <li><a th:href="@{/patient/profile}">Profile</a></li>
-            <!-- <li><a href="#portals">Portals</a></li>
-    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
-            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
             <li>
-                <button class="btn-secondary" onclick="window.location.href='/logout'">Logout</button>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li>
+                <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
             </li>
         </ul>
     </nav>
 </header>
 
-<div class="app-container">
-    <!-- Main Content Area -->
-    <main class="main-canvas">
-        <div class="page-header">
-            <!-- Modal Trigger -->
-            <label class="btn-primary" for="modal-toggle">
-                <span class="material-symbols-outlined">edit_note</span> Submit New Feedback
-            </label>
-        </div>
-        <div class="feedback-container">
-            <div class="card">
-<!--                <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 24px;">Previous Feedbacks</h2>-->
-                <table class="feedback-list">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Subject</th>
-                        <th>Doctor</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="feedback-row">
-                        <td>Oct 12, 2023</td>
-                        <td style="font-weight: 600;">Post-op Consultation Clarity</td>
-                        <td>Dr. Michael Aris</td>
-                        <td><span class="chip chip-resolved">Resolved</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
-                    </tr>
-                    <tr class="feedback-row">
-                        <td>Oct 05, 2023</td>
-                        <td style="font-weight: 600;">Wait Time Inquiry</td>
-                        <td>General Staff</td>
-                        <td><span class="chip chip-resolved">Resolved</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
-                    </tr>
-                    <tr class="feedback-row">
-                        <td>Nov 18, 2023</td>
-                        <td style="font-weight: 600;">Prescription Refill Process</td>
-                        <td>Dr. Elena Kostic</td>
-                        <td><span class="chip chip-pending">Pending</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
-                    </tr>
-                    <tr class="feedback-row">
-                        <td>Oct 12, 2023</td>
-                        <td style="font-weight: 600;">Post-op Consultation Clarity</td>
-                        <td>Dr. Michael Aris</td>
-                        <td><span class="chip chip-resolved">Resolved</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
-                    </tr>
-                    <tr class="feedback-row">
-                        <td>Nov 18, 2023</td>
-                        <td style="font-weight: 600;">Prescription Refill Process</td>
-                        <td>Dr. Elena Kostic</td>
-                        <td><span class="chip chip-pending">Pending</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
-                    </tr>
-                    </tbody>
-                </table>
+<main class="container">
+    <div class="actions-bar">
+        <button class="btn-primary" id="openModal">
+            <span class="material-symbols-outlined">add</span>
+            New Feedback
+        </button>
+    </div>
+    <div class="feedback-list">
+        <!-- Item 1 -->
+        <div class="feedback-card">
+            <div class="card-header">
+                <div>
+                    <span class="badge badge-resolved">Resolved</span>
+                    <h3 class="card-title">Post-operative consultation review</h3>
+                </div>
+                <span class="card-date">Oct 14, 2023</span>
+            </div>
+            <div class="provider-info">
+                <img alt="Doctor" class="provider-img"
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzWdh28rUYgJMcf819-VuHJdbtubl3F6GMwap2wx5SuYm4vAQ8ZUnfq50P4qeCWFuyJFLIduL3HtbSV8Vt4L7_IPZWkYus_kpEkX5C9vaYTlYPvKrMkJTSvE9qGtjG3Cxk3gI4nyplk-jyid9FaGaAySD7rGOqPK6Qk0FM-tg5sq6J5jN54SMs33IER2a84WzlIL0wIYfOYYAsKUx8lfQ7DpV1FRPNMQfMksYu4bWQ3SFbQjUEEc_T4DvWCgpAs4Pz4ZxvBc8SWl_u"/>
+                <div class="provider-details">
+                    <p>Dr. Aris Thorne</p>
+                    <p>Senior Orthopedic Specialist</p>
+                </div>
+            </div>
+            <div class="card-content">
+                The recovery plan discussed was very clear. I appreciated the extra time taken to explain the
+                physiotherapy schedule. Highly professional environment.
             </div>
         </div>
-    </main>
-</div>
+        <!-- Item 2 -->
+        <div class="feedback-card">
+            <div class="card-header">
+                <div>
+                    <span class="badge badge-pending">Pending</span>
+                    <h3 class="card-title">Reception wait time concerns</h3>
+                </div>
+                <span class="card-date">Oct 22, 2023</span>
+            </div>
+            <div class="provider-info">
+                <div class="provider-fallback">
+                    <span class="material-symbols-outlined">medical_services</span>
+                </div>
+                <div class="provider-details">
+                    <p>St. Mary's Wing Reception</p>
+                    <p>Administrative Services</p>
+                </div>
+            </div>
+            <div class="card-content">
+                Wait time exceeded the 20-minute promise. The reception staff were busy but a status update would have
+                been appreciated during the wait.
+            </div>
+        </div>
+        <!-- Item 3 -->
+        <div class="feedback-card">
+            <div class="card-header">
+                <div>
+                    <span class="badge badge-resolved">Resolved</span>
+                    <h3 class="card-title">Annual Wellness Checkup</h3>
+                </div>
+                <span class="card-date">Sep 05, 2023</span>
+            </div>
+            <div class="provider-info">
+                <img alt="Doctor" class="provider-img"
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0iQOHCaKOpjATZ19zl37cUAX6Ejflo2v7Iu-8dHu8VbN0yDTfasEO0STQnWO5wESzlE2y5JnKev8xhXrCMn-aqe2He9TUW7DzrtkTn5jO27kGt009yJvWSHBl_sQzZLm2Yzr8fLibA9uVVu_Nh-CO60sJXKvOMv7_4r2AxvBxKxXrfR7X402GnJ9mUQqtbgPa1HZyRMPjgf5Sopf_ItmdVx02JNpwmF5eIebqnbl5FaNvwKbEa3qSn5XV-tzOZ8ncvc29oW4QYhgr"/>
+                <div class="provider-details">
+                    <p>Dr. Elena Vance</p>
+                    <p>General Practitioner</p>
+                </div>
+            </div>
+            <div class="card-content">
+                Efficient and friendly. The blood work results were uploaded to my portal within 24 hours as promised.
+                Very happy with the care.
+            </div>
+        </div>
+    </div>
+</main>
 
-<!-- Modal Implementation -->
-<input id="modal-toggle" type="checkbox"/>
-<div class="modal-overlay">
+<!-- Feedback Modal -->
+<div class="modal-overlay" id="modalOverlay">
     <div class="modal-content">
-        <label class="modal-close" for="modal-toggle">
-            <span class="material-symbols-outlined">close</span>
-        </label>
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em;">New Feedback</h2>
-        <p style="color: var(--on-surface-variant); font-size: 0.875rem; margin-bottom: 32px;">Please provide details
-            about your recent visit or inquiry.</p>
-        <form action="#" method="POST" onsubmit="return false;">
+        <div class="modal-header">
+            <h2>Share Feedback</h2>
+            <button class="close-btn" id="closeModal">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form id="feedbackForm">
             <div class="form-group">
-                <label class="form-label">Subject</label>
-                <input class="form-control" placeholder="e.g., Appointment Scheduling Issue" type="text"/>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Select Doctor</label>
-                <select class="form-control">
-                    <option value="">Choose a Physician (Optional)</option>
-                    <option value="1">Dr. Michael Aris</option>
-                    <option value="2">Dr. Elena Kostic</option>
-                    <option value="3">Dr. James Wilson</option>
-                    <option value="0">General Inquiry</option>
+                <label class="form-label">Specialist / Department</label>
+                <select class="form-select" required="">
+                    <option disabled="" selected="" value="">Select an option</option>
+                    <option>Dr. Aris Thorne (Orthopedics)</option>
+                    <option>Dr. Elena Vance (Cardiology)</option>
+                    <option>Reception (St. Mary's Wing)</option>
+                    <option>Pharmacy Services</option>
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" placeholder="Tell us more about your experience..."></textarea>
+                <label class="form-label">Subject</label>
+                <input class="form-input" placeholder="e.g., Appointment experience" required="" type="text"/>
             </div>
-            <div style="display: flex; gap: 12px; margin-top: 40px;">
-                <label class="btn-primary" for="modal-toggle"
-                       style="flex: 1; justify-content: center; background: none; border: 1px solid var(--outline-variant); color: var(--on-surface);">
-                    Cancel
-                </label>
-                <button class="btn-primary" style="flex: 2; justify-content: center;" type="submit">
-                    Submit Feedback
-                </button>
+            <div class="form-group">
+                <label class="form-label">Feedback Type</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item">
+                        <input name="type" type="checkbox" value="question"/> Question
+                    </label>
+                    <label class="checkbox-item">
+                        <input name="type" type="checkbox" value="compliment"/> Compliment
+                    </label>
+                    <label class="checkbox-item">
+                        <input name="type" type="checkbox" value="concern"/> Concern
+                    </label>
+                    <label class="checkbox-item">
+                        <input name="type" type="checkbox" value="suggestion"/> Suggestion
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Detailed Feedback</label>
+                <textarea class="form-textarea" placeholder="Please describe your experience in detail..." required=""
+                          rows="4"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelModal" type="button">Cancel</button>
+                <button class="btn-primary btn-submit" type="submit">Submit Feedback</button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
+    const modal = document.getElementById('modalOverlay');
+    const openBtn = document.getElementById('openModal');
+    const closeBtn = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelModal');
+    const form = document.getElementById('feedbackForm');
+
+    const toggleModal = (show) => {
+        if (show) {
+            modal.style.display = 'flex';
+            // Small delay to trigger CSS transition
+            setTimeout(() => {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }, 10);
+        } else {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            // Wait for transition before hiding
+            setTimeout(() => {
+                if (!modal.classList.contains('active')) {
+                    modal.style.display = 'none';
+                }
+            }, 300);
+        }
+    };
+
+    openBtn.addEventListener('click', () => toggleModal(true));
+    closeBtn.addEventListener('click', () => toggleModal(false));
+    cancelBtn.addEventListener('click', () => toggleModal(false));
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) toggleModal(false);
+    });
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const submitBtn = form.querySelector('.btn-submit');
+        const originalText = submitBtn.innerHTML;
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="material-symbols-outlined">sync</span> Submitting...';
+
+        setTimeout(() => {
+            alert('Thank you! Your feedback has been submitted successfully.');
+            toggleModal(false);
+            form.reset();
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }, 800);
+    });
+
     // Mobile hamburger menu
     const btn = document.getElementById('hamburgerBtn');
     const nav = document.getElementById('navLinks');
@@ -179,6 +257,30 @@
         nav.classList.toggle('open');
         btn.classList.toggle('active');
     });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+
+    // Dark mode toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode';
+    }
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+
 </script>
 </body>
 </html>
