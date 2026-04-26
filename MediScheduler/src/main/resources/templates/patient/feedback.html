@@ -73,72 +73,46 @@
             New Feedback
         </button>
     </div>
+
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
     <div class="feedback-list">
-        <!-- Item 1 -->
-        <div class="feedback-card">
+        <div th:each="f : ${feedbackList}" class="feedback-card">
             <div class="card-header">
                 <div>
-                    <span class="badge badge-resolved">Resolved</span>
-                    <h3 class="card-title">Post-operative consultation review</h3>
+                <span th:each="type : ${#strings.arraySplit(f.feedbackType, ',')}"
+                      class="badge"
+                      th:classappend="${'badge-' + #strings.toLowerCase(#strings.trim(type))}"
+                      th:text="${type}">Type</span>
+                    <h3 class="card-title" th:text="${f.subject}">Subject</h3>
                 </div>
-                <span class="card-date">Oct 14, 2023</span>
+                <span class="card-date" th:text="${#temporals.format(f.createdAt, 'MMM dd, yyyy')}">Date</span>
             </div>
+
             <div class="provider-info">
-                <img alt="Doctor" class="provider-img"
-                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzWdh28rUYgJMcf819-VuHJdbtubl3F6GMwap2wx5SuYm4vAQ8ZUnfq50P4qeCWFuyJFLIduL3HtbSV8Vt4L7_IPZWkYus_kpEkX5C9vaYTlYPvKrMkJTSvE9qGtjG3Cxk3gI4nyplk-jyid9FaGaAySD7rGOqPK6Qk0FM-tg5sq6J5jN54SMs33IER2a84WzlIL0wIYfOYYAsKUx8lfQ7DpV1FRPNMQfMksYu4bWQ3SFbQjUEEc_T4DvWCgpAs4Pz4ZxvBc8SWl_u"/>
                 <div class="provider-details">
-                    <p>Dr. Aris Thorne</p>
-                    <p>Senior Orthopedic Specialist</p>
+                    <p th:text="'Regarding: ' + ${f.appointment.reason}">Reason</p>
+                    <p th:text="'With: Dr. ' + ${f.appointment.doctor.lastName}">Doctor</p>
                 </div>
             </div>
-            <div class="card-content">
-                The recovery plan discussed was very clear. I appreciated the extra time taken to explain the
-                physiotherapy schedule. Highly professional environment.
+
+            <div class="card-content" th:text="${f.content}">
+                Feedback content goes here.
             </div>
-        </div>
-        <!-- Item 2 -->
-        <div class="feedback-card">
-            <div class="card-header">
-                <div>
-                    <span class="badge badge-pending">Pending</span>
-                    <h3 class="card-title">Reception wait time concerns</h3>
-                </div>
-                <span class="card-date">Oct 22, 2023</span>
-            </div>
-            <div class="provider-info">
-                <div class="provider-fallback">
-                    <span class="material-symbols-outlined">medical_services</span>
-                </div>
-                <div class="provider-details">
-                    <p>St. Mary's Wing Reception</p>
-                    <p>Administrative Services</p>
-                </div>
-            </div>
-            <div class="card-content">
-                Wait time exceeded the 20-minute promise. The reception staff were busy but a status update would have
-                been appreciated during the wait.
-            </div>
-        </div>
-        <!-- Item 3 -->
-        <div class="feedback-card">
-            <div class="card-header">
-                <div>
-                    <span class="badge badge-resolved">Resolved</span>
-                    <h3 class="card-title">Annual Wellness Checkup</h3>
-                </div>
-                <span class="card-date">Sep 05, 2023</span>
-            </div>
-            <div class="provider-info">
-                <img alt="Doctor" class="provider-img"
-                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0iQOHCaKOpjATZ19zl37cUAX6Ejflo2v7Iu-8dHu8VbN0yDTfasEO0STQnWO5wESzlE2y5JnKev8xhXrCMn-aqe2He9TUW7DzrtkTn5jO27kGt009yJvWSHBl_sQzZLm2Yzr8fLibA9uVVu_Nh-CO60sJXKvOMv7_4r2AxvBxKxXrfR7X402GnJ9mUQqtbgPa1HZyRMPjgf5Sopf_ItmdVx02JNpwmF5eIebqnbl5FaNvwKbEa3qSn5XV-tzOZ8ncvc29oW4QYhgr"/>
-                <div class="provider-details">
-                    <p>Dr. Elena Vance</p>
-                    <p>General Practitioner</p>
-                </div>
-            </div>
-            <div class="card-content">
-                Efficient and friendly. The blood work results were uploaded to my portal within 24 hours as promised.
-                Very happy with the care.
+
+            <div class="card-actions">
+                <button class="btn-action btn-edit">
+                    <span class="material-symbols-outlined">edit</span> Edit
+                </button>
+
+                <form th:action="@{/patient/feedback/delete}" method="post"
+                      onsubmit="return confirm('Are you sure you want to delete this feedback?');">
+                    <input type="hidden" name="feedbackId" th:value="${f.id}"/>
+                    <button type="submit" class="btn-action btn-delete">
+                        <span class="material-symbols-outlined">delete</span> Delete
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -153,43 +127,48 @@
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
-        <form id="feedbackForm">
+        <form th:action="@{/patient/feedback/submit}" method="post">
             <div class="form-group">
-                <label class="form-label">Specialist / Department</label>
-                <select class="form-select" required="">
-                    <option disabled="" selected="" value="">Select an option</option>
-                    <option>Dr. Aris Thorne (Orthopedics)</option>
-                    <option>Dr. Elena Vance (Cardiology)</option>
-                    <option>Reception (St. Mary's Wing)</option>
-                    <option>Pharmacy Services</option>
+                <label class="form-label">Appointment</label>
+                <select name="appointmentId" class="form-select" required>
+                    <option disabled selected value="">Select an option</option>
+                    <option th:each="appt : ${appointments}"
+                            th:value="${appt.id}"
+                            th:text="${'REC-' + appt.id + ' - ' + appt.reason + ' (' + appt.status + ')'}">
+                    </option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label class="form-label">Subject</label>
-                <input class="form-input" placeholder="e.g., Appointment experience" required="" type="text"/>
+                <input name="subject" class="form-input" placeholder="e.g., Appointment experience" required
+                       type="text"/>
             </div>
+
             <div class="form-group">
                 <label class="form-label">Feedback Type</label>
                 <div class="checkbox-grid">
                     <label class="checkbox-item">
-                        <input name="type" type="checkbox" value="question"/> Question
+                        <input name="feedbackTypes" type="checkbox" value="Question"/> Question
                     </label>
                     <label class="checkbox-item">
-                        <input name="type" type="checkbox" value="compliment"/> Compliment
+                        <input name="feedbackTypes" type="checkbox" value="Compliment"/> Compliment
                     </label>
                     <label class="checkbox-item">
-                        <input name="type" type="checkbox" value="concern"/> Concern
+                        <input name="feedbackTypes" type="checkbox" value="Concern"/> Concern
                     </label>
                     <label class="checkbox-item">
-                        <input name="type" type="checkbox" value="suggestion"/> Suggestion
+                        <input name="feedbackTypes" type="checkbox" value="Suggestion"/> Suggestion
                     </label>
                 </div>
             </div>
+
             <div class="form-group">
                 <label class="form-label">Detailed Feedback</label>
-                <textarea class="form-textarea" placeholder="Please describe your experience in detail..." required=""
-                          rows="4"></textarea>
+                <textarea name="content" class="form-textarea"
+                          placeholder="Please describe your experience in detail..." required rows="4"></textarea>
             </div>
+
             <div class="modal-footer">
                 <button class="btn-secondary" id="cancelModal" type="button">Cancel</button>
                 <button class="btn-primary btn-submit" type="submit">Submit Feedback</button>

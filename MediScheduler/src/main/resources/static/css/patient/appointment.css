@@ -29,6 +29,8 @@
 
     --transition: all 0.2s ease;
     --radius-full: 9999px;
+
+    --on-surface-variant: #64748b;
 }
 
 * {
@@ -140,6 +142,31 @@ body::-webkit-scrollbar {
     width: 100%;
     max-width: 80rem;
     padding: 0 2rem 2rem 2rem;
+}
+
+.no-appointments {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    text-align: center;
+
+    /* Dashed outline look */
+    border-radius: 1.25rem;
+
+    /* Grayout effect */
+    color: var(--on-surface-variant);
+    opacity: 0.8; /* Makes the whole box look "grayed out" */
+
+    margin-top: 2rem;
+}
+
+.no-appointments p {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: 0.025em;
 }
 
 /* 4. Appointment Grid (3 Columns) */
@@ -492,7 +519,6 @@ body::-webkit-scrollbar {
 }
 
 .btn-logout:hover { background: var(--primary-hover); }
-
 
 @media (max-width: 768px) {
   /* Hamburger visible */

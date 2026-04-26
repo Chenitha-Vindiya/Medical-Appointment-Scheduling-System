@@ -171,7 +171,7 @@
                 </div>
                 <div class="input-group">
                     <label class="input-label">Phone Number</label>
-                    <input class="form-input" name="phoneNumber" type="tel" th:value="${patient.phoneNumber}" required/>
+                    <input class="form-input" name="phoneNumber" pattern="^(?:0|94|\\+94)?(7[0-9]{8})$" type="tel" th:value="${patient.phoneNumber}" required/>
                 </div>
                 <div class="input-group full-width">
                     <label class="input-label">Home Address</label>

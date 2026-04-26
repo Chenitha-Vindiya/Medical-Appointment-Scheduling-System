@@ -12,6 +12,7 @@
     --text-main: #0f172a;
     --text-variant: #475569;
     --outline: #e2e8f0;
+    --danger: #ef4444;
     --radius-lg: 1.25rem;
     --radius-full: 9999px;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
@@ -290,7 +291,7 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
     gap: 1rem;
 }
 
@@ -303,16 +304,30 @@ main {
     border-radius: 6px;
     letter-spacing: 0.05em;
     margin-bottom: 0.5rem;
+    margin-right: 0.5rem; /* Space between multiple badges */
 }
 
-.badge-resolved {
-    background: #dcfce7;
-    color: #166534;
-}
+.badge-question { background-color: #e0f2fe; color: #0369a1; }
+.badge-compliment { background-color: #dcfce7; color: #15803d; }
+.badge-concern { background-color: #fee2e2; color: #b91c1c; }
+.badge-suggestion { background-color: #fef3c7; color: #b45309; }
 
-.badge-pending {
-    background: #fef9c3;
-    color: #854d0e;
+.alert {
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    text-align: center;
+    font-weight: 500;
+}
+.alert-error {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+.alert-success {
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
 }
 
 .card-date {
@@ -335,7 +350,6 @@ main {
     padding: 1rem 0;
     border-top: 1px solid #f1f5f9;
     margin-top: 1rem;
-    margin-bottom: 0.75rem;
 }
 
 .provider-img {
@@ -374,6 +388,50 @@ main {
     color: var(--text-variant);
     font-size: 0.95rem;
     line-height: 1.6;
+}
+
+/* Card Actions */
+.card-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+    justify-content: flex-end;
+}
+
+.btn-action {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-variant);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: var(--transition);
+}
+
+.btn-action:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: var(--text-main);
+}
+
+.btn-action.btn-edit:hover {
+    border-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.btn-action.btn-delete:hover {
+    border-color: #fecaca;
+    color: var(--danger);
+}
+
+.btn-action .material-symbols-outlined {
+    font-size: 18px;
 }
 
 /* Modal Styles */
@@ -554,6 +612,8 @@ main {
     .btn-primary {
         width: 100%;
     }
+
+    .card-actions { justify-content: stretch; }
 }
 
 /* =====================

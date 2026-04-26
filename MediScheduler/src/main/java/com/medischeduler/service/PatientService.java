@@ -121,26 +121,30 @@ public class PatientService {
             List<Appointment> appts = apptsByPatient.get(p);
             LocalDate lastVisit = null;
             LocalDate nextAppt = null;
-            String condition = "Checkup"; // Default
+            String condition = "Checkup";
 
             for (Appointment a : appts) {
+                // Always skip cancelled appointments regardless of time
+                if (a.getStatus().equalsIgnoreCase("CANCELLED")) continue;
+
                 LocalDate appDate = a.getAppointmentDate();
                 LocalDateTime appDateTime = LocalDateTime.of(appDate, a.getStartTime());
 
-                // Check Past Appointments: Time has passed OR Doctor already marked it COMPLETED
+                // 1. PAST APPOINTMENTS: (Is past OR is Completed) AND NOT Cancelled
                 if (appDateTime.isBefore(now) || a.getStatus().equalsIgnoreCase("COMPLETED")) {
-                    // Use !isBefore to ensure today's appointment overrides older ones
                     if (lastVisit == null || !appDate.isBefore(lastVisit)) {
                         lastVisit = appDate;
-                        condition = a.getReason(); // Use past reason as condition
+                        condition = a.getReason();
                     }
                 }
-                // Check Future Appointments: Time is in the future AND status is Pending/Confirmed
-                else if (!appDateTime.isBefore(now) && (a.getStatus().equalsIgnoreCase("PENDING") || a.getStatus().equalsIgnoreCase("CONFIRMED"))) {
+                // 2. FUTURE APPOINTMENTS: (Is in future) AND (Pending/Confirmed)
+                else if (appDateTime.isAfter(now) &&
+                        (a.getStatus().equalsIgnoreCase("PENDING") || a.getStatus().equalsIgnoreCase("CONFIRMED"))) {
+
                     if (nextAppt == null || appDate.isBefore(nextAppt)) {
                         nextAppt = appDate;
                         if (lastVisit == null) {
-                            condition = a.getReason(); // Fallback if it's a new patient
+                            condition = a.getReason();
                         }
                     }
                 }

@@ -143,7 +143,7 @@
                     </div>
                     <div class="form-group">
                         <label>Phone Number</label>
-                        <input class="form-input" name="phoneNumber" type="text" th:value="${doctor.phoneNumber}"
+                        <input class="form-input" name="phoneNumber" pattern="^(?:0|94|\\+94)?(7[0-9]{8})$" type="tel" th:value="${doctor.phoneNumber}"
                                required/>
                     </div>
                     <div class="input-group">
