@@ -901,11 +901,6 @@ body::-webkit-scrollbar {
     color: var(--slate-700);
 }
 
-.time-icon-small {
-    font-size: 18px !important;
-    color: var(--primary);
-}
-
 .to-label-small {
     font-weight: 700;
     font-size: 0.65rem;
@@ -1052,3 +1047,54 @@ body.dark-mode .btn-cancel {
     background: transparent;
     color: #94a3b8;
 }
+
+/* =====================
+   DARK MODE: OFFICE HOURS
+   ===================== */
+body.dark-mode .office-hours-card {
+    background-color: var(--white); /* Uses your existing dark background */
+    border: 1px solid var(--slate-100);
+}
+
+body.dark-mode .hour-card-mobile {
+    background-color: var(--slate-100); /* Slightly lighter than card bg for depth */
+    border: 1px solid var(--slate-200);
+}
+
+body.dark-mode .time-input-container {
+    background: var(--slate-200);
+    border: 1px solid var(--slate-500);
+}
+
+body.dark-mode .day-name {
+    color: var(--slate-900);
+}
+
+/* Time inputs: Matching your .time-field style */
+body.dark-mode .time-input-clean {
+    background-color: var(--slate-200);
+    border: 1px solid var(--slate-100);
+    color: #ffffff;
+}
+
+body.dark-mode .to-label-small,
+body.dark-mode .status-label-small {
+    color: var(--slate-500);
+}
+
+/* Switch Styling */
+body.dark-mode .slider {
+    background-color: var(--slate-200);
+}
+
+body.dark-mode .active-checkbox:checked + .slider {
+    background-color: var(--primary);
+}
+
+/* Save Button */
+body.dark-mode .btn-save {
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+}
+

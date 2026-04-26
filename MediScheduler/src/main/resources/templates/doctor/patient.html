@@ -43,7 +43,8 @@
     <nav class="navbar">
         <div class="user-profile">
             <span class="material-symbols-outlined logo-icon">stethoscope</span>
-            <span class="logo-text" th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
+            <span class="logo-text"
+                  th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
         </div>
 
         <!-- Hamburger (mobile) -->
@@ -63,7 +64,9 @@
                     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
                 </button>
             </li>
-            <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
+            <li>
+                <button class="btn-primary" onclick="window.location.href='/logout'">Logout</button>
+            </li>
         </ul>
     </nav>
 </header>
@@ -71,179 +74,286 @@
 <main class="main-content">
     <div class="container">
         <div class="grid">
-            <!-- Card 1 -->
-            <div class="card" data-patient-id="#CL-88291">
+
+            <div th:each="patient : ${patients}"
+                 class="card"
+                 th:classappend="${!patient.active} ? 'card-archived' : ''"
+                 th:attr="data-patient-id=${patient.id}">
+
                 <div class="patient-info-main"
-                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
-                        alt="Patient Avatar" class="patient-img"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjkiRthbdmS9h6Vwz_S0qkJagGrAN-QIlI9uVBE5-IV96RVaczL9enkRPssHxddepmbQ9jHWIy_2u4uYe9frqUrfD0mlcJOROqHGY7KxsgP24XrOcS9p0PhGujWOhhNNBwQS6QIaF5TDacIO_v0fvULLhcEfagcPzLUhuRnCDo8kzMym5bSIaalRTzdcHVr7yy4yJLA7JC1ZgyQCsYC7wFlpONxJNr081aaFbevmjW3dEIb5M9VZfih6YWgQrawhsbPEDTZLfh35ht"/>
-                    <div class="patient-text-group" style="text-align: left;"><h3>Sarah Henderson</h3>
-                        <p class="patient-id" style="justify-content: flex-start;"><span
-                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
-                            #CL-88291</p></div>
+                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <img alt="Patient Avatar" class="patient-img"
+                         th:src="'https://ui-avatars.com/api/?name=' + ${patient.firstName} + '+' + ${patient.lastName} + '&background=random'"/>
+
+                    <div class="patient-text-group" style="text-align: left;">
+                        <h3 th:text="${patient.firstName + ' ' + patient.lastName}">Name</h3>
+                        <p class="patient-id" style="justify-content: flex-start;">
+                            <span class="material-symbols-outlined" style="font-size: 14px">fingerprint</span>
+                            ID: <span th:text="'#PAT-' + ${patient.id}">#123</span>
+                        </p>
+                    </div>
                 </div>
+
                 <div class="info-list">
                     <div class="info-item">
                         <span class="info-label">Last Visit</span>
-                        <span class="info-value">Oct 12, 2023</span>
+                        <span class="info-value"
+                              th:text="${lastVisits[patient.id] != null ? #temporals.format(lastVisits[patient.id], 'MMM dd, yyyy') : '-'}">
+                        </span>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label">Next Appt.</span>
-                        <span class="text-primary">In 3 Days</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Condition</span>
-                        <span class="text-tertiary">Post-Op Recovery</span>
-                    </div>
+
+                    <th:block th:if="${patient.active}">
+                        <div class="info-item">
+                            <span class="info-label">Next Appt.</span>
+                            <span th:classappend="${nextAppts[patient.id] != 'TBD'} ? 'text-primary' : 'info-value'"
+                                  th:text="${nextAppts[patient.id]}"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Condition</span>
+                            <span class="text-tertiary" th:text="${conditions[patient.id]}"></span>
+                        </div>
+                    </th:block>
+
+                    <th:block th:unless="${patient.active}">
+                        <div class="info-item">
+                            <span class="info-label">Status</span>
+                            <span class="info-value"
+                                  style="font-weight: 700; color: var(--slate-600);">Case Closed</span>
+                        </div>
+                    </th:block>
                 </div>
+
                 <button class="btn-action open-modal">
                     View Details
-                    <span class="material-symbols-outlined">arrow_forward</span>
+                    <span class="material-symbols-outlined"
+                          th:text="${patient.active ? 'arrow_forward' : 'history'}">arrow_forward</span>
                 </button>
             </div>
-            <!-- Card 2 -->
-            <div class="card" data-patient-id="#CL-10442">
-                <div class="patient-info-main"
-                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
-                        alt="Patient Avatar" class="patient-img"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvk74s9Qd3uWZZmaDCK9vywbY1-LJH07-bLkvWDJN9vPyHEZAC4hX4-u_VPKII7VTXzTG34Dk1kSlgqnYkpklj1k4to1kFAZxLHnWq_gvdL2av6tIE9iuTJ64rlFXeJTEfK_6C7FgcLSg0900kg9fY735BAFAX8g8eYakYko50YcXMnfCO9FE7Ls4_D_qx2zwpXRZmWOI9AdMcMj5tx-BAGyhadXBY5JuDoXI87qGCHOpppHESn908bHxPHeyB4uKDCf8xlBl2heID"/>
-                    <div class="patient-text-group" style="text-align: left;"><h3>Robert Chen</h3>
-                        <p class="patient-id" style="justify-content: flex-start;"><span
-                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
-                            #CL-10442</p></div>
-                </div>
-                <div class="info-list">
-                    <div class="info-item">
-                        <span class="info-label">Last Visit</span>
-                        <span class="info-value">Sep 28, 2023</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Next Appt.</span>
-                        <span class="info-value">TBD</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Condition</span>
-                        <span class="text-tertiary">Hypertension</span>
-                    </div>
-                </div>
-                <button class="btn-action open-modal">
-                    View Details
-                    <span class="material-symbols-outlined">arrow_forward</span>
-                </button>
-            </div>
-            <!-- Card 3 -->
-            <div class="card" data-patient-id="#CL-99012">
-                <div class="patient-info-main"
-                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
-                        alt="Patient Avatar" class="patient-img"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZLQmalXTDF2Bk9PtfUUMZowpdf6imk83XHDN2bKWQTn3hN89qirer1Umg-dRuIr8HYJF4alXzBeb6ldmzh9JbSAFCvYstYm1CUqxY2EuzNRe8S87agZbVm11e4jMuDAT9XDs6N2V_CDhuRAzgnzrVxarTyhCBo56lCOE8l2_v9QylaT_7zjqrZ1jMsKJpdeiTQLJsZD7XVxgX1JKF0-Uh8KypVs0xAtOvXS9pfXCBsa70JT5VQQEfM5JIBWwQ3tXaOR7hHfufGgi1"/>
-                    <div class="patient-text-group" style="text-align: left;"><h3>Amara Okafor</h3>
-                        <p class="patient-id" style="justify-content: flex-start;"><span
-                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
-                            #CL-99012</p></div>
-                </div>
-                <div class="info-list">
-                    <div class="info-item">
-                        <span class="info-label">Last Visit</span>
-                        <span class="info-value">Aug 05, 2023</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Next Appt.</span>
-                        <span class="text-primary">Tomorrow</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Condition</span>
-                        <span class="text-tertiary">Annual Checkup</span>
-                    </div>
-                </div>
-                <button class="btn-action open-modal">
-                    View Details
-                    <span class="material-symbols-outlined">arrow_forward</span>
-                </button>
-            </div>
-            <!-- Card 4 (Archived) -->
-            <div class="card card-archived" data-patient-id="#CL-77123">
-                <div class="patient-info-main"
-                     style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;"><img
-                        alt="Patient Avatar" class="patient-img"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0QBHLIh6HLulk5NJP8QMRql_eiHNDEsZ8og6SDqG8tB2PbAouKYtGgZJ7r80-bUtMmACm69MvrKqf1WscoSQkFu9Q1MBcvjinclO6NecwPg_UldYPPIstKTVYxwOeUW_HXombthI0rz973pOImGstLMX4pzr3jAztg2N0mo71zE-INRy837rms4RXA1Gm-JO4O0BqhnYaCWXAWoZwpx1iDvKo44xQGDe1ZqW324vkHdHdg8gsghzHJJuOLJeqdI7A9WV84Nak0NIt"/>
-                    <div class="patient-text-group" style="text-align: left;"><h3>Marcus Thorne</h3>
-                        <p class="patient-id" style="justify-content: flex-start;"><span
-                                class="material-symbols-outlined" style="font-size: 14px">fingerprint</span> ID:
-                            #CL-77123</p></div>
-                </div>
-                <div class="info-list">
-                    <div class="info-item">
-                        <span class="info-label">Last Visit</span>
-                        <span class="info-value">Dec 12, 2022</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Status</span>
-                        <span class="info-value">Case Closed</span>
-                    </div>
-                </div>
-                <button class="btn-action open-modal">
-                    View Details
-                    <span class="material-symbols-outlined">history</span>
-                </button>
-            </div>
+
         </div>
     </div>
 </main>
 
 <!-- Patient Details Modal -->
-<div class="modal-overlay" id="patientModal">
+<div class="modal-overlay" id="patientModal" style="display: none;">
     <div class="modal-content">
+
         <div class="modal-header">
-            <h2 id="modalPatientName">Patient Profile</h2>
+            <div class="modal-header-info">
+                <img alt="Patient Profile" class="modal-patient-img" id="modalPatientImg" src=""/>
+                <div class="modal-header-text">
+                    <h2 id="modalPatientName">Patient Name</h2>
+                    <p class="patient-id">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">fingerprint</span>
+                        ID: <span id="modalPatientId">#00000</span>
+                    </p>
+                    <div class="modal-patient-meta">
+                        <div class="meta-row contact-row">
+                            <div class="contact-group">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">call</span>
+                                <span id="modalPatientPhone">--</span>
+                            </div>
+                            <span class="meta-divider">|</span>
+                            <div class="contact-group">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">mail</span>
+                                <span id="modalPatientEmail">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <button class="modal-close-btn" id="closeModal">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
+
         <div class="modal-body">
-            <div class="modal-section">
-                <span class="modal-section-title">Personal Information</span>
-                <div class="info-grid">
-                    <div class="info-box">
-                        <p>Phone Number</p>
-                        <span id="modalPhone">+1 (555) 012-3456</span>
-                    </div>
-                    <div class="info-box">
-                        <p>Email Address</p>
-                        <span id="modalEmail">patient@email.com</span>
-                    </div>
-                    <div class="info-box" id="addressBox" style="grid-column: span 2;">
-                        <p>Home Address</p>
-                        <span id="modalAddress">123 Medical Plaza, Suite 400, North Springfield, IL 62704</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-section">
-                <span class="modal-section-title">Recent Medical Notes</span>
-                <div class="notes-content" id="modalNotes">
-                    Patient is showing steady improvement since last consultation.
-                </div>
-            </div>
-            <div class="modal-section">
-                <span class="modal-section-title">Upcoming Medications</span>
-                <ul class="med-list" id="modalMeds">
-                    <li class="med-item">
-                        <span class="material-symbols-outlined med-icon">pill</span>
-                        <div class="med-details">
-                            <h4>Lisinopril 10mg</h4>
-                            <p>Take 1 tablet daily every morning</p>
+            <div class="modal-grid">
+                <div class="modal-column">
+                    <span class="column-title">
+                        <span class="material-symbols-outlined"
+                              style="font-size: 18px; color: var(--on-surface-variant);">history</span>
+                        Last Visit
+                    </span>
+
+                    <div id="lastVisitDetails">
+                        <div class="visit-detail-item">
+                            <span class="visit-detail-label">Date</span>
+                            <span class="visit-detail-value" id="lastVisitDate">--</span>
                         </div>
-                    </li>
-                </ul>
+                        <div class="visit-detail-item">
+                            <span class="visit-detail-label">Time</span>
+                            <span class="visit-detail-value" id="lastVisitTime">--</span>
+                        </div>
+                        <div class="visit-detail-item">
+                            <span class="visit-detail-label">Location</span>
+                            <span class="visit-detail-value" id="lastVisitLoc">--</span>
+                        </div>
+                        <div class="visit-detail-item">
+                            <span class="visit-detail-label">Reason</span>
+                            <div class="visit-detail-value reason" id="lastVisitReason">--</div>
+                        </div>
+                    </div>
+
+                    <div id="lastVisitEmpty" class="empty-visit-msg" style="display: none;">
+                        No previous visits on record.
+                    </div>
+                </div>
+
+                <div class="modal-column">
+                    <span class="column-title">
+                        <span class="material-symbols-outlined"
+                              style="font-size: 18px; color: var(--primary);">event</span>
+                        Next Visit
+                    </span>
+
+                    <div id="nextVisitDetails">
+                        <div class="visit-detail-item">
+                            <span class="visit-detail-label">Date</span>
+                            <span class="visit-detail-value" id="nextVisitDate">--</span>
+                        </div>
+                        <div class="visit-detail-item">
+                            <span class="visit-detail-label">Time</span>
+                            <span class="visit-detail-value" id="nextVisitTime">--</span>
+                        </div>
+                        <div class="visit-detail-item">
+                            <span class="visit-detail-label">Status</span>
+                            <span class="visit-detail-value" id="nextVisitStatus">--</span>
+                        </div>
+                        <div class="visit-detail-item">
+                            <span class="visit-detail-label">Location</span>
+                            <span class="visit-detail-value" id="nextVisitLoc">--</span>
+                        </div>
+                        <div class="visit-detail-item">
+                            <span class="visit-detail-label">Reason</span>
+                            <div class="visit-detail-value reason" id="nextVisitReason">--</div>
+                        </div>
+                    </div>
+
+                    <div id="nextVisitEmpty" class="empty-visit-msg" style="display: none;">
+                        No upcoming visits scheduled.
+                    </div>
+                </div>
             </div>
         </div>
+
         <div class="modal-footer">
-            <button class="btn-primary" id="footerClose">Close Details</button>
+            <button class="btn-cancel-overview" id="footerClose">Close Overview</button>
         </div>
     </div>
 </div>
 
 <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("patientModal");
+        const closeBtns = [document.getElementById("closeModal"), document.getElementById("footerClose")];
+
+        // Format helpers
+        const formatDate = (dateStr) => {
+            if (!dateStr) return "--";
+            const options = {year: 'numeric', month: 'short', day: 'numeric'};
+            return new Date(dateStr).toLocaleDateString('en-US', options);
+        };
+
+        const formatTime = (timeStr) => {
+            if (!timeStr) return "--";
+            const [hours, minutes] = timeStr.split(':');
+            let h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            return `${h}:${minutes} ${ampm}`;
+        };
+
+        // Listen for all "View Details" button clicks
+        document.querySelectorAll(".open-modal").forEach(button => {
+            button.addEventListener("click", function () {
+                // Get patient ID from the parent card
+                const card = this.closest(".card");
+                const patientId = card.getAttribute("data-patient-id");
+
+                // Fetch data from the new backend API!
+                fetch(`/patient/api/doctor-view-details?patientId=${patientId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert("Session expired or unauthorized.");
+                            return;
+                        }
+
+                        const p = data.patient;
+                        const lv = data.lastVisit;
+                        const nv = data.nextVisit;
+
+                        // 1. Populate Header
+                        document.getElementById("modalPatientName").innerText = `${p.firstName} ${p.lastName}`;
+                        document.getElementById("modalPatientId").innerText = `#PAT-${p.id}`;
+                        document.getElementById("modalPatientImg").src = `https://ui-avatars.com/api/?name=${p.firstName}+${p.lastName}&background=random`;
+                        document.getElementById("modalPatientPhone").innerText = p.phoneNumber || "N/A";
+                        document.getElementById("modalPatientEmail").innerText = p.email || "N/A";
+
+                        // 2. Populate Last Visit
+                        if (lv && lv.appointmentDate) {
+                            document.getElementById("lastVisitDetails").style.display = "block";
+                            document.getElementById("lastVisitEmpty").style.display = "none";
+
+                            document.getElementById("lastVisitDate").innerText = formatDate(lv.appointmentDate);
+                            document.getElementById("lastVisitTime").innerText = formatTime(lv.startTime);
+                            document.getElementById("lastVisitLoc").innerText = lv.location || "--";
+                            document.getElementById("lastVisitReason").innerText = lv.reason || "--";
+                        } else {
+                            // Hide details, show empty message
+                            document.getElementById("lastVisitDetails").style.display = "none";
+                            document.getElementById("lastVisitEmpty").style.display = "block";
+                        }
+
+                        // 3. Populate Next Visit
+                        if (nv && nv.appointmentDate) {
+                            document.getElementById("nextVisitDetails").style.display = "block";
+                            document.getElementById("nextVisitEmpty").style.display = "none";
+
+                            document.getElementById("nextVisitDate").innerText = formatDate(nv.appointmentDate);
+                            document.getElementById("nextVisitTime").innerText = formatTime(nv.startTime);
+                            document.getElementById("nextVisitStatus").innerText = nv.status || "--";
+                            document.getElementById("nextVisitLoc").innerText = nv.location || "--";
+                            document.getElementById("nextVisitReason").innerText = nv.reason || "--";
+                        } else {
+                            // Hide details, show empty message
+                            document.getElementById("nextVisitDetails").style.display = "none";
+                            document.getElementById("nextVisitEmpty").style.display = "block";
+                        }
+
+                        // Show Modal
+                        modal.style.display = "flex";
+
+                        // ADD THIS: Lock background scroll
+                        document.body.style.overflow = "hidden";
+                    })
+                    .catch(err => console.error("Error fetching patient details:", err));
+            });
+        });
+
+        // Close Modal Logic
+        closeBtns.forEach(btn => {
+            if (btn) {
+                btn.addEventListener("click", () => {
+                    modal.style.display = "none";
+                    // ADD THIS: Restore background scroll
+                    document.body.style.overflow = "";
+                });
+            }
+        });
+
+        // Close if clicked outside the modal
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+                // ADD THIS: Restore background scroll
+                document.body.style.overflow = "";
+            }
+        });
+    });
+
     // Mobile hamburger menu
     const btn = document.getElementById('hamburgerBtn');
     const nav = document.getElementById('navLinks');

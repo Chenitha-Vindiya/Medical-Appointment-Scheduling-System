@@ -41,7 +41,7 @@
     <nav class="navbar">
         <div class="user-profile">
             <span class="material-symbols-outlined logo-icon">patient_list</span>
-            <span class="logo-text">Patient Appointments</span>
+            <span class="logo-text">Appointments</span>
         </div>
 
         <!-- Hamburger (mobile) -->
@@ -56,11 +56,13 @@
             <li><a th:href="@{/patient/payment}">Payment</a></li>
             <li><a th:href="@{/patient/feedback}">Feedback</a></li>
             <li><a th:href="@{/patient/profile}">Profile</a></li>
-            <!-- <li><a href="#portals">Portals</a></li>
-    <li><a href="#" onclick="event.preventDefault()">Support</a></li> -->
-            <!-- <li><button class="btn-login" onclick="window.location.href='login.html'">Login</button></li> -->
             <li>
-                <button class="btn-primary" onclick="window.location.href='/logout'">Logout</button>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li>
+                <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
             </li>
         </ul>
     </nav>
@@ -164,7 +166,8 @@
 
             <div class="form-group">
                 <label>REASON FOR VISIT</label>
-                <textarea name="reason" id="rescheduleReason" required placeholder="Reason for rescheduling..."></textarea>
+                <textarea name="reason" id="rescheduleReason" required placeholder="Reason for rescheduling..."
+                          minlength="10"></textarea>
             </div>
 
             <div th:if="${errorList != null}" class="error-container">
@@ -183,7 +186,8 @@
 </div>
 
 <!--New Appointment Model-->
-<div id="appointmentModal" class="modal-overlay" th:classappend="${errorList != null && isRescheduleError == null} ? 'show'">
+<div id="appointmentModal" class="modal-overlay"
+     th:classappend="${errorList != null && isRescheduleError == null} ? 'show'">
     <div class="modal-container">
         <div class="modal-header-blue">
             <h2>Make Appointment</h2>
@@ -204,7 +208,7 @@
 
             <div class="form-group">
                 <label>REASON FOR VISIT</label>
-                <textarea name="reason" placeholder="Describe your symptoms or reason for the visit..."
+                <textarea name="reason" placeholder="Describe your symptoms or reason for the visit..." minlength="10"
                           required></textarea>
             </div>
 

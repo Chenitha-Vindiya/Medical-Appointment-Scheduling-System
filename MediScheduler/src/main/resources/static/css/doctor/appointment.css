@@ -14,6 +14,8 @@
     --outline-variant: #cbd5e1;
     --accent-orange: #f59e0b;
     --accent-orange-light: #fef3c7;
+    --accent-red: #a52e21;
+    --accent-red-light: #f18c82;
     --accent-slate: #64748b;
     --accent-slate-light: #f1f5f9;
     --radius-md: 12px;
@@ -22,9 +24,15 @@
     --primary: #0ea5e9;
     --primary-hover: #238dc2;
     --slate-100: #f1f5f9;
+    --slate-300: #b6b6b6;
     --slate-500: #64748b;
     --slate-600: #475569;
     --slate-700: #334155;
+
+    --empty-bg: #f8fafc;
+    --empty-border: #e2e8f0;
+    --empty-text: #64748b;
+    --empty-icon: #cbd5e1;
 }
 
 * {
@@ -323,12 +331,16 @@ main {
     background: var(--primary);
 }
 
-.appointment-card.in-progress::after {
-    background: var(--accent-orange);
+.appointment-card.pending::after {
+    background: var(--accent-orange-light);
 }
 
-.appointment-card.arrived::after {
-    background: var(--accent-slate);
+.appointment-card.completed::after {
+     background: #0a7720;
+ }
+
+.appointment-card.cancelled::after {
+    background: var(--accent-red);
 }
 
 .patient-avatar {
@@ -396,9 +408,14 @@ main {
     color: #92400e;
 }
 
+.status-pill.completed {
+    background: #abff7d;
+    color: #0a7720;
+}
+
 .status-pill.cancelled {
-    background: #fee2e2;
-    color: #ef4444;
+    background: var(--accent-red-light);
+    color: var(--accent-red);
 }
 
 
@@ -440,17 +457,271 @@ main {
     box-shadow: 0 0 0 4px white;
 }
 
-.timeline-marker.inactive {
-    border-color: var(--outline-variant);
+.timeline-marker.confirmed {
+    border-color: var(--primary);
 }
 
-.timeline-marker.orange {
+.timeline-marker.pending {
     border-color: var(--accent-orange);
 }
 
-.timeline-marker.slate {
-    border-color: var(--accent-slate);
+.timeline-marker.completed {
+     border-color: #0a7720;
+ }
+
+.timeline-marker.cancelled {
+    border-color: var(--accent-red);
 }
+
+.date-navigator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--slate-100);
+    color: var(--slate-600);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.today-jump {
+    font-size: 0.85rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    display: inline-block;
+}
+
+.no-work-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 1.5rem;
+    margin: 1rem 0;
+    text-align: center;
+
+    /* Using Variables */
+    background: var(--empty-bg);
+    border: 2px dashed var(--empty-border);
+    color: var(--empty-text);
+
+    border-radius: var(--radius-lg);
+    transition: var(--transition);
+}
+
+
+.no-work-msg p {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.alert-error {
+    background-color: #fee2e2;
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 2rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #dcfce7;
+    color: #16a34a;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 2rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* ==================================================
+   MODAL OVERLAY (The backdrop)
+   ================================================== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.show-flex {
+    display: flex !important;
+}
+
+/* ==================================================
+   MODAL CONTAINER (The card)
+   ================================================== */
+.modal-container {
+    background: #ffffff;
+    width: 90%;
+    max-width: 450px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header-blue {
+    background: #008ecc;
+    color: white;
+    padding: 1.25rem 1.5rem;
+}
+
+.modal-header-blue h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* ==================================================
+   FORM & CONTENT STYLING
+   ================================================== */
+.modal-form {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.info-section {
+    padding: 0.25rem 0;
+}
+
+.section-divider {
+    border-bottom: 1px solid var(--slate-100);
+    padding-bottom: 0.75rem;
+}
+
+.info-section label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--slate-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.info-section p {
+    font-size: 0.95rem;
+    color: var(--slate-700);
+    margin: 0;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--slate-500);
+    text-transform: uppercase;
+}
+
+.modal-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--slate-300);
+    border-radius: 12px;
+    background: var(--slate-50);
+    font-size: 0.95rem;
+    color: var(--slate-800);
+}
+
+/* ==================================================
+   FOOTER & BUTTONS
+   ================================================== */
+.modal-footer {
+    display: flex;
+    gap: 12px;
+    padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+}
+
+.btn-cancel, .btn-confirm {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-cancel {
+    background: #f1f5f9;
+    color: var(--slate-600);
+}
+
+.btn-cancel:hover { background: #e2e8f0; }
+
+.btn-confirm {
+    background: #008ecc;
+    color: white;
+}
+
+.btn-confirm:hover { background: #007bb5; }
+
+/*--------------*/
+.btn-cancel, .btn-confirm {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-cancel {
+    border: 1px solid var(--slate-300);
+    color: var(--slate-600);
+}
+
+.btn-cancel:hover { background: var(--slate-300); }
+
+.btn-confirm {
+    background: #008ecc;
+    color: white;
+}
+
+.btn-confirm:hover { background: #007bb5; }
 
 @media (max-width: 1024px) {
     /* Hamburger visible */
@@ -609,9 +880,16 @@ body.dark-mode {
     --on-surface: #f1f5f9;
     --on-surface-variant: #94a3b8;
     --outline-variant: #1e293b;
+    --surface-container-lowest: #202b3e;
     --slate-100: #1e2d40;
+    --slate-300: #1c2837;
     --slate-600: #cbd5e1;
     --slate-700: #f1f5f9;
+
+    --empty-bg: #1e293b;
+    --empty-border: #334155;
+    --empty-text: #94a3b8;
+    --empty-icon: #475569;
 }
 
 body.dark-mode .navbar,
@@ -650,37 +928,35 @@ body.dark-mode .timeline-marker {
     box-shadow: 0 0 0 4px #182030;
 }
 
-.date-navigator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    width: 100%;
+/* ==================================================
+   DARK MODE OVERRIDES
+   ================================================== */
+body.dark-mode .modal-container {
+    background: #182030;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.nav-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--slate-100);
-    color: var(--slate-600);
-    text-decoration: none;
-    transition: all 0.2s;
+body.dark-mode .info-section p {
+    color: #e2e8f0;
 }
 
-.nav-btn:hover {
-    background: var(--primary);
-    color: white;
+body.dark-mode .modal-select {
+    background-color: #1e2d40;
+    color: #ffffff;
+    border: 1px solid #334155;
 }
 
-.today-jump {
-    font-size: 0.85rem;
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
-    margin-top: 0.5rem;
-    display: inline-block;
+body.dark-mode select option {
+    background-color: #182030;
+    color: #ffffff;
+}
+
+body.dark-mode .btn-cancel {
+    background: #7e95ba;
+    color: var(--slate-300);
+}
+
+/* Dark mode adjustment for the border */
+body.dark-mode .section-divider {
+    border-bottom: 1px solid #334155;
 }

@@ -63,7 +63,6 @@ body::-webkit-scrollbar { display: none; }
 
 /* =====================
    HEADER & NAVBAR
-   (identical to appointment.css floating pill style)
    ===================== */
 .header-wrapper {
   position: fixed;
@@ -133,35 +132,7 @@ body::-webkit-scrollbar { display: none; }
 
 .nav-links a:hover { color: var(--primary); }
 
-/* Theme toggle — icon button inside nav */
-.theme-toggle {
-  background: none;
-  border: none;
-  color: var(--slate-500);
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s, background 0.2s;
-  flex-shrink: 0;
-}
 
-.theme-toggle:hover {
-  color: var(--primary);
-  background: var(--slate-100);
-}
-
-.theme-toggle .material-symbols-outlined {
-  font-size: 22px;
-  transition: transform 0.35s ease;
-}
-
-.theme-toggle:hover .material-symbols-outlined {
-  transform: rotate(20deg);
-}
 
 /* Hamburger */
 .hamburger {
@@ -731,7 +702,7 @@ body.dark-mode .data-table tbody tr {
 }
 
 body.dark-mode .data-table tbody tr:hover {
-  background: var(--slate-100);
+  background: var(--slate-200);
 }
 
 body.dark-mode .icon-blue   { background: rgba(43,173,238,0.12); }

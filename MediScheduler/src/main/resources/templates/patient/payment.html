@@ -55,7 +55,12 @@
             <li><a th:href="@{/patient/feedback}">Feedback</a></li>
             <li><a th:href="@{/patient/profile}">Profile</a></li>
             <li>
-                <button class="btn-secondary" onclick="window.location.href='/logout'">Logout</button>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li>
+                <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
             </li>
         </ul>
     </nav>
@@ -75,7 +80,6 @@
                         <th>Service</th>
                         <th>Amount</th>
                         <th>Status</th>
-                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -85,7 +89,6 @@
                         <td style="font-weight: 600;">Routine Check-up</td>
                         <td>$65.00</td>
                         <td><span class="chip chip-resolved">Resolved</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
                     </tr>
                     <tr class="payment-row">
                         <td class="invoice-id" style="font-weight: 600;">#INV-9825</td>
@@ -93,7 +96,7 @@
                         <td style="font-weight: 600;">Routine Check-up</td>
                         <td>$55.00</td>
                         <td><span class="chip chip-pending">Pending</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
+
                     </tr>
                     <tr class="payment-row">
                         <td class="invoice-id" style="font-weight: 600;">#INV-9821</td>
@@ -101,7 +104,7 @@
                         <td style="font-weight: 600;">Routine Check-up</td>
                         <td>$65.00</td>
                         <td><span class="chip chip-resolved">Resolved</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
+
                     </tr>
                     <tr class="payment-row">
                         <td class="invoice-id" style="font-weight: 600;">#INV-9825</td>
@@ -109,7 +112,7 @@
                         <td style="font-weight: 600;">Routine Check-up</td>
                         <td>$55.00</td>
                         <td><span class="chip chip-pending">Pending</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
+
                     </tr>
                     <tr class="payment-row">
                         <td class="invoice-id" style="font-weight: 600;">#INV-9821</td>
@@ -117,7 +120,7 @@
                         <td style="font-weight: 600;">Routine Check-up</td>
                         <td>$65.00</td>
                         <td><span class="chip chip-resolved">Resolved</span></td>
-                        <td><a class="view-link" href="#">View Details</a></td>
+
                     </tr>
                     </tbody>
                 </table>
@@ -176,6 +179,29 @@
         nav.classList.toggle('open');
         btn.classList.toggle('active');
     });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
+        });
+    });
+
+    // Dark mode toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.innerText = 'dark_mode';
+    }
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
 </script>
+
 </body>
 </html>

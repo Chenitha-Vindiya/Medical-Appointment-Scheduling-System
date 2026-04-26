@@ -39,7 +39,7 @@
     <nav class="navbar">
         <div class="user-profile">
             <span class="material-symbols-outlined logo-icon">stethoscope</span>
-            <span class="logo-text" th:text="'Welcome, Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
+            <span class="logo-text" th:text="'Dr. ' + ${session.loggedInDoctor.lastName}">Welcome, Doctor</span>
         </div>
 
         <!-- Hamburger (mobile) -->

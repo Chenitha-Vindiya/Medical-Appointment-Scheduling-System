@@ -387,7 +387,7 @@ body::-webkit-scrollbar {
 .modal-content {
     background-color: var(--surface-container-lowest);
     width: 100%;
-    max-width: 36rem;
+    max-width: 42rem;
     max-height: 90vh;
     border-radius: 1.25rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -407,14 +407,75 @@ body::-webkit-scrollbar {
     border-bottom: 1px solid var(--outline-variant);
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* Changed from center to align top with the new extra data */
     background-color: var(--surface-container-low);
 }
 
-.modal-header h2 {
+.modal-header-info {
+    display: flex;
+    align-items: flex-start; /* Aligns avatar with the top of the text block */
+    gap: 1.25rem;
+}
+
+.modal-patient-img {
+    width: 4.5rem; /* Made slightly larger to balance the extra text */
+    height: 4.5rem;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.modal-header-text h2 {
     font-size: 1.25rem;
     font-weight: 800;
     color: var(--on-surface);
+    margin-bottom: 0.125rem;
+}
+
+.modal-header-text .patient-id {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Base Meta Styles (Desktop) */
+.modal-patient-meta {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--on-surface-variant);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.meta-row {
+    display: flex;
+    align-items: center;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+}
+
+.contact-group {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Space between icon and text on desktop */
+}
+
+.meta-divider {
+    margin: 0 8px;
+    color: var(--outline-variant);
+}
+
+/* Add space after the tiny icons */
+.modal-patient-meta .material-symbols-outlined {
+    margin-right: 4px;
 }
 
 .modal-close-btn {
@@ -432,86 +493,84 @@ body::-webkit-scrollbar {
 }
 
 .modal-body {
-    padding: 2rem;
+    padding: 0;
     overflow-y: auto;
     flex: 1;
+    /* Hide scrollbar for modal body but keep it scrollable */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 
-.modal-section {
-    margin-bottom: 2rem;
+.modal-body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
 
-.modal-section:last-child {
-    margin-bottom: 0;
+.modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100%;
 }
 
-.modal-section-title {
+.modal-column {
+    padding: 2rem;
+}
+
+.modal-column:first-child {
+    border-right: 1px solid var(--outline-variant);
+}
+
+.column-title {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 1rem;
-    display: block;
+    color: var(--on-surface-variant);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
+.visit-detail-item {
+    margin-bottom: 1.5rem;
 }
 
-.info-box p {
+.visit-detail-label {
     font-size: 0.75rem;
     color: var(--on-surface-variant);
     margin-bottom: 0.25rem;
+    display: block;
 }
 
-.info-box span {
-    font-size: 0.9375rem;
+.visit-detail-value {
+    font-size: 1rem;
     font-weight: 600;
     color: var(--on-surface);
-}
-
-.notes-content {
-    background-color: var(--surface-container-low);
-    padding: 1rem;
-    border-radius: 0.75rem;
-    font-size: 0.875rem;
-    color: var(--on-surface-variant);
-    line-height: 1.6;
-    border-left: 3px solid var(--primary);
-}
-
-.med-list {
-    list-style: none;
-}
-
-.med-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--outline-variant);
+    gap: 0.5rem;
 }
 
-.med-item:last-child {
-    border-bottom: none;
-}
-
-.med-icon {
-    color: var(--primary-container);
-    font-size: 1.25rem;
-}
-
-.med-details h4 {
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-
-.med-details p {
-    font-size: 0.75rem;
+.visit-detail-value.reason {
+    line-height: 1.5;
+    font-weight: 500;
     color: var(--on-surface-variant);
+    background: var(--surface-container-low);
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.empty-visit-msg {
+    color: var(--on-surface-variant);
+    font-style: italic;
+    font-size: 0.9rem;
+    padding: 1.5rem;
+    text-align: center;
+    background-color: var(--surface-container-lowest);
+    border-radius: 0.75rem;
+    border: 1px dashed var(--outline-variant);
+    margin-top: 1rem;
 }
 
 .modal-footer {
@@ -520,6 +579,99 @@ body::-webkit-scrollbar {
     display: flex;
     justify-content: flex-end;
     background-color: var(--surface-container-low);
+}
+
+.btn-cancel-overview {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-cancel-overview:hover {
+    opacity: 0.9;
+}
+
+/* NEW: Mobile Responsiveness */
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 1rem;
+    }
+
+    .modal-close-btn {
+        display: none;
+    }
+
+    .modal-header {
+        padding: 1.25rem;
+        flex-direction: column;
+        align-items: flex-end;
+        position: relative;
+    }
+
+    .modal-header-info {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .modal-close-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .modal-grid {
+        grid-template-columns: 1fr; /* Stacks the columns vertically */
+    }
+
+    .modal-column {
+        padding: 1.5rem;
+    }
+
+    .modal-patient-meta div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .meta-divider {
+        display: none;
+    }
+
+    .modal-patient-meta {
+        margin-top: 12px;
+        gap: 1rem;
+    }
+
+    /* Extra space between Phone block and Email block */
+    .contact-row {
+        gap: 1rem;
+    }
+
+    /* THIS CREATES THE LOOK FROM YOUR SCREENSHOT */
+    /* Stacks the Icon ABOVE the text */
+    .contact-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    /* Stack items vertically inside the rows */
+    .meta-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .modal-column:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--outline-variant);
+    }
 }
 
 /* Responsive Styles */
@@ -563,19 +715,6 @@ body::-webkit-scrollbar {
 
     .info-grid {
         grid-template-columns: 1fr;
-    }
-
-    .modal-content {
-        max-height: 85vh;
-        margin: 0.5rem;
-    }
-
-    .modal-body {
-        padding: 1.25rem;
-    }
-
-    .modal-header {
-        padding: 1rem 1.25rem;
     }
 }
 

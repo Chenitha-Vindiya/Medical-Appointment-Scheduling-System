@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Medical Records | MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/history.css}">
     <link rel="icon" type="image/svg+xml"
@@ -13,247 +13,153 @@
 
 <body>
 
-    <!-- Scroll to Top Button -->
-    <button id="scrollTopBtn" title="Go to top">▲</button>
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" title="Go to top">▲</button>
 
-    <script>
-        //Scroll to Top Button
-        const scrollTopBtn = document.getElementById('scrollTopBtn');
+<script>
+    //Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 75) {
-                scrollTopBtn.classList.add('show');
-            } else {
-                scrollTopBtn.classList.remove('show');
-            }
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
         });
+    });
+</script>
 
-        scrollTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    </script>
+<!-- HEADER -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="user-profile">
+            <span class="material-symbols-outlined logo-icon">patient_list</span>
+            <span class="logo-text">History</span>
+        </div>
 
-    <!-- HEADER -->
-    <header class="header-wrapper">
-        <nav class="navbar">
-            <div class="user-profile">
-                <span class="material-symbols-outlined logo-icon">patient_list</span>
-                <span class="logo-text">Patient History</span>
-            </div>
-
-            <!-- Hamburger (mobile) -->
-            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-                <span></span><span></span><span></span>
-            </button>
-
-            <ul class="nav-links" id="navLinks">
-                <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
-                <li><a th:href="@{/patient/appointment}">Appointments</a></li>
-                <li><a th:href="@{/patient/history}">History</a></li>
-                <li><a th:href="@{/patient/payment}">Payment</a></li>
-                <li><a th:href="@{/patient/feedback}">Feedback</a></li>
-                <li><a th:href="@{/patient/profile}">Profile</a></li>
-                <li><button class="btn-primary" onclick="window.location.href='/logout'">Logout</button></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main class="main-content">
-        <section class="filter-bar">
-            <div class="search-wrapper">
-                <span class="material-symbols-outlined">search</span>
-                <input placeholder="Search by doctor name, record type or facility..." type="text" />
-            </div>
-            <!-- <div class="filter-actions">
-                <select>
-                    <option>All Types</option>
-                    <option>Consultations</option>
-                    <option>Lab Results</option>
-                    <option>Prescriptions</option>
-                </select>
-                <select>
-                    <option>Last 6 Months</option>
-                    <option>Last Year</option>
-                </select> -->
-            </div>
-        </section>
-
-        <section class="records-container">
-            <div class="timeline-line"></div>
-
-            <div class="record-entry">
-                <div class="timeline-dot"></div>
-                <div class="record-card">
-                    <div class="record-header">
-                        <div class="record-icon-box blue-bg">
-                            <span class="material-symbols-outlined">stethoscope</span>
-                        </div>
-                        <div>
-                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                                <span class="record-type-badge badge-consultation">Consultation</span>
-                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-9022</span>
-                            </div>
-                            <h3 class="record-title">General Checkup - Annual Review</h3>
-                            <p class="record-subtitle">Dr. Sarah Mitchell • City General Hospital</p>
-                            <div class="record-meta">
-                                <span><span class="material-symbols-outlined"
-                                        style="font-size:14px">calendar_today</span> Oct 12, 2023</span>
-                                <span><span class="material-symbols-outlined" style="font-size:14px">schedule</span>
-                                    10:30 AM</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="record-actions">
-                        <button class="btn-action btn-view">
-                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="record-entry">
-                <div class="timeline-dot"></div>
-                <div class="record-card">
-                    <div class="record-header">
-                        <div class="record-icon-box amber-bg">
-                            <span class="material-symbols-outlined">biotech</span>
-                        </div>
-                        <div>
-                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                                <span class="record-type-badge badge-lab">Lab Results</span>
-                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-8841</span>
-                            </div>
-                            <h3 class="record-title">Full Blood Count (CBC)</h3>
-                            <p class="record-subtitle">Pathology Lab Dept • Healthcare Central</p>
-                            <div class="record-meta">
-                                <span><span class="material-symbols-outlined"
-                                        style="font-size:14px">calendar_today</span> Sep 28, 2023</span>
-                                <span style="color: #166534; font-weight:700;"><span class="material-symbols-outlined"
-                                        style="font-size:14px">check_circle</span> All Normal</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="record-actions">
-                        <button class="btn-action btn-view">
-                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="record-entry">
-                <div class="timeline-dot"></div>
-                <div class="record-card">
-                    <div class="record-header">
-                        <div class="record-icon-box slate-bg">
-                            <span class="material-symbols-outlined">radiology</span>
-                        </div>
-                        <div>
-                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                                <span class="record-type-badge badge-radiology">Radiology</span>
-                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-7129</span>
-                            </div>
-                            <h3 class="record-title">Left Ankle X-Ray</h3>
-                            <p class="record-subtitle">Radiology Dept • Healthcare Central</p>
-                            <div class="record-meta">
-                                <span><span class="material-symbols-outlined"
-                                        style="font-size:14px">calendar_today</span> May 03, 2023</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="record-actions">
-                        <button class="btn-action btn-view">
-                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="record-entry">
-                <div class="timeline-dot"></div>
-                <div class="record-card">
-                    <div class="record-header">
-                        <div class="record-icon-box amber-bg">
-                            <span class="material-symbols-outlined">biotech</span>
-                        </div>
-                        <div>
-                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                                <span class="record-type-badge badge-lab">Lab Results</span>
-                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-8841</span>
-                            </div>
-                            <h3 class="record-title">Full Blood Count (CBC)</h3>
-                            <p class="record-subtitle">Pathology Lab Dept • Healthcare Central</p>
-                            <div class="record-meta">
-                                <span><span class="material-symbols-outlined"
-                                        style="font-size:14px">calendar_today</span> Sep 28, 2023</span>
-                                <span style="color: #166534; font-weight:700;"><span class="material-symbols-outlined"
-                                        style="font-size:14px">check_circle</span> All Normal</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="record-actions">
-                        <button class="btn-action btn-view">
-                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="record-entry record-entry-older">
-                <div class="timeline-dot"></div>
-                <div class="record-card">
-                    <div class="record-header">
-                        <div class="record-icon-box slate-bg">
-                            <span class="material-symbols-outlined">radiology</span>
-                        </div>
-                        <div>
-                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                                <span class="record-type-badge badge-radiology">Radiology</span>
-                                <span class="text-xs font-bold" style="color:var(--slate-400)">#REC-7129</span>
-                            </div>
-                            <h3 class="record-title">Left Ankle X-Ray</h3>
-                            <p class="record-subtitle">Radiology Dept • Healthcare Central</p>
-                            <div class="record-meta">
-                                <span><span class="material-symbols-outlined"
-                                        style="font-size:14px">calendar_today</span> May 03, 2023</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="record-actions">
-                        <button class="btn-action btn-view">
-                            <span class="material-symbols-outlined" style="font-size:18px">visibility</span> View Record
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <button class="load-more-btn">
-            Show Older Records
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
         </button>
-    </main>
 
-    <script>
-        // Mobile hamburger menu
-        const btn = document.getElementById('hamburgerBtn');
-        const nav = document.getElementById('navLinks');
-        btn.addEventListener('click', () => {
-            nav.classList.toggle('open');
-            btn.classList.toggle('active');
+        <ul class="nav-links" id="navLinks">
+            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
+            <li><a th:href="@{/patient/history}">History</a></li>
+            <li><a th:href="@{/patient/payment}">Payment</a></li>
+            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
+            <li><a th:href="@{/patient/profile}">Profile</a></li>
+            <li>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+            </li>
+            <li>
+                <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="main-content">
+    <section class="filter-bar">
+        <div class="search-wrapper">
+            <span class="material-symbols-outlined">search</span>
+            <input placeholder="Search by doctor name, record type or facility..." type="text"/>
+        </div>
+    </section>
+    <div id="noResults" style="display:none; text-align:center; padding: 2rem; color: var(--on-surface-variant);">
+        <p>No records found matching your search.</p>
+    </div>
+
+    <section class="records-container">
+        <div class="timeline-line"></div>
+
+        <div th:each="record : ${historyRecords}"
+             class="record-entry"
+             th:attr="data-search=${record.doctor.firstName + ' ' + record.doctor.lastName + ' REC-' + record.id + ' ' + record.reason}">
+            <div class="timeline-dot"></div>
+            <div class="record-card">
+                <div class="record-header">
+                    <div class="record-icon-box"
+                         th:classappend="${record.status == 'COMPLETED' ? 'blue-bg' : 'slate-bg'}">
+                    <span class="material-symbols-outlined"
+                          th:text="${record.status == 'COMPLETED' ? 'stethoscope' : 'cancel'}"></span>
+                    </div>
+                    <div>
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                        <span class="record-type-badge"
+                              th:classappend="${record.status == 'COMPLETED' ? 'badge-consultation' : 'badge-radiology'}"
+                              th:text="${record.status}">Status</span>
+                            <span class="text-xs font-bold" style="color:var(--slate-400)"
+                                  th:text="'#REC-' + ${record.id}"></span>
+                        </div>
+                        <h3 class="record-title" th:text="${record.reason}">Reason</h3>
+                        <p class="record-subtitle"
+                           th:text="'Dr. ' + ${record.doctor.firstName} + ' ' + ${record.doctor.lastName} + (${record.status == 'COMPLETED'} ? ' • ' + ${record.location} : '')">
+                        <div class="record-meta">
+                        <span><span class="material-symbols-outlined" style="font-size:14px">calendar_today</span>
+                            <span th:text="${#temporals.format(record.appointmentDate, 'MMM dd, yyyy')}"></span></span>
+                            <span><span class="material-symbols-outlined" style="font-size:14px">schedule</span>
+                            <span th:text="${#temporals.format(record.startTime, 'hh:mm a')}"></span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    // Mobile hamburger menu
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        btn.classList.toggle('active');
+    });
+
+    // Close menu on link click
+    nav.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.classList.remove('active');
         });
+    });
 
-        // Close menu on link click
-        nav.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('click', () => {
-                nav.classList.remove('open');
-                btn.classList.remove('active');
+    //Search Bar
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".filter-bar input");
+        const recordEntries = document.querySelectorAll(".record-entry");
+        const noResults = document.getElementById("noResults"); // Reference the new div
+
+        searchInput.addEventListener("input", function () {
+            const searchTerm = searchInput.value.toLowerCase();
+            let visibleCount = 0; // Track how many items remain visible
+
+            recordEntries.forEach(entry => {
+                const searchableText = entry.getAttribute("data-search").toLowerCase();
+
+                if (searchableText.includes(searchTerm)) {
+                    entry.style.display = "block";
+                    visibleCount++; // Increment count if item is visible
+                } else {
+                    entry.style.display = "none";
+                }
             });
+
+            // Toggle "No Results" message
+            noResults.style.display = (visibleCount === 0) ? "block" : "none";
         });
-    </script>
+    });
+</script>
 
 </body>
 

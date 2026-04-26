@@ -1,5 +1,6 @@
 package com.medischeduler.controller;
 
+import com.medischeduler.model.Appointment;
 import com.medischeduler.model.Patient;
 import com.medischeduler.repository.AppointmentRepository;
 import com.medischeduler.service.AppointmentService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -100,5 +102,42 @@ public class AppointmentController {
     public String cancelAppointment(@RequestParam Long id) {
         appointmentRepository.deleteById(id);
         return "redirect:/patient/appointment?cancelled=true";
+    }
+
+    @PostMapping("/doctor/appointment/update-status")
+    public String updateAppointmentStatus(
+            @RequestParam Long appointmentId,
+            @RequestParam(required = false) String status, // Marked required=false to match hidden input
+            @RequestParam(required = false) String location,
+            RedirectAttributes redirectAttributes) {
+
+        Appointment app = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+
+        LocalDateTime appTime = LocalDateTime.of(app.getAppointmentDate(), app.getStartTime());
+        LocalDateTime now = LocalDateTime.now();
+
+        // 1. Block edits if the appointment has already started or passed
+        // Using !isBefore(now) handles both 'now' and 'past' appointments
+        if (!appTime.isAfter(now)) {
+            redirectAttributes.addFlashAttribute("error", "This appointment has already started or passed. It is now read-only.");
+            return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
+        }
+
+        // 2. Prevent marking FUTURE appointments as COMPLETED early
+        if ("COMPLETED".equalsIgnoreCase(status)) {
+            redirectAttributes.addFlashAttribute("error", "Cannot mark future appointments as Completed. Please wait until the appointment time.");
+            return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
+        }
+
+        // 3. Success Save (Only update status if it was sent)
+        if (status != null && !status.isEmpty()) {
+            app.setStatus(status);
+        }
+        app.setLocation(location);
+        appointmentRepository.save(app);
+
+        redirectAttributes.addFlashAttribute("success", "Appointment updated successfully.");
+        return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
     }
 }
