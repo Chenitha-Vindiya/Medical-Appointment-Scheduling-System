@@ -13,8 +13,10 @@ public class HistoryService {
     private AppointmentRepository appointmentRepository;
 
     public List<Appointment> getPatientHistory(Long patientId) {
-        // Fetch only COMPLETED or CANCELLED records
+        // Fetch only COMPLETED or CANCELLED records Update
         List<String> statuses = List.of("COMPLETED", "CANCELLED");
         return appointmentRepository.findByPatientIdAndStatusInOrderByAppointmentDateDesc(patientId, statuses);
     }
+
+
 }
