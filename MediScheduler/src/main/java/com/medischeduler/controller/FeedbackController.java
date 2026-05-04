@@ -45,6 +45,8 @@ public class FeedbackController {
         return "redirect:/patient/feedback";
     }
 
+    //feedback delete
+
     @PostMapping("/delete")
     public String deleteFeedback(@RequestParam Long feedbackId,
                                  HttpSession session,
