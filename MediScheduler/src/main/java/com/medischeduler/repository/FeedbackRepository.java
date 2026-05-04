@@ -4,6 +4,7 @@ import com.medischeduler.model.Feedback;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
+//connect with database
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     List<Feedback> findByPatientIdOrderByCreatedAtDesc(Long patientId);
 
