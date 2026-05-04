@@ -58,4 +58,24 @@ public class FeedbackController {
         redirectAttributes.addFlashAttribute("success", "Feedback deleted successfully.");
         return "redirect:/patient/feedback";
     }
+
+    @PostMapping("/update")
+    public String updateFeedback(@RequestParam Long id,
+                                 @RequestParam(required = false) String[] feedbackTypes,
+                                 @RequestParam String content,
+                                 HttpSession session,
+                                 RedirectAttributes ra) {
+
+        Patient patient = (Patient) session.getAttribute("loggedInPatient");
+        if (patient == null) return "redirect:/login";
+
+        try {
+            feedbackService.updateFeedback(id, feedbackTypes, content, patient.getId());
+            ra.addFlashAttribute("success", "Feedback updated successfully.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Failed to update feedback: " + e.getMessage());
+        }
+
+        return "redirect:/patient/feedback";
+    }
 }

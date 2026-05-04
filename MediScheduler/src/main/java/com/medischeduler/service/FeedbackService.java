@@ -70,4 +70,22 @@ public class FeedbackService {
             throw new RuntimeException("Unauthorized: You cannot delete this feedback.");
         }
     }
+
+    public void updateFeedback(Long id, String[] feedbackTypes, String content, Long patientId) {
+        Feedback feedback = feedbackRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Feedback not found"));
+
+        // Security check: ensure the feedback belongs to the patient
+        if (!feedback.getPatient().getId().equals(patientId)) {
+            throw new RuntimeException("Unauthorized to edit this feedback");
+        }
+
+        // Only update allowed fields
+        if (feedbackTypes != null) {
+            feedback.setFeedbackType(String.join(", ", feedbackTypes));
+        }
+        feedback.setContent(content);
+
+        feedbackRepository.save(feedback);
+    }
 }

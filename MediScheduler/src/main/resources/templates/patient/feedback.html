@@ -94,6 +94,12 @@
                 <div class="provider-details">
                     <p th:text="'Regarding: ' + ${f.appointment.reason}">Reason</p>
                     <p th:text="'With: Dr. ' + ${f.appointment.doctor.lastName}">Doctor</p>
+
+                    <p class="appointment-meta">
+                        <span th:text="${#temporals.format(f.appointment.appointmentDate, 'MMM dd, yyyy')}">Date</span>
+                        &nbsp;•&nbsp;
+                        <span th:text="${#temporals.format(f.appointment.startTime, 'hh:mm a')}">Time</span>
+                    </p>
                 </div>
             </div>
 
@@ -102,7 +108,12 @@
             </div>
 
             <div class="card-actions">
-                <button class="btn-action btn-edit">
+                <button class="btn-action btn-edit"
+                        th:data-id="${f.id}"
+                        th:data-appointment="${f.appointment.reason}"
+                        th:data-subject="${f.subject}"
+                        th:data-content="${f.content}"
+                        onclick="openEditModal(this)">
                     <span class="material-symbols-outlined">edit</span> Edit
                 </button>
 
@@ -117,6 +128,47 @@
         </div>
     </div>
 </main>
+
+<!--Edit Feedback Model-->
+<div class="modal-overlay" id="editModalOverlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Edit Feedback</h2>
+            <button class="close-btn" id="cancelEditBtn" type="button">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form th:action="@{/patient/feedback/update}" method="post">
+            <input type="hidden" name="id" id="editId"/>
+
+            <div class="form-group">
+                <label class="form-label">Appointment</label>
+                <input class="form-input" id="editAppointment" readonly />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Subject</label>
+                <input class="form-input" id="editSubject" readonly />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Feedback Type</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Question"/> Question</label>
+                    <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Compliment"/> Compliment</label>
+                    <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Concern"/> Concern</label>
+                    <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Suggestion"/> Suggestion</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Detailed Feedback</label>
+                <textarea name="content" id="editContent" class="form-textarea" required rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">Save Changes</button>
+        </form>
+    </div>
+</div>
 
 <!-- Feedback Modal -->
 <div class="modal-overlay" id="modalOverlay">
@@ -178,6 +230,31 @@
 </div>
 
 <script>
+    function openEditModal(button) {
+        const id = button.getAttribute('data-id');
+        const appt = button.getAttribute('data-appointment');
+        const subject = button.getAttribute('data-subject');
+        const content = button.getAttribute('data-content');
+
+        const modal = document.getElementById('editModalOverlay');
+        const form = modal.querySelector('form');
+
+        form.querySelector('input[name="id"]').value = id;
+        document.getElementById('editAppointment').value = appt;
+        document.getElementById('editSubject').value = subject;
+        document.getElementById('editContent').value = content;
+
+        // Use .active so it matches your existing CSS display rules
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+    }
+
+    // Update your close buttons to remove 'active'
+    document.getElementById('cancelEditBtn').addEventListener('click', () => {
+        document.getElementById('editModalOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
     const modal = document.getElementById('modalOverlay');
     const openBtn = document.getElementById('openModal');
     const closeBtn = document.getElementById('closeModal');

@@ -390,6 +390,15 @@ main {
     line-height: 1.6;
 }
 
+.appointment-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-variant);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
 /* Card Actions */
 .card-actions {
     display: flex;
@@ -592,6 +601,21 @@ main {
 
 .btn-submit {
     flex: 2;
+}
+
+.form-input[readonly] {
+    cursor: not-allowed;
+    background-color: #f1f5f9;
+    border-color: transparent;
+    color: var(--text-variant);
+    opacity: 0.8;
+}
+
+
+.form-input[readonly]:focus {
+    outline: none;
+    box-shadow: none;
+    cursor: not-allowed;
 }
 
 /* Responsive */
