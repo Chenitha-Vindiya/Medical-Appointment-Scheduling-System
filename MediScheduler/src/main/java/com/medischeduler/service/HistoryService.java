@@ -13,6 +13,7 @@ public class HistoryService {
     private AppointmentRepository appointmentRepository;
 
     public List<Appointment> getPatientHistory(Long patientId) {
+        System.out.println("Fetching patient history for ID: " + patientId);
         // Fetch only COMPLETED or CANCELLED records
         List<String> statuses = List.of("COMPLETED", "CANCELLED");
         return appointmentRepository.findByPatientIdAndStatusInOrderByAppointmentDateDesc(patientId, statuses);
