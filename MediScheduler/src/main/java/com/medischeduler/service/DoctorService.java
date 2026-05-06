@@ -23,7 +23,7 @@ public class DoctorService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void registerDoctor(Doctor doctor) throws Exception {
+    public void registerDoctor(Doctor doctor) {
         List<String> errors = new ArrayList<>();
 
         if (doctorRepository.findByEmail(doctor.getEmail()) != null) {
@@ -49,7 +49,7 @@ public class DoctorService {
         String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
         for (String day : days) {
-            boolean isWeekend = day.equals("Saturday") || day.equals("Sunday");
+            boolean isWeekend = List.of("Saturday", "Sunday").contains(day);
             WorkingHours wh = WorkingHours.builder()
                     .day(day)
                     .startTime(java.time.LocalTime.of(8, 0))
