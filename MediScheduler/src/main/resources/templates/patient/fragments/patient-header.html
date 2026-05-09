@@ -1,0 +1,40 @@
+<div th:fragment="header-nav">
+    <!-- Scroll to Top -->
+    <button id="scrollTopBtn" title="Go to top">&#9650;</button>
+
+    <!-- HEADER -->
+    <header class="header-wrapper">
+        <nav class="navbar">
+
+            <!-- LEFT: Logo -->
+            <div class="user-profile">
+                <span class="material-symbols-outlined logo-icon">patient_list</span>
+                <span class="logo-text">Patient Dashboard</span>
+            </div>
+
+            <!-- Hamburger (mobile) -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <!-- CENTER + RIGHT: Nav links (Logout inside list, like appointment page) -->
+            <ul class="nav-links" id="navLinks">
+                <li><a th:href="@{/patient/dashboard}" class="active">Dashboard</a></li>
+                <li><a th:href="@{/patient/appointment}">Appointments</a></li>
+                <li><a th:href="@{/patient/history}">History</a></li>
+                <li><a th:href="@{/patient/payment}">Payment</a></li>
+                <li><a th:href="@{/patient/feedback}">Feedback</a></li>
+                <li><a th:href="@{/patient/profile}">Profile</a></li>
+                <li>
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                        <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
+                </li>
+            </ul>
+
+        </nav>
+    </header>
+</div>
