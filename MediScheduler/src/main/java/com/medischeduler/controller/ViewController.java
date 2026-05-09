@@ -132,14 +132,11 @@ public class ViewController {
     }
 
     @GetMapping("/patient/history")
-    public String history(HttpSession session, Model model) {
+    public String showHistory(HttpSession session, Model model) {
         Patient patient = (Patient) session.getAttribute("loggedInPatient");
         if (patient == null) return "redirect:/login";
 
-        // Fetch records and add to model
-        List<Appointment> historyRecords = historyService.getPatientHistory(patient.getId());
-        model.addAttribute("historyRecords", historyRecords);
-
+        model.addAttribute("historyList", historyService.getPatientHistory(patient.getId()));
         return "patient/history";
     }
 
@@ -289,6 +286,15 @@ public class ViewController {
         model.addAttribute("conditions", patientDetails.get("conditions"));
 
         return "doctor/patient";
+    }
+
+    @GetMapping("/doctor/history")
+    public String doctorHistory(HttpSession session, Model model) {
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (doctor == null) return "redirect:/doctor/login";
+
+        model.addAttribute("historyList", historyService.getDoctorHistory(doctor.getId()));
+        return "doctor/history";
     }
 
     //Doctor's Payment
