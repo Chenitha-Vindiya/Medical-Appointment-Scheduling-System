@@ -6,50 +6,13 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Patient Dashboard - MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/dashboard.css}">
-    <link rel="icon" type="image/svg+xml"
-          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+    <link rel="stylesheet" th:href="@{/css/patient/fragments/patient-header.css}">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
 </head>
 
 <body>
 
-<!-- Scroll to Top -->
-<button id="scrollTopBtn" title="Go to top">&#9650;</button>
-
-<!-- HEADER -->
-<header class="header-wrapper">
-    <nav class="navbar">
-
-        <!-- LEFT: Logo -->
-        <div class="user-profile">
-            <span class="material-symbols-outlined logo-icon">patient_list</span>
-            <span class="logo-text">Patient Dashboard</span>
-        </div>
-
-        <!-- Hamburger (mobile) -->
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
-        </button>
-
-        <!-- CENTER + RIGHT: Nav links (Logout inside list, like appointment page) -->
-        <ul class="nav-links" id="navLinks">
-            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
-            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
-            <li><a th:href="@{/patient/history}">History</a></li>
-            <li><a th:href="@{/patient/payment}">Payment</a></li>
-            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
-            <li><a th:href="@{/patient/profile}">Profile</a></li>
-            <li>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
-                </button>
-            </li>
-            <li>
-                <button class="btn-primary" onclick="window.location.href='/logout'">Logout</button>
-            </li>
-        </ul>
-
-    </nav>
-</header>
+<div th:replace="~{patient/fragments/patient-header :: header-nav}"></div>
 
 <!-- MAIN CONTENT -->
 <main class="main-content">

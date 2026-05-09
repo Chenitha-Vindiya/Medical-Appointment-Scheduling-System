@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AppointmentService {
@@ -106,9 +107,20 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
-        // Validate using the existing doctor, but new date/time
+        // 1. Check if the incoming data is exactly the same as the existing database record
+        boolean isUnchanged = Objects.equals(date, appointment.getAppointmentDate()) &&
+                Objects.equals(time, appointment.getStartTime()) &&
+                Objects.equals(reason, appointment.getReason());
+
+        if (isUnchanged) {
+            // Return early with the specific error to prevent unnecessary database queries
+            return new ArrayList<>(List.of("No changes were made. Please modify the date, time, or reason to update the appointment."));
+        }
+
+        // 2. Validate using the existing doctor, but new date/time
         List<String> errors = validateAppointment(appointment.getDoctor().getId(), date, time, appointmentId);
 
+        // 3. Save if no validation errors occurred
         if (errors.isEmpty()) {
             appointment.setAppointmentDate(date);
             appointment.setStartTime(time);

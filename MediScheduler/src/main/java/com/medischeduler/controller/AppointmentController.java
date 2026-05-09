@@ -4,6 +4,7 @@ import com.medischeduler.model.Appointment;
 import com.medischeduler.model.Patient;
 import com.medischeduler.repository.AppointmentRepository;
 import com.medischeduler.service.AppointmentService;
+import com.medischeduler.service.HistoryService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +23,9 @@ public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
+
+    @Autowired
+    private HistoryService historyService;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -98,9 +102,22 @@ public class AppointmentController {
     /**
      * Cancel/Delete an Appointment
      */
+    /**
+     * Cancel an Appointment (Patient Side)
+     */
     @PostMapping("/patient/appointment/cancel")
     public String cancelAppointment(@RequestParam Long id) {
-        appointmentRepository.deleteById(id);
+        // 1. Fetch the appointment instead of deleting it
+        Appointment app = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        // 2. Change the status
+        app.setStatus("CANCELLED");
+        appointmentRepository.save(app);
+
+        // 3. Record it in the history timeline!
+        historyService.createHistoryRecord(app);
+
         return "redirect:/patient/appointment?cancelled=true";
     }
 
@@ -136,6 +153,7 @@ public class AppointmentController {
         }
         app.setLocation(location);
         appointmentRepository.save(app);
+        historyService.createHistoryRecord(app);
 
         redirectAttributes.addFlashAttribute("success", "Appointment updated successfully.");
         return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();

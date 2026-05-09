@@ -6,67 +6,13 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Medical Records | MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/history.css}">
-    <link rel="icon" type="image/svg+xml"
-          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
-
+    <link rel="stylesheet" th:href="@{/css/patient/fragments/patient-header.css}">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
 </head>
 
 <body>
 
-<!-- Scroll to Top Button -->
-<button id="scrollTopBtn" title="Go to top">▲</button>
-
-<script>
-    //Scroll to Top Button
-    const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 75) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
-        }
-    });
-
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-</script>
-
-<!-- HEADER -->
-<header class="header-wrapper">
-    <nav class="navbar">
-        <div class="user-profile">
-            <span class="material-symbols-outlined logo-icon">patient_list</span>
-            <span class="logo-text">History</span>
-        </div>
-
-        <!-- Hamburger (mobile) -->
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
-        </button>
-
-        <ul class="nav-links" id="navLinks">
-            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
-            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
-            <li><a th:href="@{/patient/history}">History</a></li>
-            <li><a th:href="@{/patient/payment}">Payment</a></li>
-            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
-            <li><a th:href="@{/patient/profile}">Profile</a></li>
-            <li>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
-                </button>
-            </li>
-            <li>
-                <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
-            </li>
-        </ul>
-    </nav>
-</header>
+<div th:replace="~{patient/fragments/patient-header :: header-nav}"></div>
 
 <main class="main-content">
     <section class="filter-bar">
@@ -75,49 +21,85 @@
             <input placeholder="Search by doctor name, record type or facility..." type="text"/>
         </div>
     </section>
-    <div id="noResults" style="display:none; text-align:center; padding: 2rem; color: var(--on-surface-variant);">
+
+    <div id="noResults" class="no-results-message">
         <p>No records found matching your search.</p>
     </div>
 
     <section class="records-container">
         <div class="timeline-line"></div>
 
-        <div th:each="record : ${historyRecords}"
+        <div th:each="record : ${historyList}"
              class="record-entry"
-             th:attr="data-search=${record.doctor.firstName + ' ' + record.doctor.lastName + ' REC-' + record.id + ' ' + record.reason}">
+             th:attr="data-search=${record.appointment.doctor.firstName + ' ' + record.appointment.doctor.lastName + ' REC-' + record.id + ' ' + record.appointment.reason}">
+
             <div class="timeline-dot"></div>
+
             <div class="record-card">
-                <div class="record-header">
-                    <div class="record-icon-box"
-                         th:classappend="${record.status == 'COMPLETED' ? 'blue-bg' : 'slate-bg'}">
-                    <span class="material-symbols-outlined"
-                          th:text="${record.status == 'COMPLETED' ? 'stethoscope' : 'cancel'}"></span>
+
+                <div class="record-card-content">
+                    <div class="record-header">
+                        <div class="record-icon-box" th:classappend="${record.status == 'COMPLETED' ? 'blue-bg' : 'slate-bg'}">
+                            <span class="material-symbols-outlined" th:text="${record.status == 'COMPLETED' ? 'stethoscope' : 'cancel'}"></span>
+                        </div>
+                        <div>
+                            <div class="record-badge-group">
+                                <span class="record-type-badge" th:classappend="${record.status == 'COMPLETED' ? 'badge-consultation' : 'badge-radiology'}" th:text="${record.status}">Status</span>
+                                <span class="record-id" th:text="'#REC-' + ${record.id}"></span>
+                            </div>
+
+                            <h3 class="record-title" th:text="${record.appointment.reason}">Reason</h3>
+
+                            <p class="record-subtitle" th:text="'Dr. ' + ${record.appointment.doctor.firstName} + ' ' + ${record.appointment.doctor.lastName} + (${record.status == 'COMPLETED'} ? ' • ' + ${record.appointment.location} : '')"></p>
+
+                            <div class="record-meta">
+                                    <span>
+                                        <span class="material-symbols-outlined meta-icon">calendar_today</span>
+                                        <span th:text="${#temporals.format(record.appointment.appointmentDate, 'MMM dd, yyyy')}"></span>
+                                    </span>
+                                <span>
+                                        <span class="material-symbols-outlined meta-icon">schedule</span>
+                                        <span th:text="${#temporals.format(record.appointment.startTime, 'hh:mm a')}"></span>
+                                    </span>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                        <span class="record-type-badge"
-                              th:classappend="${record.status == 'COMPLETED' ? 'badge-consultation' : 'badge-radiology'}"
-                              th:text="${record.status}">Status</span>
-                            <span class="text-xs font-bold" style="color:var(--slate-400)"
-                                  th:text="'#REC-' + ${record.id}"></span>
-                        </div>
-                        <h3 class="record-title" th:text="${record.reason}">Reason</h3>
-                        <p class="record-subtitle"
-                           th:text="'Dr. ' + ${record.doctor.firstName} + ' ' + ${record.doctor.lastName} + (${record.status == 'COMPLETED'} ? ' • ' + ${record.location} : '')">
-                        <div class="record-meta">
-                        <span><span class="material-symbols-outlined" style="font-size:14px">calendar_today</span>
-                            <span th:text="${#temporals.format(record.appointmentDate, 'MMM dd, yyyy')}"></span></span>
-                            <span><span class="material-symbols-outlined" style="font-size:14px">schedule</span>
-                            <span th:text="${#temporals.format(record.startTime, 'hh:mm a')}"></span></span>
-                        </div>
+
+                    <div th:if="${record.extraNote != null and !record.extraNote.isEmpty()}" class="record-clinical-note">
+                        <strong>Note:</strong> <span th:text="${record.extraNote}"></span>
                     </div>
                 </div>
+
+                <div class="record-delete-zone">
+                    <form th:action="@{/patient/history/delete}" method="post" onsubmit="return confirm('Are you sure you want to remove this from your history view?');">
+                        <input type="hidden" name="historyId" th:value="${record.id}"/>
+
+                        <button type="submit" class="btn-zone-delete" title="Remove Record">
+                            <span class="material-symbols-outlined">delete</span>
+                            <span class="btn-zone-text">REMOVE</span>
+                        </button>
+                    </form>
+                </div>
+
             </div>
         </div>
     </section>
 </main>
 
 <script>
+    // Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 75) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+    });
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
     // Mobile hamburger menu
     const btn = document.getElementById('hamburgerBtn');
     const nav = document.getElementById('navLinks');
@@ -134,33 +116,31 @@
         });
     });
 
-    //Search Bar
+    // Search Bar Filtering
     document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.querySelector(".filter-bar input");
         const recordEntries = document.querySelectorAll(".record-entry");
-        const noResults = document.getElementById("noResults"); // Reference the new div
+        const noResults = document.getElementById("noResults");
 
         searchInput.addEventListener("input", function () {
             const searchTerm = searchInput.value.toLowerCase();
-            let visibleCount = 0; // Track how many items remain visible
+            let visibleCount = 0;
 
             recordEntries.forEach(entry => {
                 const searchableText = entry.getAttribute("data-search").toLowerCase();
 
                 if (searchableText.includes(searchTerm)) {
                     entry.style.display = "block";
-                    visibleCount++; // Increment count if item is visible
+                    visibleCount++;
                 } else {
                     entry.style.display = "none";
                 }
             });
 
-            // Toggle "No Results" message
             noResults.style.display = (visibleCount === 0) ? "block" : "none";
         });
     });
 </script>
 
 </body>
-
 </html>
