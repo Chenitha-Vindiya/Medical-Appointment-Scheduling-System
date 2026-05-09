@@ -1,16 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap');
 
+/* 1. Page-Specific Variables */
 :root {
-    --primary: #006591;
-    --primary-container: #0ea5e9;
+    --primary: #006591; /* Overrides global primary */
     --secondary: #2badee;
     --secondary-hover: #238dc2;
+    --primary-container: #0ea5e9;
     --on-primary: #ffffff;
     --surface: #f7f9fb;
-    --surface-container-low: #f2f4f6;
-    --surface-container-lowest: #ffffff;
-    --surface-container-high: #e6e8ea;
     --on-surface: #191c1e;
     --on-surface-variant: #3e4850;
     --outline-variant: rgba(190, 200, 210, 0.2);
@@ -23,10 +21,6 @@
     --tertiary-fixed: #ffddb8;
     --on-tertiary-fixed: #2a1700;
     --radius-xl: 0.75rem;
-    --radius-full: 9999px;
-    --shadow: 0px 20px 40px rgba(25, 28, 30, 0.06);
-    --transition: all 0.2s ease;
-    --slate-700: #334155;
 }
 
 
@@ -236,3 +230,11 @@ textarea.form-control {
     .data-table th, .data-table td { padding: 1rem; }
     .specialty-cell { display: none; } /* Hide specialty to fit mobile */
 }
+
+/* --- DARK MODE --- */
+body.dark-mode .card { background: var(--white); }
+body.dark-mode .payment-row td { background-color: var(--slate-50); color: var(--slate-700); }
+body.dark-mode .payment-row:hover td { background-color: var(--slate-100); }
+body.dark-mode .display-sm, body.dark-mode .form-label { color: var(--slate-900); }
+body.dark-mode .form-control { background: var(--slate-50); border-color: var(--slate-200); color: var(--slate-900); }
+body.dark-mode .modal-close { color: var(--slate-500); }

@@ -1,3 +1,44 @@
+/* ------ GLOBAL VARIABLES ------ */
+:root {
+    /* Brand Colors */
+    --primary: #2badee;
+    --primary-hover: #238dc2;
+    --danger: #ef4444;
+    --white: #ffffff;
+
+    /* Global Backgrounds & Surfaces */
+    --bg: #f4f7fb;
+    --bg-light: #f8fafc;
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #f2f4f6;
+    --surface-container-high: #e6e8ea;
+
+    /* Slate Color Scale (Required for Dark Mode Engine) */
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1e293b;
+    --slate-900: #0f172a;
+
+    /* Global Shadows */
+    --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.07);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Global Utilities */
+    --transition: all 0.2s ease;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-full: 9999px;
+}
+
 /* ------ RESET & BASE ------ */
 * {
     box-sizing: border-box;
@@ -89,11 +130,20 @@ body::-webkit-scrollbar {
     color: var(--slate-600);
     font-weight: 500;
     font-size: 0.93rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
     transition: color 0.2s;
 }
 
 .nav-links a:hover {
     color: var(--primary);
+    background-color: var(--slate-50);
+}
+
+.nav-links a.active {
+    color: var(--primary);
+    font-weight: 700;
+    background-color: #e0f2fe;
 }
 
 /* ------ Hamburger Menu ------ */
@@ -249,7 +299,136 @@ body::-webkit-scrollbar {
         border-radius: 0;
     }
 
+    .nav-links a.active {
+        background-color: transparent;
+        border-left: 4px solid var(--primary);
+        border-radius: 0;
+        padding-left: 1rem;
+    }
+
     .nav-links.open {
         display: flex;
     }
 }
+
+body.dark-mode {
+    /* Backgrounds & Surfaces */
+    --bg:          #0c1322;
+    --bg-light:    #0f172a;
+    --white:       #182030;
+    --surface:     #1e293b;
+    --surface-container-lowest: #0c1322;
+    --surface-container-low: #141e2e;
+    --surface-container-high: #263347;
+
+    /* Invert the Slate scale (Light text, dark borders) */
+    --slate-900:   #f8fafc;
+    --slate-800:   #f1f5f9;
+    --slate-700:   #e2e8f0;
+    --slate-600:   #cbd5e1;
+    --slate-500:   #94a3b8;
+    --slate-400:   #64748b;
+    --slate-300:   #475569;
+    --slate-200:   #334155;
+    --slate-100:   #1e293b;
+    --slate-50:    #0f172a;
+
+    /* Text & Lines */
+    --text-main:   #f8fafc;
+    --text-variant:#cbd5e1;
+    --on-surface:  #f8fafc;
+    --on-surface-variant: #94a3b8;
+    --border-color:#334155;
+    --outline:     #334155;
+    --outline-variant: rgba(255, 255, 255, 0.1);
+
+    /* Softer Shadows */
+    --shadow-xs:   0 1px 3px rgba(0,0,0,0.4);
+    --shadow-sm:   0 2px 8px rgba(0,0,0,0.5);
+    --shadow-md:   0 4px 16px rgba(0,0,0,0.6);
+    --shadow-lg:   0 8px 32px rgba(0,0,0,0.7);
+}
+
+body.dark-mode .navbar {
+    background: rgba(24, 32, 48, 0.92);
+    border-color: rgba(255,255,255,0.08);
+}
+
+body.dark-mode .navbar .nav-links {
+    border-color: var(--slate-100);
+}
+
+body.dark-mode #scrollTopBtn {
+    color: #0f172a;
+}
+
+body.dark-mode .theme-toggle {
+    color: #94a3b8;
+}
+
+body.dark-mode .theme-toggle:hover {
+    color: var(--primary);
+    background: rgba(255,255,255,0.06);
+}
+
+body.dark-mode .nav-links a { color: var(--slate-600); }
+
+/* Dark Mode: Active Nav Link */
+body.dark-mode .nav-links a.active {
+    color: var(--primary);
+    background-color: rgba(43, 173, 238, 0.15);
+}
+
+body.dark-mode .nav-links a:not(.active):hover {
+    color: var(--slate-900);
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Common UI Elements (Modals & Forms) */
+body.dark-mode .modal-content,
+body.dark-mode .modal-container {
+    background-color: var(--white);
+    border: 1px solid var(--slate-200);
+    box-shadow: var(--shadow-lg);
+}
+
+body.dark-mode .form-input,
+body.dark-mode .form-textarea,
+body.dark-mode .form-select,
+body.dark-mode .modal-select,
+body.dark-mode textarea,
+body.dark-mode input {
+    background-color: var(--slate-50);
+    border-color: var(--slate-200);
+    color: var(--slate-900);
+}
+
+body.dark-mode .form-input[readonly],
+body.dark-mode .form-input:disabled {
+    background-color: var(--bg);
+    border-color: var(--slate-100);
+    color: var(--slate-500);
+}
+
+/* Common Status Badges & Alerts */
+body.dark-mode .blue-bg,
+body.dark-mode .icon-blue { background: rgba(43,173,238,0.15); color: var(--primary); }
+body.dark-mode .slate-bg { background: var(--slate-100); color: var(--slate-500); }
+
+body.dark-mode .badge-consultation, body.dark-mode .badge-question,
+body.dark-mode .badge-pending, body.dark-mode .pending, body.dark-mode .chip-pending {
+    background: rgba(180,83,9,0.2); color: #fcd34d;
+}
+
+body.dark-mode .badge-confirmed, body.dark-mode .badge-compliment,
+body.dark-mode .confirmed, body.dark-mode .chip-resolved {
+    background: rgba(30,64,175,0.2); color: #93c5fd;
+}
+
+body.dark-mode .badge-cancelled, body.dark-mode .badge-concern {
+    background: rgba(153, 27, 27, 0.3); color: #fca5a5;
+}
+
+body.dark-mode .alert-success { background: rgba(22, 101, 52, 0.2); color: #86efac; border-color: rgba(22, 101, 52, 0.4); }
+body.dark-mode .alert-danger,
+body.dark-mode .error-alert { background: rgba(153, 27, 27, 0.2); color: #fca5a5; border-color: rgba(153, 27, 27, 0.4); }

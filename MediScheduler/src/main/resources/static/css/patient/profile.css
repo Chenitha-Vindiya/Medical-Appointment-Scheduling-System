@@ -2,24 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
-/* General Reset & Variables */
+/* 1. Page-Specific Variables */
 :root {
-    --primary: #2badee;
-    --primary-hover: #238dc2;
-    --bg-light: #f8fafc;
-    --white: #ffffff;
-    --slate-50: #f8fafc;
-    --slate-100: #f1f5f9;
-    --slate-200: #e2e8f0;
-    --slate-400: #94a3b8;
-    --slate-500: #64748b;
-    --slate-600: #475569;
-    --slate-700: #334155;
-    --slate-800: #1e293b;
-    --slate-900: #0f172a;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --brand-blue: #2badee;
     --brand-bg: #f5f3f3;
     --brand-dark: #1e293b;
@@ -518,3 +502,14 @@
     min-width: 120px;
     height: 44px;
 }
+
+/* --- DARK MODE --- */
+body.dark-mode .form-card, body.dark-mode .danger-zone { background: var(--white); border-color: var(--slate-200); }
+body.dark-mode .section-title { color: var(--slate-900); border-color: var(--slate-200); }
+body.dark-mode .danger-zone { background: rgba(153, 27, 27, 0.1); border-color: rgba(153, 27, 27, 0.2); }
+body.dark-mode .danger-title { color: #fca5a5 !important; border-color: rgba(153, 27, 27, 0.2) !important; }
+body.dark-mode .danger-item { border-color: rgba(153, 27, 27, 0.2); }
+body.dark-mode .danger-info strong { color: var(--slate-900); }
+body.dark-mode .avatar-container { background-color: var(--slate-50); border-color: var(--slate-200); }
+body.dark-mode .toast-notification { background: var(--white); color: var(--slate-900); border-left-color: #059669; }
+body.dark-mode .toast-title { color: var(--slate-900); }

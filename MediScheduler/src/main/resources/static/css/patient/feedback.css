@@ -1,22 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap');
 
+/* 1. Page-Specific Variables */
 :root {
-    --primary: #006591;
-    --primary-hover: #238dc2;
+    --primary: #006591; /* Overrides global primary */
     --primary-light: #0ea5e9;
     --primary-container: #c9e6ff;
     --on-primary-container: #001e2f;
     --surface: #f8fafc;
-    --surface-container: #ffffff;
     --text-main: #0f172a;
     --text-variant: #475569;
     --outline: #e2e8f0;
-    --danger: #ef4444;
-    --radius-lg: 1.25rem;
-    --radius-full: 9999px;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Header & Content */
@@ -435,3 +429,14 @@ main {
 
     .card-actions { justify-content: stretch; }
 }
+
+/* --- DARK MODE --- */
+body.dark-mode .feedback-card { background: var(--white); border-color: var(--slate-100); }
+body.dark-mode .card-title, body.dark-mode .provider-details p:first-child,
+body.dark-mode .modal-header h2 { color: var(--slate-900); }
+body.dark-mode .provider-info, body.dark-mode .card-actions { border-color: var(--slate-100); }
+body.dark-mode .provider-img, body.dark-mode .provider-fallback { background: var(--slate-50); color: var(--slate-500); }
+body.dark-mode .btn-action { background: var(--slate-50); border-color: var(--slate-200); color: var(--slate-600); }
+body.dark-mode .btn-action:hover { background: var(--slate-100); color: var(--slate-900); }
+body.dark-mode .checkbox-grid { background: var(--slate-50); border-color: var(--slate-100); }
+body.dark-mode .btn-secondary { background: var(--slate-50); border-color: var(--slate-200); color: var(--slate-700); }

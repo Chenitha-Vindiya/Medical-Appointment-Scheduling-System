@@ -6,12 +6,14 @@
     <title>Feedback - MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/feedback.css}">
     <link rel="stylesheet" th:href="@{/css/patient/fragments/patient-header.css}">
+
+    <script th:src="@{/js/patient/fragments/patient-header.js}" defer></script>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
 
 </head>
 <body>
 
-<div th:replace="~{patient/fragments/patient-header :: header-nav}"></div>
+<div th:replace="~{patient/fragments/patient-header :: header-nav('Feedback & Reviews', 'feedback', 'reviews')}"></div>
 
 <main class="container">
     <div class="actions-bar">
@@ -252,55 +254,6 @@
             submitBtn.innerHTML = originalText;
         }, 800);
     });
-
-    // Mobile hamburger menu
-    const btn = document.getElementById('hamburgerBtn');
-    const nav = document.getElementById('navLinks');
-    btn.addEventListener('click', () => {
-        nav.classList.toggle('open');
-        btn.classList.toggle('active');
-    });
-
-    // Close menu on link click
-    nav.querySelectorAll('a, button').forEach(el => {
-        el.addEventListener('click', () => {
-            nav.classList.remove('open');
-            btn.classList.remove('active');
-        });
-    });
-
-    //Scroll to Top Button
-    const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 75) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
-        }
-    });
-
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-
-    // Dark mode toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-        themeIcon.innerText = 'dark_mode';
-    }
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-
 
 </script>
 </body>
