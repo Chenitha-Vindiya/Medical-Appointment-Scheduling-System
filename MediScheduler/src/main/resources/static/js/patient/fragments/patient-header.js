@@ -1,16 +1,3 @@
-// Scroll to Top Button
-const scrollTopBtn = document.getElementById('scrollTopBtn');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 75) {
-        scrollTopBtn.classList.add('show');
-    } else {
-        scrollTopBtn.classList.remove('show');
-    }
-});
-scrollTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
 // Mobile hamburger menu
 const btn = document.getElementById('hamburgerBtn');
 const nav = document.getElementById('navLinks');
@@ -27,16 +14,23 @@ nav.querySelectorAll('a, button').forEach(el => {
     });
 });
 
-// Dark mode toggle
+// Dark mode toggle logic
 const themeToggle = document.getElementById('theme-toggle');
 const themeIcon = document.getElementById('theme-icon');
+
+// Check for saved user preference on load
 if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode');
-    themeIcon.innerText = 'dark_mode';
+    themeIcon.innerText = 'dark_mode'; // Changes icon to moon
+} else {
+    themeIcon.innerText = 'light_mode'; // Changes icon to sun
 }
+
 themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
     const isDark = document.body.classList.contains('dark-mode');
+
+    // Update icon text and save preference
     themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
 });

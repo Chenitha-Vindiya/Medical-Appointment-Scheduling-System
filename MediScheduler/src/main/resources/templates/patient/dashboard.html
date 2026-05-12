@@ -37,7 +37,7 @@
 
                 <div th:unless="${nextAppointment != null}">
                     <p class="stat-value">None</p>
-                    <small>Schedule your first visit</small>
+                    <small>Schedule your next visit</small>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
             </div>
             <div class="stat-body">
                 <p class="stat-label">Total Visits</p>
-                <p class="stat-value">12 Visits</p>
+                <p class="stat-value" th:text="${totalVisits} + ' Visits'">12 Visits</p>
             </div>
         </div>
 

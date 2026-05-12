@@ -1,0 +1,34 @@
+<div th:fragment="notification-handler" id="notification-container">
+
+    <div th:if="${success}" class="toast glass-toast success">
+        <div class="toast-body">
+            <div class="icon-wrapper">
+                <span class="material-symbols-outlined">verified</span>
+            </div>
+            <div class="toast-content">
+                <p class="toast-text" th:text="${success}">Success message</p>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${error}" class="toast glass-toast error">
+        <div class="toast-body">
+            <div class="icon-wrapper">
+                <span class="material-symbols-outlined">error</span>
+            </div>
+            <div class="toast-content">
+                <p class="toast-text" th:text="${error}">cancel</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.glass-toast').forEach(toast => {
+            setTimeout(() => {
+                toast.classList.add('hide');
+                // Remove from DOM after the slide-out animation finishes
+                setTimeout(() => toast.remove(), 500);
+            }, 5000);
+        });
+    </script>
+</div>

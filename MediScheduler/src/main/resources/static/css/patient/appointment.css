@@ -9,8 +9,29 @@
     --on-primary: #ffffff;
     --secondary: #1e293b;
     --on-surface-variant: #64748b;
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1e293b;
+    --slate-900: #0f172a;
+    --white: #ffffff;
+    --danger: #ef4444;
+    --transition: all 0.2s ease;
+    --radius-full: 9999px;
 }
 
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fb;
+    color: var(--slate-900);
+}
 
 /* Buttons */
 .btn-secondary {
@@ -33,7 +54,6 @@
     box-shadow: 0 10px 15px -3px rgba(0, 101, 145, 0.2);
 }
 
-
 /* 3. Centered Layout */
 .main-content {
     display: flex;
@@ -45,346 +65,629 @@
     width: 100%;
     max-width: 80rem;
     padding: 6.5rem 2rem 2rem 2rem;
+    box-sizing: border-box;
 }
 
-.no-appointments {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 3rem;
-    text-align: center;
-
-    /* Dashed outline look */
-    border-radius: 1.25rem;
-
-    /* Grayout effect */
-    color: var(--on-surface-variant);
-    opacity: 0.8; /* Makes the whole box look "grayed out" */
-
-    margin-top: 2rem;
-}
-
-.no-appointments p {
-    font-size: 1rem;
-    font-weight: 500;
-    margin: 0;
-    letter-spacing: 0.025em;
-}
-
-/* 4. Appointment Grid (3 Columns) */
+/* --- REDESIGNED APPOINTMENT GRID & EMPTY STATE --- */
 .cards-grid {
     display: grid;
     gap: 1.5rem;
-    margin-bottom: 2.5rem;
-    /* Default: 1 column for mobile */
+    margin-bottom: 3rem;
     grid-template-columns: repeat(1, 1fr);
+    width: 100%;
 }
 
-/* Tablet: 2 per row */
-@media (min-width: 768px) {
-    .cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
+@media (min-width: 768px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1150px) { .cards-grid { grid-template-columns: repeat(3, 1fr); } }
 
-/* Desktop: Fixed 3 per row */
-@media (min-width: 1100px) {
-    .cards-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* 5. Appointment Card Style (Preserved) */
-.appointment-card {
-    background: white;
-    border-radius: 1rem;
-    border: 1px solid var(--slate-200);
-    padding: 1.25rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
-}
-
-.appointment-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-}
-
-.card-header {
+/* Polished Empty State */
+.no-appointments {
+    grid-column: 1 / -1;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    background: var(--white);
+    border-radius: 1.25rem;
+    border: 1px dashed var(--slate-300);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+.empty-calendar-icon {
+    font-size: 48px;
+    color: var(--slate-400);
     margin-bottom: 1rem;
 }
 
-.doctor-info {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-}
-
-.icon-box {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.blue-bg { background: #eff6ff; color: var(--primary); }
-.purple-bg { background: #faf5ff; color: #9333ea; }
-
-.doctor-name {
+.no-appointments p {
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--slate-800);
-    font-size: 1rem;
+    margin: 0 0 0.25rem 0;
 }
 
-.specialty-text {
-    font-size: 0.875rem;
+.empty-subtext {
+    font-size: 0.9rem;
     color: var(--slate-500);
 }
 
-.status-badge {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 4px 8px;
-    border-radius: 99px;
-    text-transform: uppercase;
+/* --- PREMIUM APPOINTMENT CARDS --- */
+.appointment-card {
+    background: var(--white);
+    border-radius: 1.25rem;
+    border: 1px solid var(--slate-200);
+    padding: 1.5rem;
+    box-sizing: border-box;
+
+    /* Strict vertical flex engine anchors buttons perfectly */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    /* Premium Elevation Micro-interaction */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
 }
 
-.badge-confirmed { background: #dcfce7; color: #15803d; }
-.badge-pending { background: #dbeafe; color: #1d4ed8; }
-.badge-cancelled { background: #f18c82; color: #d32f1d; }
+.appointment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px -4px rgba(0, 101, 145, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    border-color: var(--slate-700);
+}
 
+.card-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Pushes the action area to the absolute bottom */
+}
+
+/* --- CLEANER CARD HEADER --- */
+.card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Space between doctor info and the reason */
+    margin-bottom: 1.25rem;
+}
+
+.header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Aligns badge with the doctor icon/name */
+    width: 100%;
+}
+
+.doctor-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.doctor-details {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.doctor-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    margin: 0;
+}
+
+/* --- REASON FOR VISIT (The Focus) --- */
+.reason-container {
+    padding: 0.5rem 0 0 0;
+}
+
+.visit-reason-title {
+    font-size: 1rem;
+    font-weight: 100;
+    color: var(--slate-500);
+    line-height: 1.4;
+    margin: 0;
+    word-wrap: break-word;
+    hyphens: auto;
+    background: var(--slate-100);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+
+
+/* --- REFINED STATUS BADGES --- */
+.status-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px; /* Squared-off rounds look more modern than pills here */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-confirmed {
+    background: #f0fdf4;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.badge-pending {
+    background: #f0f9ff;
+    color: #075985;
+    border-color: #bae6fd;
+}
+
+.badge-cancelled {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+/* Glass Icon Box adjustment for the new layout */
+.glass-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(14, 165, 233, 0.05));
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    color: #0ea5e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+/* Card Details Grid */
 .card-details {
     border-top: 1px solid var(--slate-100);
-    border-bottom: 1px solid var(--slate-100);
-    padding: 1rem 0;
+    padding-top: 1.25rem;
     margin-bottom: 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.75rem;
 }
 
 .detail-item {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    color: var(--slate-600);
-    font-size: 0.875rem;
 }
 
-.detail-item span.material-symbols-outlined {
+.detail-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    flex-shrink: 0;
     color: var(--slate-400);
-    font-size: 1.2rem;
 }
 
+.detail-icon-wrapper .material-symbols-outlined {
+    font-size: 1.15rem;
+}
+
+.detail-text {
+    color: var(--slate-700);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Bottom Actions */
 .card-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 0.75rem;
-}
-
-.card-actions form {
-    display: contents; /* This makes the button inside behave as the grid item */
-}
-
-.card-actions form {
-    display: block;
     width: 100%;
+    margin-top: auto; /* Permanently locks actions to the bottom */
+    padding-top: 1rem;
+    border-top: 1px dashed var(--slate-200);
+    box-sizing: border-box;
+    align-items: stretch;
 }
 
-/* 6. Buttons */
+/* Force both the direct button and the form wrapper to take exactly equal 50% portions */
+.card-actions > .btn-reschedule,
+.card-actions > form.cancel-form {
+    flex: 1 1 0%;
+    min-width: 0; /* Prevents long text from stretching the container */
+    margin: 0;
+}
+
+.card-actions form {
+    display: flex;
+    margin: 0;
+}
+
+form.cancel-form {
+    display: flex;
+    align-items: stretch;
+}
+
 .btn {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 6px;
     width: 100%;
-    height: 100%;
-    gap: 0.4rem;
-    padding: 0.6rem;
-    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    border-radius: 0.5rem;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     border: 1px solid transparent;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+    text-align: center;
+    white-space: nowrap; /* Keeps button content aligned cleanly */
+}
+
+.btn-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
 }
 
 .btn-outline {
     border-color: var(--slate-200);
-    background: #fff;
-    color: var(--slate-600);
+    background: var(--white);
+    color: var(--slate-700);
 }
 
 .btn-outline:hover {
     background: var(--slate-50);
+    border-color: var(--slate-300);
+    color: var(--slate-900);
 }
 
 .btn-danger {
-    border-color: #fee2e2;
-    background: #fff;
+    border-color: rgba(239, 68, 68, 0.2);
+    background: var(--white);
     color: var(--danger);
 }
 
 .btn-danger:hover {
     background: #fef2f2;
+    border-color: rgba(239, 68, 68, 0.3);
 }
 
-.section-title {
-    font-size: 1.125rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    color: var(--slate-800);
+/* --- FLAWLESS MOBILE RESPONSIVENESS --- */
+@media (max-width: 600px) {
+    .appointment-card {
+        padding: 1.25rem;
+    }
+
+    .card-header {
+        gap: 0.5rem;
+    }
+
+    .visit-reason-title {
+        font-size: 0.95rem;
+    }
+
+    .card-actions {
+        gap: 0.5rem;
+    }
+
+    .btn {
+        padding: 0.6rem 0.5rem;
+        font-size: 0.85rem;
+    }
 }
 
-@media (max-width: 768px) {
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-  .card-header { padding: 1.25rem; }
-  .data-table th, .data-table td { padding: 1rem; }
-  .specialty-cell { display: none; } /* Hide specialty to fit mobile */
+/* --- COMPLETE DARK MODE OVERRIDES --- */
+body.dark-mode .no-appointments {
+    background: var(--slate-900);
+    border-color: var(--slate-700);
 }
 
-/* Modal Overlay */
+body.dark-mode .no-appointments p { color: var(--white); }
+body.dark-mode .empty-calendar-icon { color: var(--slate-600); }
+
+body.dark-mode .appointment-card {
+    background: var(--slate-900);
+    border-color: var(--slate-700);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .appointment-card:hover {
+    box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .glass-icon-box {
+    background: rgba(14, 165, 233, 0.12);
+    border-color: rgba(14, 165, 233, 0.2);
+}
+
+body.dark-mode .visit-reason-title { color: var(--slate-500); }
+body.dark-mode .card-details { border-top-color: var(--slate-800); }
+body.dark-mode .detail-icon-wrapper { color: var(--slate-500); }
+body.dark-mode .detail-text { color: var(--slate-300); }
+body.dark-mode .card-actions { border-top-color: var(--slate-100); }
+
+body.dark-mode .btn-outline {
+    background: var(--slate-800);
+    border-color: var(--slate-700);
+    color: var(--slate-200);
+}
+
+body.dark-mode .btn-outline:hover {
+    background: var(--slate-700);
+    border-color: var(--slate-600);
+    color: var(--white);
+}
+
+body.dark-mode .btn-danger {
+    background: var(--slate-800);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+body.dark-mode .btn-danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* =========================================
+   OPTIMIZED MODAL OVERLAYS & CONTAINERS
+   ========================================= */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none; /* Hidden by default */
-    align-items: center; justify-content: center;
-    z-index: 1000;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
-.modal-overlay.show { display: flex; }
+.modal-overlay.show,
+.modal-overlay.show-flex {
+    display: flex !important;
+}
 
-/* Modal Container */
+/* Modal Container (Increased Width & Managed Height) */
 .modal-container {
-    background: white;
-    width: 90%; max-width: 500px;
-    border-radius: 20px;
+    background: var(--white);
+    width: 100%;
+    max-width: 580px; /* Expanded from 500px to perfectly fit inner cards */
+    max-height: 90vh; /* Prevents window vertical overflow */
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    animation: slideUp 0.3s ease-out;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.25s ease-out;
 }
 
 @keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
+    from { transform: translateY(15px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
 .modal-header-blue {
-    background: #008ecc; /* Matches your image */
-    color: white;
-    padding: 1.5rem;
+    background: #008ecc;
+    color: var(--white);
+    padding: 1.25rem 1.5rem;
+    flex-shrink: 0;
 }
 
-.modal-header-blue h2 { margin: 0; font-size: 1.5rem; }
-.modal-header-blue p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.9; }
+.modal-header-blue h2 { margin: 0; font-size: 1.35rem; font-weight: 800; }
+.modal-header-blue p { margin: 4px 0 0; font-size: 0.85rem; opacity: 0.9; }
 
-/* Form Styling */
-.modal-form { padding: 1.5rem; }
+/* Internal Scrollable Content */
+.modal-form {
+    padding: 1.5rem;
+    overflow-y: auto; /* Internal scrolling if items compress */
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
 
-.form-group { margin-bottom: 1.2rem; }
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+}
+
 .form-group label {
-    display: block;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    color: #666;
-    margin-bottom: 8px;
+    color: var(--slate-500);
     text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
 }
 
 .modal-select, .modal-form textarea, .modal-form input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    background: #f8fafc;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--slate-200);
+    border-radius: 8px;
+    background: var(--slate-50);
     font-size: 0.9rem;
+    color: var(--slate-800);
+    box-sizing: border-box;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
 }
 
-.modal-form textarea { height: 100px; resize: none; }
+.modal-select:focus, .modal-form textarea:focus, .modal-form input:focus {
+    border-color: var(--primary-container);
+    background: var(--white);
+}
 
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.readonly-field {
+    background: var(--slate-100) !important;
+    cursor: not-allowed;
+    border: 1px dashed var(--slate-300) !important;
+    color: var(--slate-600);
+}
+
+.modal-form textarea {
+    height: 90px;
+    resize: none;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
 
 /* Footer Buttons */
 .modal-footer {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 0.5rem;
+    flex-shrink: 0;
 }
 
 .btn-cancel {
-    background: white;
-    border: 1px solid #e2e8f0;
-    padding: 12px; border-radius: 25px;
-    cursor: pointer; font-weight: 600;
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    padding: 0.75rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--slate-600);
+    transition: background 0.2s;
+    font-family: inherit;
+    font-size: 0.9rem;
 }
+
+.btn-cancel:hover { background: var(--slate-50); }
 
 .btn-confirm {
     background: #008ecc;
-    color: white; border: none;
-    padding: 12px; border-radius: 25px;
-    cursor: pointer; font-weight: 600;
+    color: var(--white);
+    border: none;
+    padding: 0.75rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.btn-confirm:hover { background: #0073a8; }
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .error-alert {
     background-color: #fff5f5;
     border: 1px solid #feb2b2;
     color: #c53030;
-    padding: 10px 15px;
-    border-radius: 10px;
-    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-size: 0.85rem;
     font-weight: 500;
 }
 
-.error-alert .material-symbols-outlined {
-    font-size: 1.2rem;
+.error-alert .material-symbols-outlined { font-size: 1.2rem; flex-shrink: 0; }
+
+/* =========================================
+   SELECTABLE PAYMENT CARDS STYLES
+   ========================================= */
+.payment-cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem; /* Tighter gap to maximize horizontal layout space */
+    width: 100%;
 }
 
-/* Ensure both modals center correctly */
-.modal-overlay {
-    display: none; /* JS will toggle this */
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.7); /* Darker glass effect */
-    backdrop-filter: blur(5px);
+.payment-option-card {
+    display: block;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+}
+
+.payment-option-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0; width: 0;
+}
+
+.payment-option-card .card-content {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 2000;
+    gap: 0.75rem;
+    padding: 0.85rem;
+    background-color: var(--white);
+    border: 1px solid var(--slate-300);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    height: 100%;
 }
 
-/* Helper class for JS */
-.modal-overlay.show-flex {
-    display: flex !important;
+.payment-option-card .icon {
+    font-size: 24px;
+    color: var(--slate-400);
+    transition: color 0.2s;
+    flex-shrink: 0;
 }
 
-/* Fix for the Reschedule labels and inputs */
-#rescheduleModal .form-group label {
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
+.payment-option-card .text-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0; /* Forces text truncation if things get severely tight */
+}
+
+.payment-option-card .text-details strong {
+    font-size: 0.9rem;
+    color: var(--slate-800);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.payment-option-card .text-details span {
+    font-size: 0.75rem;
     color: var(--slate-500);
+    line-height: 1.2;
 }
 
-#rescheduleModal textarea,
-#rescheduleModal input {
-    border: 1px solid var(--slate-200);
-    transition: border-color 0.2s;
+.payment-option-card:hover .card-content {
+    border-color: var(--slate-400);
+    background-color: var(--slate-50);
 }
 
-#rescheduleModal input:focus,
-#rescheduleModal textarea:focus {
-    outline: none;
-    border-color: var(--primary);
+.payment-option-card input[type="radio"]:checked ~ .card-content {
+    border-color: var(--primary-container);
+    background-color: #f0f9ff;
+    box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.15);
+}
+
+.payment-option-card input[type="radio"]:checked ~ .card-content .icon,
+.payment-option-card input[type="radio"]:checked ~ .card-content .text-details strong {
+    color: #008ecc;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+    .dashboard-container { padding-top: 5.5rem; }
+    .form-row, .payment-cards-container { grid-template-columns: 1fr; gap: 0.75rem; }
 }
 
 /* --- DARK MODE --- */
@@ -393,8 +696,28 @@ body.dark-mode .card-details { border-color: var(--slate-100); }
 body.dark-mode .doctor-name, body.dark-mode .section-title { color: var(--slate-900); }
 body.dark-mode .btn-outline { background: var(--slate-50); border-color: var(--slate-200); color: var(--slate-700); }
 body.dark-mode .btn-outline:hover { background: var(--slate-100); color: var(--slate-900); }
-body.dark-mode .btn-danger { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); }
+body.dark-mode .btn-danger { background: var(--slate-50); border-color: rgba(239, 68, 68, 0.2); }
 body.dark-mode .btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
 body.dark-mode .btn-cancel { background: var(--slate-100); border-color: var(--slate-200); color: var(--slate-800); }
 body.dark-mode .modal-header-blue { background: var(--slate-100); color: var(--slate-900); border-bottom: 1px solid var(--slate-200); }
 body.dark-mode .form-group label { color: var(--slate-400); }
+
+
+/* Dark Mode Integration */
+body.dark-mode .payment-option-card .card-content {
+    background-color: var(--slate-50);
+    border-color: var(--slate-200);
+}
+
+body.dark-mode .payment-option-card .text-details strong {
+    color: var(--slate-900);
+}
+
+body.dark-mode .payment-option-card:hover .card-content {
+    background-color: var(--surface);
+}
+
+body.dark-mode .payment-option-card input[type="radio"]:checked ~ .card-content {
+    background-color: rgba(14, 165, 233, 0.1);
+    border-color: var(--primary-light);
+}
