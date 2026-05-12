@@ -6,10 +6,10 @@
     <title>Feedback - MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/feedback.css}">
     <link rel="stylesheet" th:href="@{/css/patient/fragments/patient-header.css}">
+    <link rel="stylesheet" th:href="@{/css/patient/fragments/notifications.css}">
 
     <script th:src="@{/js/patient/fragments/patient-header.js}" defer></script>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
-
 </head>
 <body>
 
@@ -23,151 +23,201 @@
         </button>
     </div>
 
-    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
-    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-
     <div class="feedback-list">
+        <div class="empty-state" th:if="${#lists.isEmpty(feedbackList)}">
+            <span class="material-symbols-outlined empty-icon">rate_review</span>
+            <h3>No feedback recorded yet</h3>
+            <p>Share your experiences to help us improve healthcare administration services.</p>
+        </div>
+
         <div th:each="f : ${feedbackList}" class="feedback-card">
-            <div class="card-header">
-                <div>
-                <span th:each="type : ${#strings.arraySplit(f.feedbackType, ',')}"
-                      class="badge"
-                      th:classappend="${'badge-' + #strings.toLowerCase(#strings.trim(type))}"
-                      th:text="${type}">Type</span>
-                    <h3 class="card-title" th:text="${f.subject}">Subject</h3>
+
+            <div class="card-context">
+                <div class="context-left">
+                    <div class="info-group">
+                        <span class="material-symbols-outlined icon-small">stethoscope</span>
+                        <span th:text="'Dr. ' + ${f.appointment.doctor.lastName}">Doctor</span>
+                    </div>
+
+                    <span class="dot-separator">•</span>
+
+                    <div class="info-group">
+                        <span class="material-symbols-outlined icon-small">event_note</span>
+                        <span th:text="${f.appointment.reason}">Reason</span>
+                    </div>
+
+                    <span class="dot-separator">•</span>
+
+                    <div class="info-group">
+                        <span class="material-symbols-outlined icon-small">schedule</span>
+                        <span th:text="${#temporals.format(f.appointment.appointmentDate, 'MMM dd, yyyy') + ' at ' + #temporals.format(f.appointment.startTime, 'hh:mm a')}">Date & Time</span>
+                    </div>
                 </div>
-                <span class="card-date" th:text="${#temporals.format(f.createdAt, 'MMM dd, yyyy')}">Date</span>
-            </div>
-
-            <div class="provider-info">
-                <div class="provider-details">
-                    <p th:text="'Regarding: ' + ${f.appointment.reason}">Reason</p>
-                    <p th:text="'With: Dr. ' + ${f.appointment.doctor.lastName}">Doctor</p>
-
-                    <p class="appointment-meta">
-                        <span th:text="${#temporals.format(f.appointment.appointmentDate, 'MMM dd, yyyy')}">Date</span>
-                        &nbsp;•&nbsp;
-                        <span th:text="${#temporals.format(f.appointment.startTime, 'hh:mm a')}">Time</span>
-                    </p>
+                <div class="context-right">
+                    <span class="posted-date" th:text="'Posted ' + ${#temporals.format(f.createdAt, 'MMM dd, yyyy')}">Posted Date</span>
                 </div>
             </div>
 
-            <div class="card-content" th:text="${f.content}">
-                Feedback content goes here.
+            <div class="card-body">
+                <div class="badge-row">
+                    <span th:each="type : ${#strings.arraySplit(f.feedbackType, ',')}"
+                          class="badge"
+                          th:classappend="${'badge-' + #strings.toLowerCase(#strings.trim(type))}"
+                          th:text="${type}">Type</span>
+                </div>
+
+                <div class="rating-display-row">
+                    <div class="stars-static">
+                        <span class="material-symbols-outlined"
+                              th:each="i : ${#numbers.sequence(1, 5)}"
+                              th:classappend="${i <= (f.rating != null ? f.rating : 5)} ? 'star-filled' : 'star-empty'">
+                            star
+                        </span>
+                    </div>
+                    <span class="rating-number" th:text="${(f.rating != null ? f.rating : 5) + '.0'}">5.0</span>
+                </div>
+
+                <h3 class="card-subject" th:text="${f.subject}">Subject</h3>
+                <p class="card-text" th:text="${f.content}">Feedback content goes here.</p>
             </div>
 
-            <div class="card-actions">
-                <button class="btn-action btn-edit"
-                        th:data-id="${f.id}"
-                        th:data-appointment="${f.appointment.reason}"
-                        th:data-subject="${f.subject}"
-                        th:data-content="${f.content}"
-                        onclick="openEditModal(this)">
-                    <span class="material-symbols-outlined">edit</span> Edit
-                </button>
-
-                <form th:action="@{/patient/feedback/delete}" method="post"
-                      onsubmit="return confirm('Are you sure you want to delete this feedback?');">
-                    <input type="hidden" name="feedbackId" th:value="${f.id}"/>
-                    <button type="submit" class="btn-action btn-delete">
-                        <span class="material-symbols-outlined">delete</span> Delete
+            <div class="card-footer">
+                <div class="card-actions">
+                    <button class="btn-action btn-edit"
+                            th:data-id="${f.id}"
+                            th:data-appointment="${f.appointment.reason}"
+                            th:data-subject="${f.subject}"
+                            th:data-content="${f.content}"
+                            th:data-rating="${f.rating != null ? f.rating : 5}"
+                            th:data-types="${f.feedbackType}" onclick="openEditModal(this)">
+                        <span class="material-symbols-outlined">edit</span> Edit
                     </button>
-                </form>
+
+                    <form th:action="@{/patient/feedback/delete}" method="post"
+                          onsubmit="return confirm('Are you sure you want to delete this feedback entry?');">
+                        <input type="hidden" name="feedbackId" th:value="${f.id}"/>
+                        <button type="submit" class="btn-action btn-delete">
+                            <span class="material-symbols-outlined">delete</span> Delete
+                        </button>
+                    </form>
+                </div>
             </div>
+
         </div>
     </div>
 </main>
 
-<!--Edit Feedback Model-->
 <div class="modal-overlay" id="editModalOverlay">
-    <div class="modal-content">
+    <div class="modal-container">
         <div class="modal-header">
             <h2>Edit Feedback</h2>
-            <button class="close-btn" id="cancelEditBtn" type="button">
+            <button class="close-btn" id="cancelEditBtn" type="button" title="Close Modal">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
-        <form th:action="@{/patient/feedback/update}" method="post">
-            <input type="hidden" name="id" id="editId"/>
 
-            <div class="form-group">
-                <label class="form-label">Appointment</label>
-                <input class="form-input" id="editAppointment" readonly />
-            </div>
-            <div class="form-group">
-                <label class="form-label">Subject</label>
-                <input class="form-input" id="editSubject" readonly />
-            </div>
+        <form th:action="@{/patient/feedback/update}" method="post" class="modal-form">
+            <div class="modal-scroll-area">
+                <input type="hidden" name="id" id="editId"/>
 
-            <div class="form-group">
-                <label class="form-label">Feedback Type</label>
-                <div class="checkbox-grid">
-                    <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Question"/> Question</label>
-                    <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Compliment"/> Compliment</label>
-                    <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Concern"/> Concern</label>
-                    <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Suggestion"/> Suggestion</label>
+                <div class="form-group">
+                    <label class="form-label">Appointment</label>
+                    <input class="form-input" id="editAppointment" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input class="form-input" id="editSubject" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Overall Rating</label>
+                    <div class="star-rating-interactive" id="editRatingContainer">
+                        <input type="hidden" name="rating" id="editRatingInput" value="5" />
+                        <span class="material-symbols-outlined star-icon" data-val="1">star</span>
+                        <span class="material-symbols-outlined star-icon" data-val="2">star</span>
+                        <span class="material-symbols-outlined star-icon" data-val="3">star</span>
+                        <span class="material-symbols-outlined star-icon" data-val="4">star</span>
+                        <span class="material-symbols-outlined star-icon" data-val="5">star</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Feedback Type</label>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Question"/> Question</label>
+                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Compliment"/> Compliment</label>
+                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Concern"/> Concern</label>
+                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Suggestion"/> Suggestion</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Detailed Feedback</label>
+                    <textarea name="content" id="editContent" class="form-textarea" required rows="4"></textarea>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Detailed Feedback</label>
-                <textarea name="content" id="editContent" class="form-textarea" required rows="4"></textarea>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" id="closeEditFooterBtn">Cancel</button>
+                <button type="submit" class="btn-primary btn-submit">Save Changes</button>
             </div>
-
-            <button type="submit" class="btn-primary">Save Changes</button>
         </form>
     </div>
 </div>
 
-<!-- Feedback Modal -->
 <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
+    <div class="modal-container">
         <div class="modal-header">
             <h2>Share Feedback</h2>
-            <button class="close-btn" id="closeModal">
+            <button class="close-btn" id="closeModal" type="button" title="Close Modal">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
-        <form th:action="@{/patient/feedback/submit}" method="post">
-            <div class="form-group">
-                <label class="form-label">Appointment</label>
-                <select name="appointmentId" class="form-select" required>
-                    <option disabled selected value="">Select an option</option>
-                    <option th:each="appt : ${appointments}"
-                            th:value="${appt.id}"
-                            th:text="${'REC-' + appt.id + ' - ' + appt.reason + ' (' + appt.status + ')'}">
-                    </option>
-                </select>
-            </div>
 
-            <div class="form-group">
-                <label class="form-label">Subject</label>
-                <input name="subject" class="form-input" placeholder="e.g., Appointment experience" required
-                       type="text"/>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Feedback Type</label>
-                <div class="checkbox-grid">
-                    <label class="checkbox-item">
-                        <input name="feedbackTypes" type="checkbox" value="Question"/> Question
-                    </label>
-                    <label class="checkbox-item">
-                        <input name="feedbackTypes" type="checkbox" value="Compliment"/> Compliment
-                    </label>
-                    <label class="checkbox-item">
-                        <input name="feedbackTypes" type="checkbox" value="Concern"/> Concern
-                    </label>
-                    <label class="checkbox-item">
-                        <input name="feedbackTypes" type="checkbox" value="Suggestion"/> Suggestion
-                    </label>
+        <form th:action="@{/patient/feedback/submit}" method="post" id="feedbackForm" class="modal-form">
+            <div class="modal-scroll-area">
+                <div class="form-group">
+                    <label class="form-label">Appointment</label>
+                    <select name="appointmentId" class="form-select" required>
+                        <option disabled selected value="">Select an option</option>
+                        <option th:each="appt : ${appointments}"
+                                th:value="${appt.id}"
+                                th:text="${'REC-' + appt.id + ' - ' + appt.reason + ' (' + appt.status + ')'}">
+                        </option>
+                    </select>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="form-label">Detailed Feedback</label>
-                <textarea name="content" class="form-textarea"
-                          placeholder="Please describe your experience in detail..." required rows="4"></textarea>
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input name="subject" class="form-input" placeholder="e.g., Appointment experience" required type="text"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Overall Rating</label>
+                    <div class="star-rating-interactive" id="createRatingContainer">
+                        <input type="hidden" name="rating" id="selectedRatingInput" value="0" />
+                        <span class="material-symbols-outlined star-icon" data-val="1">star</span>
+                        <span class="material-symbols-outlined star-icon" data-val="2">star</span>
+                        <span class="material-symbols-outlined star-icon" data-val="3">star</span>
+                        <span class="material-symbols-outlined star-icon" data-val="4">star</span>
+                        <span class="material-symbols-outlined star-icon" data-val="5">star</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Feedback Type</label>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Question"/> Question</label>
+                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Compliment"/> Compliment</label>
+                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Concern"/> Concern</label>
+                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Suggestion"/> Suggestion</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Detailed Feedback</label>
+                    <textarea name="content" class="form-textarea" placeholder="Please describe your experience in detail..." required rows="4"></textarea>
+                </div>
             </div>
 
             <div class="modal-footer">
@@ -178,32 +228,119 @@
     </div>
 </div>
 
+<div th:replace="~{patient/fragments/notifications :: notification-handler}"></div>
+
 <script>
+    // ==========================================================================
+    // RATING SUBSYSTEM ENGINE
+    // ==========================================================================
+    function initializeStarRatings(containerId, inputId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const stars = container.querySelectorAll('.star-icon');
+        const hiddenInput = document.getElementById(inputId);
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function() {
+                const hoverVal = parseInt(this.getAttribute('data-val'));
+                stars.forEach(s => {
+                    const currentVal = parseInt(s.getAttribute('data-val'));
+                    s.classList.toggle('hovered', currentVal <= hoverVal);
+                });
+            });
+
+            star.addEventListener('mouseout', function() {
+                stars.forEach(s => s.classList.remove('hovered'));
+            });
+
+            star.addEventListener('click', function() {
+                const selectedVal = parseInt(this.getAttribute('data-val'));
+                hiddenInput.value = selectedVal;
+
+                stars.forEach(s => {
+                    const currentVal = parseInt(s.getAttribute('data-val'));
+                    s.classList.toggle('active', currentVal <= selectedVal);
+                });
+            });
+        });
+    }
+
+    function setModalRatingState(containerId, targetValue) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const stars = container.querySelectorAll('.star-icon');
+        stars.forEach(s => {
+            const currentVal = parseInt(s.getAttribute('data-val'));
+            s.classList.toggle('active', currentVal <= targetValue);
+        });
+    }
+
+    // ==========================================================================
+    // EDIT DIALOG INTEGRATION
+    // ==========================================================================
+    const editModalOverlay = document.getElementById('editModalOverlay');
+
     function openEditModal(button) {
         const id = button.getAttribute('data-id');
         const appt = button.getAttribute('data-appointment');
         const subject = button.getAttribute('data-subject');
         const content = button.getAttribute('data-content');
+        const ratingVal = parseInt(button.getAttribute('data-rating') || 5);
 
-        const modal = document.getElementById('editModalOverlay');
-        const form = modal.querySelector('form');
+        // Retrieve the comma-separated types string (e.g., "Compliment, Suggestion")
+        const typesString = button.getAttribute('data-types') || '';
 
+        const form = editModalOverlay.querySelector('form');
+
+        // Populate standard text inputs
         form.querySelector('input[name="id"]').value = id;
         document.getElementById('editAppointment').value = appt;
         document.getElementById('editSubject').value = subject;
         document.getElementById('editContent').value = content;
 
-        // Use .active so it matches your existing CSS display rules
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent background scroll
+        // Synchronize star rating values
+        const editRatingInput = document.getElementById('editRatingInput');
+        if (editRatingInput) editRatingInput.value = ratingVal;
+        setModalRatingState('editRatingContainer', ratingVal);
+
+        // --- CHECKBOX SYNCHRONIZATION LOGIC ---
+        const checkboxes = form.querySelectorAll('input[name="feedbackTypes"]');
+
+        // 1. Reset all checkboxes to unchecked first to prevent stale data bleed
+        checkboxes.forEach(cb => cb.checked = false);
+
+        // 2. Parse string and check matching boxes
+        if (typesString.trim() !== '') {
+            const selectedTypes = typesString.split(',').map(t => t.trim().toLowerCase());
+            checkboxes.forEach(cb => {
+                if (selectedTypes.includes(cb.value.trim().toLowerCase())) {
+                    cb.checked = true;
+                }
+            });
+        }
+
+        editModalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
 
-    // Update your close buttons to remove 'active'
-    document.getElementById('cancelEditBtn').addEventListener('click', () => {
-        document.getElementById('editModalOverlay').classList.remove('active');
+    const closeEditAction = () => {
+        editModalOverlay.classList.remove('active');
         document.body.style.overflow = '';
+    };
+
+    document.getElementById('cancelEditBtn').addEventListener('click', closeEditAction);
+    document.getElementById('closeEditFooterBtn').addEventListener('click', closeEditAction);
+
+    // FIX: Dynamic outside target execution listeners mapped to auto-dismiss dialogs
+    editModalOverlay.addEventListener('click', (e) => {
+        if (e.target === editModalOverlay) closeEditAction();
     });
 
+    // ==========================================================================
+    // CREATION DIALOG INTEGRATION
+    // ==========================================================================
     const modal = document.getElementById('modalOverlay');
     const openBtn = document.getElementById('openModal');
     const closeBtn = document.getElementById('closeModal');
@@ -213,15 +350,17 @@
     const toggleModal = (show) => {
         if (show) {
             modal.style.display = 'flex';
-            // Small delay to trigger CSS transition
             setTimeout(() => {
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }, 10);
+
+            const defaultInput = document.getElementById('selectedRatingInput');
+            if (defaultInput) defaultInput.value = 0;
+            setModalRatingState('createRatingContainer', 0);
         } else {
             modal.classList.remove('active');
             document.body.style.overflow = '';
-            // Wait for transition before hiding
             setTimeout(() => {
                 if (!modal.classList.contains('active')) {
                     modal.style.display = 'none';
@@ -239,22 +378,23 @@
     });
 
     form.addEventListener('submit', (e) => {
-        e.preventDefault();
+        const currentRating = parseInt(document.getElementById('selectedRatingInput').value);
+
+        if (currentRating === 0) {
+            e.preventDefault();
+            alert('Please select an experience rating before submitting your feedback.');
+            return;
+        }
+
         const submitBtn = form.querySelector('.btn-submit');
-        const originalText = submitBtn.innerHTML;
-
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="material-symbols-outlined">sync</span> Submitting...';
-
-        setTimeout(() => {
-            alert('Thank you! Your feedback has been submitted successfully.');
-            toggleModal(false);
-            form.reset();
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
-        }, 800);
+        submitBtn.innerHTML = '<span class="material-symbols-outlined pulse">sync</span> Submitting...';
     });
 
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeStarRatings('createRatingContainer', 'selectedRatingInput');
+        initializeStarRatings('editRatingContainer', 'editRatingInput');
+    });
 </script>
 </body>
 </html>

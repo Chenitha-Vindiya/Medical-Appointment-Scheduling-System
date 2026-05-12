@@ -71,20 +71,25 @@ public class FeedbackService {
         }
     }
 
-    public void updateFeedback(Long id, String[] feedbackTypes, String content, Long patientId) {
+    // Service method extension capturing dynamic ratings updates
+    public void updateFeedback(Long id, String[] feedbackTypes, String content, Integer rating, Long patientId) {
         Feedback feedback = feedbackRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Feedback not found"));
+                .orElseThrow(() -> new RuntimeException("Feedback instance not found"));
 
-        // Security check: ensure the feedback belongs to the patient
+        // Security assertion verification
         if (!feedback.getPatient().getId().equals(patientId)) {
-            throw new RuntimeException("Unauthorized to edit this feedback");
+            throw new RuntimeException("Unauthorized execution attempt to edit this entry");
         }
 
-        // Only update allowed fields
         if (feedbackTypes != null) {
             feedback.setFeedbackType(String.join(", ", feedbackTypes));
         }
         feedback.setContent(content);
+
+        // Ensure rating ranges strictly adhere to standard validation constraints
+        if (rating != null && rating >= 1 && rating <= 5) {
+            feedback.setRating(rating);
+        }
 
         feedbackRepository.save(feedback);
     }

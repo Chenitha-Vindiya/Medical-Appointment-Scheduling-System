@@ -23,7 +23,10 @@ public class Feedback {
     private Appointment appointment;
 
     private String subject;
-    private String feedbackType; // Comma-separated types (e.g., "Compliment,Suggestion")
+    private String feedbackType;
+
+    @Column(nullable = false)
+    private Integer rating = 0; // Set an initial fallback value
 
     @Column(columnDefinition = "TEXT")
     private String content;

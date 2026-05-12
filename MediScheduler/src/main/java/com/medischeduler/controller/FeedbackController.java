@@ -25,7 +25,7 @@ public class FeedbackController {
                                  @RequestParam Long appointmentId,
                                  @RequestParam(required = false) String[] feedbackTypes,
                                  HttpSession session,
-                                 RedirectAttributes redirectAttributes) { // Added RedirectAttributes
+                                 RedirectAttributes redirectAttributes) {
         Patient patient = (Patient) session.getAttribute("loggedInPatient");
         if (patient == null) return "redirect:/login";
 
@@ -35,13 +35,17 @@ public class FeedbackController {
             return "redirect:/patient/feedback";
         }
 
-        // Join array into comma-separated string
         if (feedbackTypes != null) {
             feedback.setFeedbackType(String.join(", ", feedbackTypes));
         }
 
+        // Safety bound fallback to catch missing payloads
+        if (feedback.getRating() == null) {
+            feedback.setRating(5);
+        }
+
         feedbackService.saveFeedback(feedback, patient.getId(), appointmentId);
-        redirectAttributes.addFlashAttribute("success", "Thank you for your feedback!");
+        redirectAttributes.addFlashAttribute("success", "Thank you for sharing your experience!");
         return "redirect:/patient/feedback";
     }
 
@@ -63,17 +67,17 @@ public class FeedbackController {
     public String updateFeedback(@RequestParam Long id,
                                  @RequestParam(required = false) String[] feedbackTypes,
                                  @RequestParam String content,
+                                 @RequestParam Integer rating,
                                  HttpSession session,
                                  RedirectAttributes ra) {
-
         Patient patient = (Patient) session.getAttribute("loggedInPatient");
         if (patient == null) return "redirect:/login";
 
         try {
-            feedbackService.updateFeedback(id, feedbackTypes, content, patient.getId());
+            feedbackService.updateFeedback(id, feedbackTypes, content, rating, patient.getId());
             ra.addFlashAttribute("success", "Feedback updated successfully.");
         } catch (Exception e) {
-            ra.addFlashAttribute("error", "Failed to update feedback: " + e.getMessage());
+            ra.addFlashAttribute("error", "Failed to finalize modifications: " + e.getMessage());
         }
 
         return "redirect:/patient/feedback";
