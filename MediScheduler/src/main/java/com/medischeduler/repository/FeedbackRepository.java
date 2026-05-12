@@ -8,4 +8,6 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     List<Feedback> findByPatientIdOrderByCreatedAtDesc(Long patientId);
 
     boolean existsByAppointmentId(Long appointmentId);
+
+    List<Feedback> findByAppointmentDoctorIdOrderByCreatedAtDesc(Long id);
 }

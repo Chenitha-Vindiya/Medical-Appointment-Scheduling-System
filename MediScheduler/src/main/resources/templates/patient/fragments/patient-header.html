@@ -1,0 +1,37 @@
+<div th:fragment="header-nav(pageTitle, activeLink, pageIcon)">
+    <!-- HEADER -->
+    <header class="header-wrapper">
+        <nav class="navbar">
+
+            <!-- LEFT: Logo -->
+            <div class="user-profile">
+                <span class="material-symbols-outlined logo-icon" th:text="${pageIcon}">patient_list</span>
+                <span class="logo-text" th:text="${pageTitle}">Patient Dashboard</span>
+            </div>
+
+            <!-- Hamburger (mobile) -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <!-- CENTER + RIGHT: Nav links (Logout inside list, like appointment page) -->
+            <ul class="nav-links" id="navLinks">
+                <li><a th:href="@{/patient/dashboard}" th:classappend="${activeLink == 'dashboard'} ? 'active' : ''">Dashboard</a></li>
+                <li><a th:href="@{/patient/appointment}" th:classappend="${activeLink == 'appointment'} ? 'active' : ''">Appointments</a></li>
+                <li><a th:href="@{/patient/history}" th:classappend="${activeLink == 'history'} ? 'active' : ''">History</a></li>
+                <li><a th:href="@{/patient/payment}" th:classappend="${activeLink == 'payment'} ? 'active' : ''">Payment</a></li>
+                <li><a th:href="@{/patient/feedback}" th:classappend="${activeLink == 'feedback'} ? 'active' : ''">Feedback</a></li>
+                <li><a th:href="@{/patient/profile}" th:classappend="${activeLink == 'profile'} ? 'active' : ''">Profile</a></li>
+                <li>
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                        <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
+                </li>
+            </ul>
+
+        </nav>
+    </header>
+</div>

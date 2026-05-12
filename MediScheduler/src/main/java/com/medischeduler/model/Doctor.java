@@ -49,7 +49,12 @@ public class Doctor {
 
 
     @Column(columnDefinition = "TEXT")
-    private String consultationFees;
+    private Double consultationFees;
+
+    private String bankName;
+    private String bankBranch;
+    private String accountName;
+    private String accountNumber;
 
     // Security
     @NotBlank(message = "Password is required")

@@ -1,18 +1,13 @@
 package com.medischeduler.controller;
 
-import com.medischeduler.model.Appointment;
-import com.medischeduler.model.WorkingHours;
-import com.medischeduler.repository.AppointmentRepository;
-import com.medischeduler.repository.DoctorRepository;
-import com.medischeduler.repository.PatientRepository;
+import com.medischeduler.model.*;
+import com.medischeduler.repository.*;
 import com.medischeduler.service.FeedbackService;
 import com.medischeduler.service.HistoryService;
 import com.medischeduler.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
-import com.medischeduler.model.Patient;
-import com.medischeduler.model.Doctor;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -44,6 +36,12 @@ public class ViewController {
 
     @Autowired
     private FeedbackService feedbackService;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
+    private FeedbackRepository feedbackRepository;
 
     @GetMapping("/index")
     public String index() {
@@ -90,8 +88,12 @@ public class ViewController {
                 .limit(5)
                 .collect(Collectors.toList());
 
+        // --- FETCH COMPLETED VISITS COUNT ---
+        long totalVisits = appointmentRepository.countByPatientIdAndStatus(patient.getId(), "COMPLETED");
+
         model.addAttribute("upcomingAppointments", tableData);
         model.addAttribute("patientName", patient.getFirstName());
+        model.addAttribute("totalVisits", totalVisits);
 
         return "patient/dashboard";
     }
@@ -121,25 +123,28 @@ public class ViewController {
     }
 
     @GetMapping("/patient/payment")
-    public String payment(HttpSession session) {
+    public String payment(HttpSession session, Model model) {
         Patient patient = (Patient) session.getAttribute("loggedInPatient");
 
         if (patient == null) {
             return "redirect:/login"; // Redirect to login if not authenticated
         }
 
+        // 2. Fetch all payments for this specific patient (newest first)
+        List<Payment> payments = paymentRepository.findByPatientIdOrderByCreatedAtDesc(patient.getId());
+
+        // 3. Add the list to the model so Thymeleaf can loop through it
+        model.addAttribute("payments", payments);
+
         return "patient/payment";
     }
 
     @GetMapping("/patient/history")
-    public String history(HttpSession session, Model model) {
+    public String showHistory(HttpSession session, Model model) {
         Patient patient = (Patient) session.getAttribute("loggedInPatient");
         if (patient == null) return "redirect:/login";
 
-        // Fetch records and add to model
-        List<Appointment> historyRecords = historyService.getPatientHistory(patient.getId());
-        model.addAttribute("historyRecords", historyRecords);
-
+        model.addAttribute("historyList", historyService.getPatientHistory(patient.getId()));
         return "patient/history";
     }
 
@@ -291,21 +296,97 @@ public class ViewController {
         return "doctor/patient";
     }
 
-    //Doctor's Payment
+    @GetMapping("/doctor/history")
+    public String doctorHistory(HttpSession session, Model model) {
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (doctor == null) return "redirect:/doctor/login";
+
+        model.addAttribute("historyList", historyService.getDoctorHistory(doctor.getId()));
+        return "doctor/history";
+    }
+
     @GetMapping("/doctor/payment")
     public String doctorPayment(HttpSession session, Model model) {
-        if (session.getAttribute("loggedInDoctor") == null) {
-            return "redirect:/login"; // Redirect to login if not authenticated
+        Doctor loggedInDoctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (loggedInDoctor == null) {
+            return "redirect:/login";
         }
+
+        try {
+            // 1. Fetch payment history for the grid
+            List<Payment> doctorPayments = paymentRepository.findByAppointmentDoctorIdOrderByCreatedAtDesc(loggedInDoctor.getId());
+            model.addAttribute("payments", doctorPayments);
+
+            // 2. Fetch appointments eligible for invoicing (modal list)
+            // Explicitly declare (Appointment app) to fix the compilation error
+            // 1. Get the exact current timestamp
+            LocalDateTime now = LocalDateTime.now();
+
+            // 2. Fetch all CONFIRMED appointments natively
+            List<Appointment> rawAppointments = appointmentRepository.findByDoctorIdAndStatus(loggedInDoctor.getId(), "CONFIRMED");
+
+            // 3. Filter: Keep only unbilled visits where the 30-minute duration has fully elapsed
+            List<Appointment> unpaidSlots = rawAppointments.stream()
+                    .filter(app -> {
+                        // Check if a billing record already exists
+                        boolean noExistingPayment = paymentRepository.findByAppointmentId(app.getId()).isEmpty();
+
+                        // Calculate the exact completion time (Start Date + Start Time + 30 Minutes)
+                        LocalDateTime appEndTimestamp = LocalDateTime.of(
+                                app.getAppointmentDate(),
+                                app.getStartTime()
+                        ).plusMinutes(Appointment.DURATION_MINUTES);
+
+                        // Rule: The current time MUST be strictly after the appointment end timestamp
+                        boolean isDurationElapsed = now.isAfter(appEndTimestamp);
+
+                        return noExistingPayment && isDurationElapsed;
+                    })
+                    .collect(Collectors.toList());
+
+            model.addAttribute("unpaidAppointments", unpaidSlots);
+
+        } catch (Exception e) {
+            System.err.println("Critical error in Doctor Payment Controller: " + e.getMessage());
+            model.addAttribute("payments", List.of());
+            model.addAttribute("unpaidAppointments", List.of());
+        }
+
         return "doctor/payment";
     }
 
     //Doctor's Feedback
     @GetMapping("/doctor/feedback")
     public String doctorFeedback(HttpSession session, Model model) {
-        if (session.getAttribute("loggedInDoctor") == null) {
-            return "redirect:/login"; // Redirect to login if not authenticated
+        Doctor loggedInDoctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (loggedInDoctor == null) {
+            return "redirect:/login";
         }
+
+        try {
+            // Fetch all reviews strictly bound to the authenticated doctor's active appointments
+            List<Feedback> allFeedback = feedbackRepository.findByAppointmentDoctorIdOrderByCreatedAtDesc(loggedInDoctor.getId());
+
+            // Calculate dynamic system-wide patient satisfaction score metrics safely
+            double averageScore = 0.0;
+            if (!allFeedback.isEmpty()) {
+                averageScore = allFeedback.stream()
+                        .mapToInt(Feedback::getRating)
+                        .average()
+                        .orElse(5.0);
+            }
+
+            model.addAttribute("feedbackList", allFeedback);
+            model.addAttribute("satisfactionScore", averageScore);
+            model.addAttribute("totalReviews", allFeedback.size());
+
+        } catch (Exception e) {
+            System.err.println("Execution exception processing Doctor Feedback metrics: " + e.getMessage());
+            model.addAttribute("feedbackList", List.of());
+            model.addAttribute("satisfactionScore", 5.0);
+            model.addAttribute("totalReviews", 0);
+        }
+
         return "doctor/feedback";
     }
 

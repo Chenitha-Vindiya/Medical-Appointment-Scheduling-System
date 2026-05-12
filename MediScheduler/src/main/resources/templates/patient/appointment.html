@@ -6,73 +6,22 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>My Appointments | MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/appointment.css}">
+    <link rel="stylesheet" th:href="@{/css/patient/fragments/patient-header.css}">
+    <link rel="stylesheet" th:href="@{/css/patient/fragments/notifications.css}">
+
+    <script th:src="@{/js/patient/fragments/patient-header.js}" defer></script>
     <link rel="icon" type="image/svg+xml"
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
-
 </head>
 
 <body class="page-body">
 
-<!-- Scroll to Top Button -->
-<button id="scrollTopBtn" title="Go to top">▲</button>
-
-<script>
-    //Scroll to Top Button
-    const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 75) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
-        }
-    });
-
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-</script>
-
-<!-- HEADER -->
-<header class="header-wrapper">
-    <nav class="navbar">
-        <div class="user-profile">
-            <span class="material-symbols-outlined logo-icon">patient_list</span>
-            <span class="logo-text">Appointments</span>
-        </div>
-
-        <!-- Hamburger (mobile) -->
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
-        </button>
-
-        <ul class="nav-links" id="navLinks">
-            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
-            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
-            <li><a th:href="@{/patient/history}">History</a></li>
-            <li><a th:href="@{/patient/payment}">Payment</a></li>
-            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
-            <li><a th:href="@{/patient/profile}">Profile</a></li>
-            <li>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
-                </button>
-            </li>
-            <li>
-                <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
-            </li>
-        </ul>
-    </nav>
-</header>
+<div th:replace="~{patient/fragments/patient-header :: header-nav('Appointments', 'appointment', 'calendar_month')}"></div>
 
 <main class="main-content">
     <div class="dashboard-container">
 
         <div class="page-header">
-            <!-- Modal Trigger -->
             <label class="btn-secondary" for="modal-toggle">
                 <span class="material-symbols-outlined">add_circle</span> Make Appointment
             </label>
@@ -80,61 +29,85 @@
 
         <section class="appointments-section">
             <div class="cards-grid">
+
                 <div th:if="${#lists.isEmpty(appointments)}" class="no-appointments">
+                    <span class="material-symbols-outlined empty-calendar-icon">event_busy</span>
                     <p>No upcoming appointments found.</p>
+                    <span class="empty-subtext">Book a new consultation to get started.</span>
                 </div>
 
                 <div class="appointment-card" th:each="app : ${appointments}">
-                    <div class="card-header">
-                        <div class="doctor-info">
-                            <div class="icon-box blue-bg">
-                                <span class="material-symbols-outlined">stethoscope</span>
+
+                    <div class="card-content-wrapper">
+
+                        <div class="card-header">
+                        <div class="header-top-row">
+                            <div class="doctor-brand">
+                                <div class="glass-icon-box">
+                                    <span class="material-symbols-outlined">medical_services</span>
+                                </div>
+                                <div class="doctor-details">
+                                    <h4 class="doctor-name" th:text="'Dr. ' + ${app.doctor.firstName} + ' ' + ${app.doctor.lastName}">Dr. Name</h4>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="doctor-name"
-                                    th:text="'Dr. ' + ${app.doctor.firstName} + ' ' + ${app.doctor.lastName}">Doctor
-                                    Name</h3>
-                                <p class="specialty-text" th:text="${app.reason}">Reason</p>
-                            </div>
+                            <span class="status-badge"
+                                  th:classappend="${'badge-' + #strings.toLowerCase(app.status)}"
+                                  th:text="${app.status}">Pending</span>
                         </div>
-                        <span class="status-badge"
-                              th:classappend="${'badge-' + #strings.toLowerCase(app.status)}"
-                              th:text="${app.status}">Pending</span>
-                    </div>
-                    <div class="card-details">
-                        <div class="detail-item">
-                            <span class="material-symbols-outlined">calendar_today</span>
-                            <span th:text="${#temporals.format(app.appointmentDate, 'EEEE, MMM dd, yyyy')}">Date</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="material-symbols-outlined">schedule</span>
-                            <span th:text="${#temporals.format(app.startTime, 'hh:mm a')}">Time</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <span th:text="${app.location != null ? app.location : 'Pending Assignment'}">Location</span>
+
+                        <div class="reason-container">
+                            <h3 class="visit-reason-title" th:text="${app.reason}">Reason for Visit</h3>
                         </div>
                     </div>
+
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <div class="detail-icon-wrapper"><span class="material-symbols-outlined">calendar_today</span></div>
+                                <span class="detail-text" th:text="${#temporals.format(app.appointmentDate, 'EEEE, MMM dd, yyyy')}">Date</span>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon-wrapper"><span class="material-symbols-outlined">schedule</span></div>
+                                <span class="detail-text" th:text="${#temporals.format(app.startTime, 'hh:mm a')}">Time</span>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon-wrapper"><span class="material-symbols-outlined">location_on</span></div>
+                                <span class="detail-text" th:text="${app.location != null ? app.location : 'Pending Assignment'}">Location</span>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon-wrapper"><span class="material-symbols-outlined">payments</span></div>
+                                <span class="detail-text" th:text="'Payment: ' + ${app.paymentMethod}">Payment Method</span>
+                            </div>
+                        </div>
+
+                    </div>
+
                     <div class="card-actions">
-                        <button class="btn btn-outline"
-                                th:attr="onclick=|openRescheduleModal('${app.id}', '${app.doctor.lastName}', '${app.doctor.specialization}', '${app.appointmentDate}', '${app.startTime}', '${app.reason}')|">
-                            <span class="material-symbols-outlined">edit_calendar</span> Reschedule
+                        <button class="btn btn-outline btn-reschedule"
+                                th:attr="onclick=|openRescheduleModal('${app.id}', '${app.doctor.lastName}', '${app.doctor.specialization}', '${app.appointmentDate}', '${app.startTime}', '${app.reason}', '${app.paymentMethod}')|">
+                            <span class="material-symbols-outlined btn-icon">edit_calendar</span> Reschedule
                         </button>
-                        <form th:action="@{/patient/appointment/cancel}" method="post">
+
+                        <form th:if="${app.status != 'CANCELLED' and (app.payment == null or app.payment.status == 'NOT PAID')}"
+                              th:action="@{/patient/appointment/cancel}"
+                              method="post"
+                              class="cancel-form">
                             <input type="hidden" name="id" th:value="${app.id}"/>
                             <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('Cancel this appointment?')">
-                                <span class="material-symbols-outlined">cancel</span> Cancel
+                                    onclick="return confirm('Are you sure you want to cancel this appointment?')">
+                                <span class="material-symbols-outlined btn-icon">cancel</span> Cancel
                             </button>
                         </form>
                     </div>
+
                 </div>
             </div>
         </section>
     </div>
 </main>
 
-<!--Reschedule Appointment Model-->
+<div th:replace="~{patient/fragments/notifications :: notification-handler}"></div>
+
+<!--Appointment Reschedule Model-->
 <div id="rescheduleModal" class="modal-overlay" th:classappend="${isRescheduleError != null} ? 'show-flex'">
     <div class="modal-container">
         <div class="modal-header-blue">
@@ -147,16 +120,19 @@
 
             <div class="form-group">
                 <label>DOCTOR</label>
-                <input type="text" id="rescheduleDoctor" class="modal-select" readonly
-                       style="background: #f1f5f9; cursor: not-allowed; border: 1px dashed #cbd5e1;">
+                <input type="text" id="rescheduleDoctor" class="modal-select readonly-field" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>PAYMENT METHOD</label>
+                <input type="text" id="reschedulePayment" class="modal-select readonly-field" readonly>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>NEW DATE</label>
                     <input type="date" name="appointmentDate" id="rescheduleDate"
-                           th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
-                           required>
+                           th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" required>
                 </div>
                 <div class="form-group">
                     <label>NEW TIME</label>
@@ -197,13 +173,42 @@
         <form th:action="@{/patient/appointment/create}" method="post" class="modal-form">
             <div class="form-group">
                 <label>DOCTOR SELECTION</label>
-                <select name="doctorId" required class="modal-select">
+                <select name="doctorId" id="doctorSelect" required class="modal-select">
                     <option value="" disabled selected>Select a specialist</option>
                     <option th:each="doc : ${doctors}"
                             th:value="${doc.id}"
                             th:text="'Dr. ' + ${doc.lastName} + ' - ' + ${doc.specialization}">
                     </option>
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label>PAYMENT METHOD</label>
+                <div class="payment-cards-container">
+
+                    <label class="payment-option-card">
+                        <input type="radio" name="paymentMethod" value="ONLINE" required>
+                        <div class="card-content">
+                            <span class="material-symbols-outlined icon">account_balance</span>
+                            <div class="text-details">
+                                <strong>Online Transfer</strong>
+                                <span>Pay now via secure transfer</span>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label class="payment-option-card">
+                        <input type="radio" name="paymentMethod" value="CASH" required>
+                        <div class="card-content">
+                            <span class="material-symbols-outlined icon">point_of_sale</span>
+                            <div class="text-details">
+                                <strong>Pay at Clinic</strong>
+                                <span>Cash or Card physically</span>
+                            </div>
+                        </div>
+                    </label>
+
+                </div>
             </div>
 
             <div class="form-group">
@@ -215,10 +220,8 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>APPOINTMENT DATE</label>
-                    <input type="date"
-                           name="appointmentDate"
-                           th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
-                           required>
+                    <input type="date" name="appointmentDate"
+                           th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" required>
                 </div>
                 <div class="form-group">
                     <label>APPOINTMENT TIME</label>
@@ -243,95 +246,60 @@
 
 <script>
     const modal = document.getElementById('appointmentModal');
-    const openModalBtn = document.querySelector('label[for="modal-toggle"]'); // Your trigger
+    const openModalBtn = document.querySelector('label[for="modal-toggle"]');
     const closeModalBtn = document.getElementById('closeModal');
 
-    // Open Modal
-    openModalBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        modal.classList.add('show');
-    });
+    if (openModalBtn) {
+        openModalBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.classList.add('show');
+        });
+    }
 
-    // Close Modal
-    closeModalBtn.addEventListener('click', () => {
-        modal.classList.remove('show');
-        if (window.location.search.includes('error')) {
-            window.location.href = window.location.pathname;
-        }
-    });
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+            if (window.location.search.includes('error')) {
+                window.location.href = window.location.pathname;
+            }
+        });
+    }
 
-    // Close if clicking outside the white box
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
             modal.classList.remove('show');
         }
     });
 
-    // Mobile hamburger menu
-    const btn = document.getElementById('hamburgerBtn');
-    const nav = document.getElementById('navLinks');
-    btn.addEventListener('click', () => {
-        nav.classList.toggle('open');
-        btn.classList.toggle('active');
-    });
-
-    // Close menu on link click
-    nav.querySelectorAll('a, button').forEach(el => {
-        el.addEventListener('click', () => {
-            nav.classList.remove('open');
-            btn.classList.remove('active');
-        });
-    });
-
     // --- Reschedule Modal Functionality ---
-
     const reschedModal = document.getElementById('rescheduleModal');
 
-    /**
-     * Opens the Reschedule Modal and populates it with existing data
-     * Triggered by the "Reschedule" button in the appointment card
-     */
-    function openRescheduleModal(id, doctorName, specialization, date, time, reason) {
-        // Fill hidden ID field
+    function openRescheduleModal(id, doctorName, specialization, date, time, reason, paymentMethod) {
         document.getElementById('rescheduleId').value = id;
-
-        // Fill read-only Doctor display
         document.getElementById('rescheduleDoctor').value = "Dr. " + doctorName + " - " + specialization;
-
-        // Fill editable fields
+        document.getElementById('reschedulePayment').value = paymentMethod;
         document.getElementById('rescheduleDate').value = date;
         document.getElementById('rescheduleTime').value = time;
         document.getElementById('rescheduleReason').value = reason;
 
-        // Show modal using flex for centering (as per CSS class)
         reschedModal.style.display = 'flex';
         reschedModal.classList.add('show-flex');
     }
 
-    /**
-     * Closes the Reschedule Modal and cleans up the UI state
-     */
     function closeModal() {
         reschedModal.style.display = 'none';
         reschedModal.classList.remove('show-flex');
 
-        // If the modal was opened due to a server-side error (editError=true),
-        // redirect to clear the URL parameters and avoid re-opening on refresh.
         if (window.location.search.includes('editError')) {
             window.location.href = window.location.pathname;
         }
     }
 
-    /**
-     * Global click listener to handle "Outside Click" to close the modal
-     */
     window.addEventListener('click', (e) => {
-        // If the click target is exactly the overlay background
         if (e.target === reschedModal) {
             closeModal();
         }
     });
 </script>
 </body>
-
 </html>

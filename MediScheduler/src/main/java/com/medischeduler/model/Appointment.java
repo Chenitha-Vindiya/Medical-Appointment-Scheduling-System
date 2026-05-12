@@ -49,6 +49,12 @@ public class Appointment {
     @Column(length = 255)
     private String location;
 
+    @Column(nullable = false)
+    private String paymentMethod;
+
+    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Payment payment;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -6,6 +6,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Patient Profile Settings - MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/profile.css}">
+    <link rel="stylesheet" th:href="@{/css/patient/fragments/patient-header.css}">
+
+    <script th:src="@{/js/patient/fragments/patient-header.js}" defer></script>
     <link rel="icon" type="image/svg+xml"
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
 
@@ -13,60 +16,7 @@
 
 <body class="page-body">
 
-<!-- Scroll to Top Button -->
-<button id="scrollTopBtn" title="Go to top">▲</button>
-
-<script>
-    //Scroll to Top Button
-    const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 75) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
-        }
-    });
-
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-</script>
-
-<!-- HEADER -->
-<header class="header-wrapper">
-    <nav class="navbar">
-        <div class="user-profile">
-            <span class="material-symbols-outlined logo-icon">patient_list</span>
-            <span class="logo-text">Profile</span>
-        </div>
-
-        <!-- Hamburger (mobile) -->
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
-        </button>
-
-        <ul class="nav-links" id="navLinks">
-            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
-            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
-            <li><a th:href="@{/patient/history}">History</a></li>
-            <li><a th:href="@{/patient/payment}">Payment</a></li>
-            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
-            <li><a th:href="@{/patient/profile}">Profile</a></li>
-            <li>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
-                </button>
-            </li>
-            <li>
-                <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
-            </li>
-        </ul>
-    </nav>
-</header>
+<div th:replace="~{patient/fragments/patient-header :: header-nav('My Profile', 'profile', 'person')}"></div>
 
 <div id="successToast" th:if="${param.updated}" class="toast-notification">
     <div class="toast-content">
@@ -136,7 +86,8 @@
                 <div class="fields-grid">
                     <div class="input-group">
                         <label class="input-label">First Name</label>
-                        <input class="form-input" name="firstName" type="text" th:value="${patient.firstName}" required/>
+                        <input class="form-input" name="firstName" type="text" th:value="${patient.firstName}"
+                               required/>
                     </div>
                     <div class="input-group">
                         <label class="input-label">Last Name</label>
@@ -144,7 +95,8 @@
                     </div>
                     <div class="input-group">
                         <label class="input-label">Date of Birth</label>
-                        <input class="form-input" name="dateOfBirth" type="date" th:value="${patient.dateOfBirth}" required/>
+                        <input class="form-input" name="dateOfBirth" type="date" th:value="${patient.dateOfBirth}"
+                               required/>
                     </div>
                     <div class="input-group">
                         <label class="input-label">Gender</label>
@@ -156,7 +108,8 @@
                     </div>
                     <div class="input-group">
                         <label class="input-label">National ID</label>
-                        <input class="form-input" name="nationalId" type="text" th:value="${patient.nationalId}" required/>
+                        <input class="form-input" name="nationalId" type="text" th:value="${patient.nationalId}"
+                               required/>
                     </div>
                 </div>
             </div>
@@ -171,7 +124,8 @@
                 </div>
                 <div class="input-group">
                     <label class="input-label">Phone Number</label>
-                    <input class="form-input" name="phoneNumber" pattern="^(?:0|94|\\+94)?(7[0-9]{8})$" type="tel" th:value="${patient.phoneNumber}" required/>
+                    <input class="form-input" name="phoneNumber" pattern="^(?:0|94|\\+94)?(7[0-9]{8})$" type="tel"
+                           th:value="${patient.phoneNumber}" required/>
                 </div>
                 <div class="input-group full-width">
                     <label class="input-label">Home Address</label>
@@ -274,73 +228,52 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        /* --- 1. MOBILE MENU LOGIC --- */
-        const btn = document.getElementById('hamburgerBtn');
-        const nav = document.getElementById('navLinks');
+    /* --- 2. EDIT/VIEW MODE TOGGLE LOGIC --- */
+    // Select all inputs except the hidden ID and the password modal fields
+    const inputs = document.querySelectorAll('.profile-form .form-input, .profile-form select, .profile-form textarea');
+    const editBtn = document.getElementById('editProfileBtn');
+    const discardBtn = document.getElementById('discardChangesBtn');
+    const viewActions = document.getElementById('viewModeActions');
+    const editActions = document.getElementById('editModeActions');
 
-        if (btn && nav) {
-            btn.addEventListener('click', () => {
-                nav.classList.toggle('open');
-                btn.classList.toggle('active');
-            });
+    // Function to lock the form (View Mode)
+    const setViewMode = () => {
+        inputs.forEach(input => {
+            input.setAttribute('readonly', true);
+            if (input.tagName === 'SELECT') input.disabled = true;
+        });
+        if (viewActions) viewActions.style.display = 'block';
+        if (editActions) editActions.style.display = 'none';
+    };
 
-            // Close menu on link click
-            nav.querySelectorAll('a, button').forEach(el => {
-                el.addEventListener('click', () => {
-                    nav.classList.remove('open');
-                    btn.classList.remove('active');
-                });
-            });
-        }
+    // Function to unlock the form (Edit Mode)
+    const setEditMode = () => {
+        inputs.forEach(input => {
+            input.removeAttribute('readonly');
+            if (input.tagName === 'SELECT') input.disabled = false;
+        });
+        if (viewActions) viewActions.style.display = 'none';
+        if (editActions) editActions.style.display = 'flex';
+    };
 
-        /* --- 2. EDIT/VIEW MODE TOGGLE LOGIC --- */
-        // Select all inputs except the hidden ID and the password modal fields
-        const inputs = document.querySelectorAll('.profile-form .form-input, .profile-form select, .profile-form textarea');
-        const editBtn = document.getElementById('editProfileBtn');
-        const discardBtn = document.getElementById('discardChangesBtn');
-        const viewActions = document.getElementById('viewModeActions');
-        const editActions = document.getElementById('editModeActions');
+    // Initialize in View Mode
+    setViewMode();
 
-        // Function to lock the form (View Mode)
-        const setViewMode = () => {
-            inputs.forEach(input => {
-                input.setAttribute('readonly', true);
-                if (input.tagName === 'SELECT') input.disabled = true;
-            });
-            if (viewActions) viewActions.style.display = 'block';
-            if (editActions) editActions.style.display = 'none';
-        };
+    if (editBtn) editBtn.addEventListener('click', setEditMode);
 
-        // Function to unlock the form (Edit Mode)
-        const setEditMode = () => {
-            inputs.forEach(input => {
-                input.removeAttribute('readonly');
-                if (input.tagName === 'SELECT') input.disabled = false;
-            });
-            if (viewActions) viewActions.style.display = 'none';
-            if (editActions) editActions.style.display = 'flex';
-        };
+    if (discardBtn) {
+        discardBtn.addEventListener('click', () => {
+            if (confirm("Are you sure? Unsaved changes will be lost.")) {
+                location.reload(); // Reverts to database values
+            }
+        });
+    }
 
-        // Initialize in View Mode
-        setViewMode();
-
-        if (editBtn) editBtn.addEventListener('click', setEditMode);
-
-        if (discardBtn) {
-            discardBtn.addEventListener('click', () => {
-                if (confirm("Are you sure? Unsaved changes will be lost.")) {
-                    location.reload(); // Reverts to database values
-                }
-            });
-        }
-
-        /* --- 3. TOAST NOTIFICATION LOGIC --- */
-        // Auto-close toast after 4 seconds
-        if (document.getElementById('successToast')) {
-            setTimeout(closeToast, 4000);
-        }
-    });
+    /* --- 3. TOAST NOTIFICATION LOGIC --- */
+    // Auto-close toast after 4 seconds
+    if (document.getElementById('successToast')) {
+        setTimeout(closeToast, 4000);
+    }
 
     /* --- GLOBAL FUNCTIONS (Accessible by HTML onclick) --- */
 

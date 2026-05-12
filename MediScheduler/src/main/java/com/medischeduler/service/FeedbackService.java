@@ -70,4 +70,27 @@ public class FeedbackService {
             throw new RuntimeException("Unauthorized: You cannot delete this feedback.");
         }
     }
+
+    // Service method extension capturing dynamic ratings updates
+    public void updateFeedback(Long id, String[] feedbackTypes, String content, Integer rating, Long patientId) {
+        Feedback feedback = feedbackRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Feedback instance not found"));
+
+        // Security assertion verification
+        if (!feedback.getPatient().getId().equals(patientId)) {
+            throw new RuntimeException("Unauthorized execution attempt to edit this entry");
+        }
+
+        if (feedbackTypes != null) {
+            feedback.setFeedbackType(String.join(", ", feedbackTypes));
+        }
+        feedback.setContent(content);
+
+        // Ensure rating ranges strictly adhere to standard validation constraints
+        if (rating != null && rating >= 1 && rating <= 5) {
+            feedback.setRating(rating);
+        }
+
+        feedbackRepository.save(feedback);
+    }
 }

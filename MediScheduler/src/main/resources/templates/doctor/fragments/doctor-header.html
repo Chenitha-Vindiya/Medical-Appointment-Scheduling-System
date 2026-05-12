@@ -1,0 +1,31 @@
+<div th:fragment="header-nav(pageTitle, activeLink, pageIcon)">
+    <!-- HEADER -->
+    <header class="header-wrapper">
+        <nav class="navbar">
+            <div class="user-profile">
+                <span class="material-symbols-outlined logo-icon" th:text="${pageIcon}">stethoscope</span>
+                <span class="logo-text" th:text="${pageTitle}">Welcome, Doctor</span>
+            </div>
+
+            <!-- Hamburger (mobile) -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a th:href="@{/doctor/dashboard}" th:classappend="${activeLink == 'dashboard'} ? 'active' : ''">Dashboard</a></li>
+                <li><a th:href="@{/doctor/appointment}" th:classappend="${activeLink == 'appointment'} ? 'active' : ''">Appointments</a></li>
+                <li><a th:href="@{/doctor/patient}" th:classappend="${activeLink == 'patient'} ? 'active' : ''">Patient</a></li>
+                <li><a th:href="@{/doctor/payment}" th:classappend="${activeLink == 'payment'} ? 'active' : ''">Payment</a></li>
+                <li><a th:href="@{/doctor/feedback}" th:classappend="${activeLink == 'feedback'} ? 'active' : ''">Feedback</a></li>
+                <li><a th:href="@{/doctor/profile}" th:classappend="${activeLink == 'profile'} ? 'active' : ''">Profile</a></li>
+                <li>
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                        <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                    </button>
+                </li>
+                <li><button class="btn-logout" onclick="window.location.href='/logout'">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+</div>

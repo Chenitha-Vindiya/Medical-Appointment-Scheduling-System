@@ -2,219 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
-/* 1. Variables & Global Reset */
+/* 1. Page-Specific Variables */
 :root {
-    --primary: #2badee;
-    --primary-hover: #238dc2;
-    --bg-light: #f5f3f3;
-    --white: #ffffff;
-    --slate-50: #f8fafc;
-    --slate-100: #f1f5f9;
-    --slate-200: #e2e8f0;
-    --slate-400: #94a3b8;
-    --slate-500: #64748b;
-    --slate-600: #475569;
-    --slate-700: #334155;
-    --slate-800: #1e293b;
-    --slate-900: #0f172a;
     --green-600: #166534;
 }
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: "Inter", sans-serif;
-    background-color: var(--bg-light);
-    color: var(--slate-900);
-    -webkit-font-smoothing: antialiased;
-}
-
-body::-webkit-scrollbar { display: none; }
-
-/* Scroll to Top Button ---------------------------------*/
-#scrollTopBtn {
-    position: fixed;
-    bottom: 35px;
-    right: 35px;
-    background-color: var(--primary);
-    font-weight: bolder;
-    color: var(--bg-dark);
-    border: none;
-    border-radius: 20px;
-    width: 50px;
-    height: 50px;
-    font-size: 22px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease, transform 0.3s ease;
-    z-index: 1001;
-}
-
-#scrollTopBtn:hover {
-    transform: scale(1.07);
-    background-color: var(--primary-hover);
-}
-
-/* When visible */
-#scrollTopBtn.show {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* =====================
-   HEADER & NAVBAR
-   ===================== */
-.header-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    z-index: 1000;
-    padding-top: 1rem;
-}
-
-.navbar {
-    width: 92%;
-    max-width: 1200px;
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 12px 24px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.user-profile img {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    border: 2px solid var(--primary);
-}
-
-.logo-icon {
-    color: var(--primary);
-    font-size: 28px;
-}
-
-.logo-text {
-    font-weight: 800;
-    font-size: 1.15rem;
-    letter-spacing: -0.02em;
-    color: var(--slate-800);
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--slate-600);
-    font-weight: 500;
-    font-size: 0.93rem;
-    transition: color 0.2s;
-}
-
-.nav-links a:hover { color: var(--primary); }
-
-/* Theme toggle — icon button inside nav */
-.theme-toggle {
-    background: none;
-    border: none;
-    color: var(--slate-500);
-    cursor: pointer;
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s, background 0.2s;
-    flex-shrink: 0;
-}
-
-.theme-toggle:hover {
-    color: var(--primary);
-    background: var(--slate-100);
-}
-
-.theme-toggle .material-symbols-outlined {
-    font-size: 22px;
-    transition: transform 0.35s ease;
-}
-
-.theme-toggle:hover .material-symbols-outlined {
-    transform: rotate(20deg);
-}
-
-/* Hamburger */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    z-index: 10;
-}
-
-.hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: var(--slate-700);
-    border-radius: 2px;
-    transition: all 0.3s;
-}
-
-.hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.hamburger.active span:nth-child(2) { opacity: 0; }
-.hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* Right-side header group: theme toggle + logout + hamburger */
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Logout button */
-.btn-logout {
-    background: var(--primary);
-    color: white;
-    padding: 0.5rem 1.25rem;
-    border-radius: 0.5rem;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s;
-    font-size: 0.875rem;
-}
-
-.btn-logout:hover { background: var(--primary-hover); }
-
 
 /* 3. Main Content Layout */
 .main-content {
@@ -259,33 +50,8 @@ body::-webkit-scrollbar { display: none; }
 }
 
 .search-wrapper input:focus {
-    /* border-color: var(--primary-color, #3b82f6);  */
     border-color: var(--primary);
     outline: none;
-    outline-offset: -1px;
-}
-
-.filter-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.filter-actions select {
-    padding: 0.6rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--slate-200);
-    font-size: 0.875rem;
-    background: white;
-}
-
-.btn-icon-filter {
-    padding: 0.5rem;
-    background: var(--slate-100);
-    border: none;
-    border-radius: 8px;
-    color: var(--slate-600);
-    cursor: pointer;
 }
 
 /* 5. Records Timeline Design */
@@ -296,7 +62,6 @@ body::-webkit-scrollbar { display: none; }
     gap: 1.5rem;
 }
 
-/* Vertical Timeline Line */
 .timeline-line {
     display: none;
 }
@@ -311,19 +76,16 @@ body::-webkit-scrollbar { display: none; }
         width: 2px;
         background: var(--slate-200);
     }
+
+    .record-entry {
+        padding-left: 3.5rem;
+    }
 }
 
 .record-entry {
     position: relative;
 }
 
-@media (min-width: 768px) {
-    .record-entry {
-        padding-left: 3.5rem;
-    }
-}
-
-/* Timeline Dot */
 .timeline-dot {
     display: none;
 }
@@ -342,29 +104,19 @@ body::-webkit-scrollbar { display: none; }
         box-shadow: 0 0 0 2px var(--primary);
         z-index: 10;
     }
-    .record-entry-older .timeline-dot {
-        background: var(--slate-300);
-        box-shadow: 0 0 0 2px var(--slate-300);
-    }
 }
 
+/* 6. Card Components */
 .record-card {
     background: var(--white);
     border-radius: 12px;
     border: 1px solid var(--slate-200);
-    padding: 1.25rem;
+    padding: 0; /* Updated for proper flex layout with the red zone */
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 1.5rem;
+    flex-direction: row;
+    align-items: stretch;
+    overflow: hidden;
     transition: transform 0.2s, box-shadow 0.2s;
-}
-
-@media (min-width: 768px) {
-    .record-card {
-        flex-direction: row;
-        align-items: center;
-    }
 }
 
 .record-card:hover {
@@ -372,15 +124,15 @@ body::-webkit-scrollbar { display: none; }
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.record-entry-older {
-    opacity: 0.8;
+.record-card-content {
+    padding: 1.5rem;
+    flex: 1;
 }
 
-/* 6. Card Components */
 .record-header {
     display: flex;
     gap: 1rem;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .record-icon-box {
@@ -394,8 +146,6 @@ body::-webkit-scrollbar { display: none; }
 }
 
 .blue-bg { background: #eff6ff; color: var(--primary); }
-.amber-bg { background: #fffbeb; color: #d97706; }
-.green-bg { background: #f0fdf4; color: #16a34a; }
 .slate-bg { background: var(--slate-100); color: var(--slate-500); }
 
 .record-type-badge {
@@ -407,8 +157,6 @@ body::-webkit-scrollbar { display: none; }
 }
 
 .badge-consultation { background: #e0f2fe; color: #0369a1; }
-.badge-lab { background: #fef3c7; color: #92400e; }
-.badge-prescription { background: #dcfce7; color: #166534; }
 .badge-radiology { background: var(--slate-200); color: var(--slate-700); }
 
 .record-title {
@@ -437,109 +185,91 @@ body::-webkit-scrollbar { display: none; }
     gap: 4px;
 }
 
-/* 7. Buttons & Actions */
-.record-actions {
+/* 7. Delete Zone & Actions */
+.record-delete-zone {
+    width: 120px;
+    background-color: var(--danger);
     display: flex;
-    align-items: center;
-    gap: 12px;
+    align-items: stretch;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
 }
 
-.btn-action {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
+.record-delete-zone:hover {
+    background-color: #dc2626;
 }
 
-.btn-view {
-    background: var(--primary);
+.record-delete-zone form {
+    width: 100%;
+    display: flex;
+}
+
+.btn-zone-delete {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
     color: white;
-    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    padding: 0;
 }
 
-.btn-view:hover {
-    background: var(--primary-hover);
+.btn-zone-delete:hover span.material-symbols-outlined {
+    transform: scale(1.15);
 }
 
-.btn-download {
-    background: white;
-    border: 1.5px solid var(--slate-200);
-    color: var(--slate-700);
+.btn-zone-delete span.material-symbols-outlined {
+    font-size: 28px;
+    transition: transform 0.2s ease;
 }
 
-.btn-download:hover {
-    background: var(--slate-50);
-    border-color: var(--slate-400);
+/* Helper Classes extracted from HTML */
+.no-results-message {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+    color: var(--slate-500);
 }
 
-.load-more-btn {
-    background: none;
-    border: none;
-    color: var(--primary);
-    font-weight: 700;
-    font-size: 14px;
+.record-badge-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin: 3rem auto 0;
-    cursor: pointer;
+    margin-bottom: 4px;
 }
 
-.load-more-btn:hover {
-    text-decoration: underline;
+.record-id {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--slate-400);
 }
 
-.material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    vertical-align: middle;
+.meta-icon {
+    font-size: 14px;
 }
 
-@media (max-width: 768px) {
-  /* Hamburger visible */
-  .hamburger { display: flex; }
-
-  /* Nav links hidden by default, dropdown on open */
-  .nav-links {
-    display: none;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    right: 0;
-    background: #e2e8f0;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    padding: 1rem;
-    z-index: 999;
-  }
-  
-  .nav-links .btn-login,
-  .nav-links .btn-primary {
-    width: 100%;
-    margin: 0.3rem 0;
-    text-align: center;
-  }
-
-    .nav-links li { width: 100%; }
-
-  .nav-links a {
-    display: block;
-    padding: 0.6rem 0.5rem;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    width: 100%;
-  }
-
-
-  .nav-links.open { display: flex; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-  .card-header { padding: 1.25rem; }
-  .data-table th, .data-table td { padding: 1rem; }
-  .specialty-cell { display: none; } /* Hide specialty to fit mobile */
+.record-clinical-note {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--slate-200);
+    color: var(--slate-600);
+    font-size: 0.9rem;
 }
+
+.btn-zone-text {
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+/* --- DARK MODE --- */
+body.dark-mode .filter-bar, body.dark-mode .record-card { background: var(--white); border-color: var(--slate-200); }
+body.dark-mode .record-title { color: var(--slate-900); }
+body.dark-mode .record-clinical-note { border-color: var(--slate-200); color: var(--slate-400); }
+body.dark-mode .search-wrapper input { background: var(--slate-50); border-color: var(--slate-200); color: var(--slate-900); }

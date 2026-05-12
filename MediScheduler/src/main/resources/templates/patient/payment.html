@@ -5,203 +5,212 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Payments - MediScheduler</title>
     <link rel="stylesheet" th:href="@{/css/patient/payment.css}">
-    <link rel="icon" type="image/svg+xml"
-          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
+    <link rel="stylesheet" th:href="@{/css/patient/fragments/patient-header.css}">
+    <link rel="stylesheet" th:href="@{/css/patient/fragments/notifications.css}">
+    <script th:src="@{/js/patient/fragments/patient-header.js}" defer></script>
 
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z'/%3E%3C/svg%3E">
 </head>
 <body>
 
-<!-- Scroll to Top Button -->
-<button id="scrollTopBtn" title="Go to top">▲</button>
-
-<script>
-    //Scroll to Top Button
-    const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 75) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
-        }
-    });
-
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-</script>
-
-<!-- HEADER -->
-<header class="header-wrapper">
-    <nav class="navbar">
-        <div class="user-profile">
-            <span class="material-symbols-outlined logo-icon">patient_list</span>
-            <span class="logo-text">Payment Records</span>
-        </div>
-
-        <!-- Hamburger (mobile) -->
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-            <span></span><span></span><span></span>
-        </button>
-
-        <ul class="nav-links" id="navLinks">
-            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
-            <li><a th:href="@{/patient/appointment}">Appointments</a></li>
-            <li><a th:href="@{/patient/history}">History</a></li>
-            <li><a th:href="@{/patient/payment}">Payment</a></li>
-            <li><a th:href="@{/patient/feedback}">Feedback</a></li>
-            <li><a th:href="@{/patient/profile}">Profile</a></li>
-            <li>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
-                </button>
-            </li>
-            <li>
-                <button class="btn-logout" onclick="window.location.href='/logout'">Logout</button>
-            </li>
-        </ul>
-    </nav>
-</header>
+<div th:replace="~{patient/fragments/patient-header :: header-nav('Payments', 'payment', 'payments')}"></div>
 
 <div class="app-container">
-    <!-- Main Content Area -->
     <main class="main-canvas">
-        <div class="payment-container">
-            <div class="card">
-<!--                <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 24px;">Previous payments</h2>-->
-                <table class="payment-list">
-                    <thead>
-                    <tr>
-                        <th>Invoice ID</th>
-                        <th>Date</th>
-                        <th>Service</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="payment-row">
-                        <td class="invoice-id" style="font-weight: 600;">#INV-9821</td>
-                        <td>Oct 15, 2023</td>
-                        <td style="font-weight: 600;">Routine Check-up</td>
-                        <td>$65.00</td>
-                        <td><span class="chip chip-resolved">Resolved</span></td>
-                    </tr>
-                    <tr class="payment-row">
-                        <td class="invoice-id" style="font-weight: 600;">#INV-9825</td>
-                        <td>Oct 12, 2023</td>
-                        <td style="font-weight: 600;">Routine Check-up</td>
-                        <td>$55.00</td>
-                        <td><span class="chip chip-pending">Pending</span></td>
 
-                    </tr>
-                    <tr class="payment-row">
-                        <td class="invoice-id" style="font-weight: 600;">#INV-9821</td>
-                        <td>Oct 15, 2023</td>
-                        <td style="font-weight: 600;">Routine Check-up</td>
-                        <td>$65.00</td>
-                        <td><span class="chip chip-resolved">Resolved</span></td>
-
-                    </tr>
-                    <tr class="payment-row">
-                        <td class="invoice-id" style="font-weight: 600;">#INV-9825</td>
-                        <td>Oct 12, 2023</td>
-                        <td style="font-weight: 600;">Routine Check-up</td>
-                        <td>$55.00</td>
-                        <td><span class="chip chip-pending">Pending</span></td>
-
-                    </tr>
-                    <tr class="payment-row">
-                        <td class="invoice-id" style="font-weight: 600;">#INV-9821</td>
-                        <td>Oct 15, 2023</td>
-                        <td style="font-weight: 600;">Routine Check-up</td>
-                        <td>$65.00</td>
-                        <td><span class="chip chip-resolved">Resolved</span></td>
-
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="page-header">
+            <h1 class="display-sm">Payment History</h1>
+            <p class="header-subtext">View and manage your consultation invoices.</p>
         </div>
+
+        <div class="payments-grid">
+            <div class="empty-state" th:if="${#lists.isEmpty(payments)}">
+                <span class="material-symbols-outlined empty-icon">receipt_long</span>
+                <h3>No payments yet</h3>
+                <p>You have no recorded transactions or pending invoices.</p>
+            </div>
+
+            <th:block th:unless="${#lists.isEmpty(payments)}">
+                <div class="payment-card" th:each="payment : ${payments}" th:id="'payment-card-' + ${payment.id}">
+
+                    <div class="card-view standard-view" th:id="'view-standard-' + ${payment.id}">
+                        <div class="card-top">
+                            <div class="invoice-info">
+                                <span class="invoice-id" th:text="'#INV-' + ${payment.id}">#INV-000</span>
+                                <span class="payment-date" th:text="${#temporals.format(payment.createdAt, 'MMM dd, yyyy')}">Date</span>
+                            </div>
+                            <span class="chip" th:classappend="${payment.status == 'PAID' ? 'chip-resolved' : 'chip-pending'}" th:text="${payment.status}">Pending</span>
+                        </div>
+
+                        <div class="card-middle">
+                            <div class="service-details">
+                                <span class="material-symbols-outlined icon-medical">medical_services</span>
+                                <div class="service-text-group">
+                                    <span class="service-name" th:text="${payment.appointment.reason}">Routine Check-up</span>
+                                    <span class="doctor-subtext" th:text="'Dr. ' + ${payment.appointment.doctor.lastName}">Dr. Smith</span>
+                                </div>
+                            </div>
+                            <div class="amount-details">
+                                <span class="amount-label">Amount</span>
+                                <span class="amount-value" th:text="${payment.amount != null ? 'LKR ' + payment.amount : 'TBD'}">LKR 0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="card-action-area processing-box" th:if="${payment.isAwaitingDoctorConfirmation()}" style="background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a;">
+                            <div class="processing-content-wrapper">
+                                <span class="material-symbols-outlined pulse-icon">schedule</span>
+                                <div class="processing-text">
+                                    <strong class="processing-title">Awaiting Doctor Approval</strong>
+                                    <span class="processing-subtitle" style="font-size: 0.85rem; margin-top: 2px;">Please wait until the doctor confirms this appointment to view banking details and submit your reference.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-action-area" th:if="${payment.isActionRequired()}">
+
+                            <div th:if="${payment.status == 'NOT PAID'}" class="action-full-width">
+                                <button type="button" class="btn-primary btn-action-trigger" th:attr="onclick=|toggleCardTransferView('${payment.id}')|">
+                                    <span class="material-symbols-outlined">account_balance</span> Pay via Bank Transfer
+                                </button>
+                            </div>
+
+                            <div th:if="${payment.status == 'PROCESSING'}" class="processing-box">
+                                <div class="processing-display">
+                                    <div class="processing-content-wrapper">
+                                        <span class="material-symbols-outlined pulse-icon">hourglass_top</span>
+                                        <div class="processing-text">
+                                            <strong class="processing-title">Verification Pending</strong>
+                                            <span class="processing-subtitle">Reference <strong th:text="${payment.referenceNumber}">12345</strong> submitted. Awaiting doctor confirmation</span>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-edit-ref" title="Edit Reference" th:attr="onclick=|toggleCardTransferView('${payment.id}')|">
+                                        <span class="material-symbols-outlined">edit</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card-view transfer-view" th:id="'view-transfer-' + ${payment.id}" style="display: none;">
+
+                        <div class="transfer-header">
+                            <div class="transfer-title-inline">
+                                <span class="material-symbols-outlined" style="color: var(--primary);">account_balance</span>
+                                <h4 class="transfer-heading">Bank Transfer Details</h4>
+                            </div>
+                            <button type="button" class="btn-close-icon" th:attr="onclick=|toggleCardTransferView('${payment.id}')|" title="Back to record">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+
+                        <div class="compact-bank-card">
+                            <div class="bank-grid-2col">
+                                <div class="bank-field">
+                                    <span class="bank-label">Bank</span>
+                                    <strong th:text="${payment.appointment.doctor.bankName}">Bank Name</strong>
+                                </div>
+                                <div class="bank-field">
+                                    <span class="bank-label">Branch</span>
+                                    <strong th:text="${payment.appointment.doctor.bankBranch}">Branch</strong>
+                                </div>
+                            </div>
+
+                            <div class="bank-field field-spaced">
+                                <span class="bank-label">Account Name</span>
+                                <div class="copy-row">
+                                    <strong th:id="'acc-name-' + ${payment.id}" th:text="${payment.appointment.doctor.accountName}">Account Name</strong>
+                                    <button type="button" class="btn-copy-sm" th:attr="onclick=|copyInlineText('acc-name-${payment.id}', this)|" title="Copy Name">
+                                        <span class="material-symbols-outlined">content_copy</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bank-field field-spaced">
+                                <span class="bank-label">Account Number</span>
+                                <div class="copy-row">
+                                    <strong th:id="'acc-num-' + ${payment.id}" class="highlight-acc" th:text="${payment.appointment.doctor.accountNumber}">000000</strong>
+                                    <button type="button" class="btn-copy-sm" th:attr="onclick=|copyInlineText('acc-num-${payment.id}', this)|" title="Copy Number">
+                                        <span class="material-symbols-outlined">content_copy</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form class="inline-reference-form" th:action="@{/patient/payment/submit-reference}" method="post">
+                            <input type="hidden" name="paymentId" th:value="${payment.id}"/>
+
+                            <div class="form-input-group">
+                                <input type="text" name="referenceNumber" class="form-input"
+                                       th:value="${payment.referenceNumber}"
+                                       placeholder="Enter Ref Number (e.g., ref-554)"
+                                       required minlength="5" maxlength="30" pattern="[a-zA-Z0-9\-_/]+"
+                                       title="Letters, numbers, dashes, or slashes only"/>
+                            </div>
+
+                            <div class="transfer-actions">
+                                <button type="button" class="btn-cancel-edit" th:attr="onclick=|toggleCardTransferView('${payment.id}')|">Back</button>
+                                <button type="submit" class="btn-primary btn-submit-flex" th:text="${payment.referenceNumber != null and payment.referenceNumber != '' ? 'Update' : 'Submit'}">Submit</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </th:block>
+        </div>
+
     </main>
 </div>
 
-<!-- Modal Implementation -->
-<input id="modal-toggle" type="checkbox"/>
-<div class="modal-overlay">
-    <div class="modal-content">
-        <label class="modal-close" for="modal-toggle">
-            <span class="material-symbols-outlined">close</span>
-        </label>
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em;">New payment</h2>
-        <p style="color: var(--on-surface-variant); font-size: 0.875rem; margin-bottom: 32px;">Please provide details
-            about your recent visit or inquiry.</p>
-        <form action="#" method="POST" onsubmit="return false;">
-            <div class="form-group">
-                <label class="form-label">Subject</label>
-                <input class="form-control" placeholder="e.g., Appointment Scheduling Issue" type="text"/>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Select Doctor</label>
-                <select class="form-control">
-                    <option value="">Choose a Physician (Optional)</option>
-                    <option value="1">Dr. Michael Aris</option>
-                    <option value="2">Dr. Elena Kostic</option>
-                    <option value="3">Dr. James Wilson</option>
-                    <option value="0">General Inquiry</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" placeholder="Tell us more about your experience..."></textarea>
-            </div>
-            <div style="display: flex; gap: 12px; margin-top: 40px;">
-                <label class="btn-primary" for="modal-toggle"
-                       style="flex: 1; justify-content: center; background: none; border: 1px solid var(--outline-variant); color: var(--on-surface);">
-                    Cancel
-                </label>
-                <button class="btn-primary" style="flex: 2; justify-content: center;" type="submit">
-                    Submit payment
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
+<div th:replace="~{patient/fragments/notifications :: notification-handler}"></div>
 
 <script>
-    // Mobile hamburger menu
-    const btn = document.getElementById('hamburgerBtn');
-    const nav = document.getElementById('navLinks');
-    btn.addEventListener('click', () => {
-        nav.classList.toggle('open');
-        btn.classList.toggle('active');
-    });
+    function toggleCardTransferView(paymentId) {
+        const standardView = document.getElementById('view-standard-' + paymentId);
+        const transferView = document.getElementById('view-transfer-' + paymentId);
 
-    // Close menu on link click
-    nav.querySelectorAll('a, button').forEach(el => {
-        el.addEventListener('click', () => {
-            nav.classList.remove('open');
-            btn.classList.remove('active');
-        });
-    });
-
-    // Dark mode toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-        themeIcon.innerText = 'dark_mode';
+        if (standardView && transferView) {
+            const isStandardVisible = standardView.style.display !== 'none';
+            standardView.style.display = isStandardVisible ? 'none' : 'block';
+            transferView.style.display = isStandardVisible ? 'block' : 'none';
+        }
     }
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        themeIcon.innerText = isDark ? 'dark_mode' : 'light_mode';
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-</script>
 
+    function copyInlineText(elementId, btnElement) {
+        const textTarget = document.getElementById(elementId);
+        if (!textTarget) return;
+
+        const textToCopy = textTarget.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            if (btnElement) {
+                const icon = btnElement.querySelector('.material-symbols-outlined');
+                if (icon) {
+                    const originalText = icon.innerText;
+                    icon.innerText = 'check';
+                    icon.style.color = 'var(--primary-light)';
+                    setTimeout(() => {
+                        icon.innerText = originalText;
+                        icon.style.color = '';
+                    }, 1500);
+                }
+            }
+
+            const container = document.getElementById('notification-container');
+            if (container) {
+                const toast = document.createElement('div');
+                toast.className = 'toast glass-toast success';
+                toast.innerHTML = `
+                    <div class="toast-body">
+                        <div class="icon-wrapper"><span class="material-symbols-outlined">check_circle</span></div>
+                        <div class="toast-content"><p class="toast-text">Copied: ${textToCopy}</p></div>
+                    </div>
+                `;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+        }).catch(err => console.error("Clipboard failure: ", err));
+    }
+</script>
 </body>
 </html>
