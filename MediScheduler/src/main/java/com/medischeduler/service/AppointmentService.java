@@ -3,6 +3,7 @@ package com.medischeduler.service;
 import com.medischeduler.model.*;
 import com.medischeduler.repository.AppointmentRepository;
 import com.medischeduler.repository.DoctorRepository;
+import com.medischeduler.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,9 @@ public class AppointmentService {
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     // --- VALIDATION LOGIC ---
     private List<String> validateAppointment(Long doctorId, LocalDate date, LocalTime time, Long currentAppId) {
@@ -86,7 +90,7 @@ public class AppointmentService {
     }
 
     // --- CREATE ---
-    public List<String> createAppointment(Long doctorId, String reason, LocalDate date, LocalTime time, Patient patient) {
+    public List<String> createAppointment(Long doctorId, String reason, LocalDate date, LocalTime time, Patient patient, String paymentMethod) {
         List<String> errors = validateAppointment(doctorId, date, time, null);
 
         if (errors.isEmpty()) {
@@ -97,7 +101,39 @@ public class AppointmentService {
             appointment.setAppointmentDate(date);
             appointment.setStartTime(time);
             appointment.setStatus("PENDING");
+            appointment.setPaymentMethod(paymentMethod);
             appointmentRepository.save(appointment);
+
+            // --- NEW: AUTO-CREATE PAYMENT IF ONLINE ---
+            if ("ONLINE".equalsIgnoreCase(paymentMethod)) {
+                Payment payment = new Payment();
+                payment.setAppointment(appointment);
+                payment.setPatient(patient);
+                payment.setPaymentMethod("ONLINE");
+                payment.setStatus("NOT PAID");
+
+                // Safely extract and parse the fee without breaking the booking flow
+                try {
+
+                    Object rawFeeObj = appointment.getDoctor().getConsultationFees();
+
+                    if (rawFeeObj != null) {
+                        String rawFee = rawFeeObj.toString();
+
+                        // Strip out currency text, spaces, and commas (e.g., "LKR 1,500.00" -> "1500.00")
+                        String cleanNumber = rawFee.replaceAll("[^\\d.]", "");
+
+                        if (!cleanNumber.isEmpty()) {
+                            payment.setAmount(Double.parseDouble(cleanNumber));
+                        }
+                    }
+                } catch (Exception e) {
+                    // If parsing fails silently, the amount stays null
+                    // for the doctor or admin to verify manually later.
+                }
+
+                paymentRepository.save(payment);
+            }
         }
         return errors;
     }

@@ -2,7 +2,9 @@ package com.medischeduler.controller;
 
 import com.medischeduler.model.Appointment;
 import com.medischeduler.model.Patient;
+import com.medischeduler.model.Payment;
 import com.medischeduler.repository.AppointmentRepository;
+import com.medischeduler.repository.PaymentRepository;
 import com.medischeduler.service.AppointmentService;
 import com.medischeduler.service.HistoryService;
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class AppointmentController {
@@ -30,15 +33,16 @@ public class AppointmentController {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    /**
-     * Create a new Appointment
-     */
+    @Autowired
+    private PaymentRepository paymentRepository;
+
     @PostMapping("/patient/appointment/create")
     public String createAppointment(
             @RequestParam Long doctorId,
             @RequestParam String reason,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate appointmentDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
+            @RequestParam String paymentMethod,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
@@ -48,10 +52,7 @@ public class AppointmentController {
             return "redirect:/login";
         }
 
-        // Fixed: We only call the service ONCE.
-        // The service internally handles the save if there are no errors.
-        List<String> errors = appointmentService.createAppointment(
-                doctorId, reason, appointmentDate, startTime, patient);
+        List<String> errors = appointmentService.createAppointment(doctorId, reason, appointmentDate, startTime, patient, paymentMethod);
 
         if (!errors.isEmpty()) {
             redirectAttributes.addFlashAttribute("errorList", errors);
@@ -61,11 +62,6 @@ public class AppointmentController {
         return "redirect:/patient/appointment?success=true";
     }
 
-    /**
-     * Reschedule an existing Appointment
-     * Note: We don't take a doctorId here because rescheduling
-     * should not allow changing the doctor.
-     */
     @PostMapping("/patient/appointment/reschedule")
     public String rescheduleAppointment(
             @RequestParam Long appointmentId,
@@ -80,51 +76,75 @@ public class AppointmentController {
             return "redirect:/login";
         }
 
-        // Call service to validate and update the existing record
+        Appointment app = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+        String previousStatus = app.getStatus();
+
         List<String> errors = appointmentService.rescheduleAppointment(
                 appointmentId, appointmentDate, startTime, reason);
 
         if (!errors.isEmpty()) {
-            // 1. Pass the errors
             redirectAttributes.addFlashAttribute("errorList", errors);
-
-            // 2. Pass the specific flag for Reschedule
             redirectAttributes.addFlashAttribute("isRescheduleError", true);
-
-            // 3. Keep your URL parameter for extra safety
             return "redirect:/patient/appointment?editError=true";
         }
 
-        redirectAttributes.addFlashAttribute("successMessage", "Appointment updated successfully!");
+        if ("CANCELLED".equalsIgnoreCase(previousStatus)) {
+            Optional<Payment> paymentOpt = paymentRepository.findByAppointmentId(appointmentId);
+            if (paymentOpt.isPresent()) {
+                Payment payment = paymentOpt.get();
+                payment.setStatus("NOT PAID");
+                paymentRepository.save(payment);
+            }
+        }
+
+        redirectAttributes.addFlashAttribute("success", "Appointment updated successfully!");
         return "redirect:/patient/appointment?rescheduled=true";
     }
 
     /**
-     * Cancel/Delete an Appointment
-     */
-    /**
      * Cancel an Appointment (Patient Side)
      */
     @PostMapping("/patient/appointment/cancel")
-    public String cancelAppointment(@RequestParam Long id) {
-        // 1. Fetch the appointment instead of deleting it
+    public String cancelAppointment(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         Appointment app = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
-        // 2. Change the status
+        Optional<Payment> paymentOpt = paymentRepository.findByAppointmentId(id);
+
+        if (paymentOpt.isPresent()) {
+            Payment payment = paymentOpt.get();
+            String paymentStatus = payment.getStatus();
+
+            // STRICT HARD STOP: Reject cancellation entirely if a reference string exists
+            if (payment.getReferenceNumber() != null && !payment.getReferenceNumber().trim().isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Cannot cancel an appointment once a payment reference number has been submitted. Please reschedule instead.");
+                return "redirect:/patient/appointment";
+            }
+
+            if (!"NOT PAID".equalsIgnoreCase(paymentStatus)) {
+                String displayStatus = paymentStatus.equalsIgnoreCase("PAID") ? "marked as paid" : paymentStatus.toLowerCase();
+                redirectAttributes.addFlashAttribute("error", "Cannot cancel an appointment that is already " + displayStatus + ".");
+                return "redirect:/patient/appointment";
+            }
+
+            payment.setStatus("CANCELLED");
+            paymentRepository.save(payment);
+        }
+
         app.setStatus("CANCELLED");
         appointmentRepository.save(app);
 
-        // 3. Record it in the history timeline!
         historyService.createHistoryRecord(app);
 
+        redirectAttributes.addFlashAttribute("success", "Your appointment and associated payment request have been successfully cancelled.");
         return "redirect:/patient/appointment?cancelled=true";
     }
 
     @PostMapping("/doctor/appointment/update-status")
     public String updateAppointmentStatus(
             @RequestParam Long appointmentId,
-            @RequestParam(required = false) String status, // Marked required=false to match hidden input
+            @RequestParam(required = false) String status,
             @RequestParam(required = false) String location,
             RedirectAttributes redirectAttributes) {
 
@@ -134,20 +154,16 @@ public class AppointmentController {
         LocalDateTime appTime = LocalDateTime.of(app.getAppointmentDate(), app.getStartTime());
         LocalDateTime now = LocalDateTime.now();
 
-        // 1. Block edits if the appointment has already started or passed
-        // Using !isBefore(now) handles both 'now' and 'past' appointments
         if (!appTime.isAfter(now)) {
             redirectAttributes.addFlashAttribute("error", "This appointment has already started or passed. It is now read-only.");
             return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
         }
 
-        // 2. Prevent marking FUTURE appointments as COMPLETED early
         if ("COMPLETED".equalsIgnoreCase(status)) {
             redirectAttributes.addFlashAttribute("error", "Cannot mark future appointments as Completed. Please wait until the appointment time.");
             return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
         }
 
-        // 3. Success Save (Only update status if it was sent)
         if (status != null && !status.isEmpty()) {
             app.setStatus(status);
         }

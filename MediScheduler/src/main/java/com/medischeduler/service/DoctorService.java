@@ -74,23 +74,27 @@ public class DoctorService {
     }
 
     public Doctor updateProfile(Doctor formDoctor) {
-        //Fetch the existing doctor from the DB by ID
         Doctor existingDoctor = doctorRepository.findById(formDoctor.getId()).orElse(null);
 
         if (existingDoctor != null) {
-            // Map personal info from the form
+            // Map personal info
             existingDoctor.setFirstName(formDoctor.getFirstName());
             existingDoctor.setLastName(formDoctor.getLastName());
             existingDoctor.setPhoneNumber(formDoctor.getPhoneNumber());
             existingDoctor.setEmail(formDoctor.getEmail());
             existingDoctor.setNationalId(formDoctor.getNationalId());
 
-            // Map professional info from the form
+            // Map professional info
             existingDoctor.setSpecialization(formDoctor.getSpecialization());
             existingDoctor.setDepartment(formDoctor.getDepartment());
             existingDoctor.setConsultationFees(formDoctor.getConsultationFees());
 
-            // 3. Save the updated doctor back to MySQL
+            // --- NEW: Map bank info ---
+            existingDoctor.setBankName(formDoctor.getBankName());
+            existingDoctor.setBankBranch(formDoctor.getBankBranch());
+            existingDoctor.setAccountName(formDoctor.getAccountName());
+            existingDoctor.setAccountNumber(formDoctor.getAccountNumber());
+
             return doctorRepository.save(existingDoctor);
         }
         return null;
