@@ -378,11 +378,6 @@ form.cancel-form {
 }
 
 /* --- COMPLETE DARK MODE OVERRIDES --- */
-body.dark-mode .no-appointments {
-    background: var(--slate-900);
-    border-color: var(--slate-700);
-}
-
 body.dark-mode .no-appointments p { color: var(--white); }
 body.dark-mode .empty-calendar-icon { color: var(--slate-600); }
 
