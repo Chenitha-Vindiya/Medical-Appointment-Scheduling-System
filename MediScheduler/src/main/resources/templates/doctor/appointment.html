@@ -50,22 +50,21 @@
                             <span class="period" th:text="${#temporals.format(booking.startTime, 'a')}">AM</span>
                         </div>
 
-                        <div class="timeline-marker" th:classappend="${#strings.toLowerCase(booking.status)}">
-                        </div>
+                        <div class="timeline-marker" th:classappend="${#strings.toLowerCase(booking.status)}"></div>
 
                         <div style="width: 100%; cursor: pointer;">
                             <div class="appointment-card"
                                  th:classappend="${booking.status.toLowerCase()}"
                                  th:attr="data-id=${booking.id},
-                                          data-status=${booking.status},
-                                          data-loc=${booking.location},
-                                          data-pname=${booking.patient.firstName + ' ' + booking.patient.lastName},
-                                          data-pphone=${booking.patient.phoneNumber},
-                                          data-pemail=${booking.patient.email},
-                                          data-paddr=${booking.patient.homeAddress},
-                                          data-date=${#temporals.format(booking.appointmentDate, 'dd MMM yyyy') + ' at ' + #temporals.format(booking.startTime, 'hh:mm a')},
-                                          data-reason=${booking.reason},
-                                          data-raw-time=${booking.appointmentDate + 'T' + booking.startTime}"
+                                      data-status=${booking.status},
+                                      data-loc=${booking.location},
+                                      data-pname=${booking.patient.firstName + ' ' + booking.patient.lastName},
+                                      data-pphone=${booking.patient.phoneNumber},
+                                      data-pemail=${booking.patient.email},
+                                      data-paddr=${booking.patient.homeAddress},
+                                      data-date=${#temporals.format(booking.appointmentDate, 'dd MMM yyyy') + ' at ' + #temporals.format(booking.startTime, 'hh:mm a')},
+                                      data-reason=${booking.reason},
+                                      data-raw-time=${booking.appointmentDate + 'T' + booking.startTime}"
                                  onclick="openDoctorModal(this)">
 
                                 <img class="patient-avatar"
@@ -75,7 +74,44 @@
                                     <h4 class="patient-name"
                                         th:text="${booking.patient.firstName} + ' ' + ${booking.patient.lastName}">
                                         Name</h4>
-                                    <p class="appointment-details" th:text="${booking.reason} + ' • 30 mins'">Reason</p>
+
+                                    <p class="appointment-details">
+                                        <span th:text="${booking.reason} + ' • 30 mins'">Reason</span>
+                                        <span th:if="${booking.location != null and booking.location != 'null' and booking.location != ''}"
+                                              th:text="' • ' + ${booking.location}"> • Room</span>
+                                    </p>
+                                </div>
+
+                                <div class="card-middle-note" th:if="${booking.status == 'COMPLETED'}" onclick="event.stopPropagation();">
+
+                                    <div class="note-edit-state" th:style="${booking.history == null or booking.history.extraNote == null} ? 'display: flex;' : 'display: none;'">
+                                        <form class="inline-note-form" th:action="@{/doctor/history/note/save}" method="post" onsubmit="saveNoteInline(event, this)">
+                                            <input type="hidden" name="appointmentId" th:value="${booking.id}" />
+                                            <input type="text" name="extraNote" class="inline-note-input" placeholder="Type clinical note..."
+                                                   th:value="${booking.history?.extraNote}" required />
+
+                                            <button type="submit" class="btn-save-note">Save</button>
+
+                                            <button type="button" class="icon-btn btn-cancel-note" onclick="cancelNoteEdit(this)"
+                                                    th:style="${booking.history?.extraNote != null} ? 'display: flex;' : 'display: none;'">
+                                                <span class="material-symbols-outlined">close</span>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <div class="note-view-state" th:style="${booking.history != null and booking.history.extraNote != null} ? 'display: flex;' : 'display: none;'">
+                                        <span class="material-symbols-outlined note-icon">clinical_notes</span>
+                                        <p class="rendered-note-text" th:text="${booking.history?.extraNote}"></p>
+
+                                        <div class="note-actions">
+                                            <button type="button" class="icon-btn edit-btn" onclick="toggleNoteEdit(this)" title="Edit Note">
+                                                <span class="material-symbols-outlined">edit</span>
+                                            </button>
+                                            <button type="button" class="icon-btn delete-btn" onclick="deleteNoteInline(this)" title="Delete Note">
+                                                <span class="material-symbols-outlined">delete</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <span class="status-pill" th:classappend="${booking.status.toLowerCase()}"
@@ -139,6 +175,108 @@
 </div>
 
 <script>
+    // ==========================================
+    // INLINE CLINICAL NOTE LOGIC
+    // ==========================================
+    function saveNoteInline(e, formNode) {
+        e.preventDefault();
+        const btn = formNode.querySelector('.btn-save-note');
+        const originalText = btn.innerText;
+        btn.innerText = 'Saving...';
+        btn.disabled = true;
+
+        const formData = new URLSearchParams(new FormData(formNode));
+        const newText = formNode.querySelector('.inline-note-input').value;
+
+        fetch(formNode.action, {
+            method: 'POST',
+            body: formData,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(res => {
+            if (res.ok) {
+                const container = formNode.closest('.card-middle-note');
+                const viewState = container.querySelector('.note-view-state');
+                const editState = container.querySelector('.note-edit-state');
+
+                // Apply text to the display element
+                viewState.querySelector('.rendered-note-text').innerText = newText;
+
+                // Ensure Cancel button is visible for future edits
+                const cancelBtn = editState.querySelector('.btn-cancel-note');
+                if (cancelBtn) cancelBtn.style.display = 'flex';
+
+                // Swap views instantly
+                editState.style.display = 'none';
+                viewState.style.display = 'flex';
+            } else {
+                alert("Failed to save the note. Please try again.");
+            }
+        }).catch(err => console.error(err))
+            .finally(() => {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            });
+    }
+
+    function toggleNoteEdit(btnNode) {
+        const container = btnNode.closest('.card-middle-note');
+        container.querySelector('.note-view-state').style.display = 'none';
+        const editState = container.querySelector('.note-edit-state');
+        editState.style.display = 'flex';
+        editState.querySelector('.inline-note-input').focus();
+    }
+
+    function cancelNoteEdit(btnNode) {
+        const container = btnNode.closest('.card-middle-note');
+        container.querySelector('.note-edit-state').style.display = 'none';
+        container.querySelector('.note-view-state').style.display = 'flex';
+    }
+
+    function deleteNoteInline(btnNode) {
+        if(!confirm("Are you sure you want to permanently delete this clinical note?")) return;
+
+        const container = btnNode.closest('.card-middle-note');
+        const formNode = container.querySelector('form');
+        const appointmentId = formNode.querySelector('input[name="appointmentId"]').value;
+
+        btnNode.disabled = true;
+        btnNode.style.color = "var(--danger)";
+
+        const formData = new URLSearchParams();
+        formData.append('appointmentId', appointmentId);
+
+        fetch('/doctor/history/note/delete', {
+            method: 'POST',
+            body: formData,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(res => {
+            if (res.ok) {
+                const viewState = container.querySelector('.note-view-state');
+                const editState = container.querySelector('.note-edit-state');
+
+                // Swap views back to the empty input field
+                viewState.style.display = 'none';
+                editState.style.display = 'flex';
+
+                // Clear out the input field and hide cancel button
+                editState.querySelector('.inline-note-input').value = '';
+                const cancelBtn = editState.querySelector('.btn-cancel-note');
+                if (cancelBtn) cancelBtn.style.display = 'none';
+            } else {
+                alert("Failed to delete the note.");
+            }
+        }).finally(() => {
+            btnNode.disabled = false;
+            btnNode.style.color = "";
+        });
+    }
+
+    // Update your existing window click listener to close both modals
+    window.addEventListener('click', (e) => {
+        const docModal = document.getElementById('doctorModal');
+        if (e.target === docModal) closeDoctorModal();
+    });
+
     function openDoctorModal(element) {
         const modal = document.getElementById('doctorModal');
 
