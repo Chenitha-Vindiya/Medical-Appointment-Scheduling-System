@@ -58,7 +58,9 @@
             </div>
             <div class="stat-body">
                 <p class="stat-label">Pending Invoices</p>
-                <p class="stat-value">2 Invoices</p>
+                <p class="stat-value" th:text="${pendingInvoicesCount} + (${pendingInvoicesCount == 1} ? ' Invoice' : ' Invoices')">
+                    0 Invoices
+                </p>
             </div>
         </div>
     </section>

@@ -42,11 +42,10 @@
                     <div class="stat-icon icon-slate">
                         <span class="material-symbols-outlined">person_add</span>
                     </div>
-                    <span class="stat-badge badge-slate">New</span>
                 </div>
-                <p class="stat-label">New Patients</p>
-                <h4 class="stat-value">04</h4>
-                <p class="stat-footer">Ready for onboarding records</p>
+                <p class="stat-label">Total Patients</p>
+                <h4 class="stat-value" th:text="${#numbers.formatInteger(totalPatients, 2)}">04</h4>
+                <p class="stat-footer">With completed/confirmed visits</p>
             </div>
 
             <div class="stat-card">
