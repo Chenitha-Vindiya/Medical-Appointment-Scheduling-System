@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "appointments")
@@ -55,8 +56,22 @@ public class Appointment {
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Payment payment;
 
+    @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
+    private List<History> histories;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+
+    public History getHistory() {
+        if (this.histories == null || this.histories.isEmpty()) {
+            return null;
+        }
+        // Always return the COMPLETED record (where notes live), or the most recent one
+        return this.histories.stream()
+                .filter(h -> "COMPLETED".equalsIgnoreCase(h.getStatus()))
+                .findFirst()
+                .orElse(this.histories.get(this.histories.size() - 1));
+    }
 }

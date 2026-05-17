@@ -102,9 +102,6 @@ public class AppointmentController {
         return "redirect:/patient/appointment?rescheduled=true";
     }
 
-    /**
-     * Cancel an Appointment (Patient Side)
-     */
     @PostMapping("/patient/appointment/cancel")
     public String cancelAppointment(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         Appointment app = appointmentRepository.findById(id)
@@ -154,21 +151,62 @@ public class AppointmentController {
         LocalDateTime appTime = LocalDateTime.of(app.getAppointmentDate(), app.getStartTime());
         LocalDateTime now = LocalDateTime.now();
 
+        // 1. Time-lock check
         if (!appTime.isAfter(now)) {
             redirectAttributes.addFlashAttribute("error", "This appointment has already started or passed. It is now read-only.");
             return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
         }
 
+        // 2. Early completion check
         if ("COMPLETED".equalsIgnoreCase(status)) {
             redirectAttributes.addFlashAttribute("error", "Cannot mark future appointments as Completed. Please wait until the appointment time.");
             return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
         }
 
-        if (status != null && !status.isEmpty()) {
+        // 3. Payment Sync & Restriction Logic
+        if (status != null && !status.isEmpty() && !status.equalsIgnoreCase(app.getStatus())) {
+
+            Optional<Payment> paymentOpt = paymentRepository.findByAppointmentId(appointmentId);
+
+            if (paymentOpt.isPresent()) {
+                Payment payment = paymentOpt.get();
+                String paymentStatus = payment.getStatus();
+
+                // A. HARD STOP: Prevent cancelling or setting to pending if money is tied up
+                if ("PAID".equalsIgnoreCase(paymentStatus) || "PROCESSING".equalsIgnoreCase(paymentStatus)) {
+                    if ("PENDING".equalsIgnoreCase(status) || "CANCELLED".equalsIgnoreCase(status)) {
+                        redirectAttributes.addFlashAttribute("error",
+                                "Cannot change status to " + status + " because the patient's payment is already " + paymentStatus + ".");
+                        return "redirect:/doctor/appointment?date=" + app.getAppointmentDate();
+                    }
+                }
+
+                // B. SYNC CANCELLATION: If doctor cancels, cancel the unpaid payment invoice too
+                if ("CANCELLED".equalsIgnoreCase(status) && !"CANCELLED".equalsIgnoreCase(paymentStatus)) {
+                    payment.setStatus("CANCELLED");
+                    paymentRepository.save(payment);
+                }
+
+                // C. SYNC REACTIVATION: If doctor reverts from Cancelled to Confirmed/Pending, reactivate the invoice
+                if ("CANCELLED".equalsIgnoreCase(app.getStatus()) &&
+                        ("PENDING".equalsIgnoreCase(status) || "CONFIRMED".equalsIgnoreCase(status))) {
+
+                    if ("CANCELLED".equalsIgnoreCase(payment.getStatus())) {
+                        payment.setStatus("NOT PAID"); // Re-activate the payment request
+                        paymentRepository.save(payment);
+                    }
+                }
+            }
+
+            // Apply the new status
             app.setStatus(status);
         }
+
+        // 4. Save location and final updates
         app.setLocation(location);
         appointmentRepository.save(app);
+
+        // Create history snapshot
         historyService.createHistoryRecord(app);
 
         redirectAttributes.addFlashAttribute("success", "Appointment updated successfully.");

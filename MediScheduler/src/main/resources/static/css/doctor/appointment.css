@@ -960,3 +960,131 @@ body.dark-mode .btn-cancel {
 body.dark-mode .section-divider {
     border-bottom: 1px solid #334155;
 }
+
+/* ==========================================================================
+   INLINE CLINICAL NOTE COMPONENT
+   ========================================================================== */
+.patient-info { flex: 1; min-width: 180px; }
+
+.card-middle-note {
+    flex: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0 1.5rem;
+    min-width: 250px;
+}
+
+/* State: Editing / Input */
+.note-edit-state {
+    width: 100%;
+    max-width: 400px;
+}
+
+.inline-note-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.inline-note-input {
+    flex: 1;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--outline-variant, #cbd5e1);
+    border-radius: 20px;
+    background-color: var(--surface-container-lowest, #ffffff);
+    color: var(--on-surface, #0f172a);
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.inline-note-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(43, 173, 238, 0.15);
+}
+
+.btn-save-note {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 0.4rem 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-save-note:hover { background-color: var(--primary-hover); }
+
+/* State: Viewing */
+.note-view-state {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--surface-container-low, #f8fafc);
+    border: 1px solid var(--outline-variant, #e2e8f0);
+    padding: 0.4rem 0.5rem 0.4rem 1rem;
+    border-radius: 20px;
+    max-width: 450px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.note-icon {
+    font-size: 1.1rem;
+    color: var(--primary);
+}
+
+.rendered-note-text {
+    font-size: 0.85rem;
+    color: var(--on-surface, #334155);
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+}
+
+/* Edit & Delete Action Icons */
+.note-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--slate-400, #94a3b8);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.icon-btn .material-symbols-outlined { font-size: 1.15rem; }
+.icon-btn:hover { background-color: var(--surface-container-high, #e2e8f0); color: var(--on-surface, #0f172a); }
+.icon-btn.delete-btn:hover { color: var(--danger, #ef4444); background-color: rgba(239, 68, 68, 0.1); }
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 850px) {
+    .appointment-card { flex-wrap: wrap; }
+    .card-middle-note { order: 3; margin: 12px 0 0 0; width: 100%; justify-content: flex-start; }
+    .status-pill { order: 2; margin-left: auto; }
+}
+
+/* --- Dark Mode Mappings --- */
+body.dark-mode .inline-note-input { background-color: var(--surface-container-lowest); border-color: var(--outline-variant); color: #fff; }
+body.dark-mode .note-view-state { background-color: var(--surface-container-high); border-color: var(--outline-variant); }
+body.dark-mode .rendered-note-text { color: var(--slate-200); }
+body.dark-mode .icon-btn { color: var(--slate-400); }
+body.dark-mode .icon-btn:hover { background-color: var(--surface-container-lowest); color: #fff; }
+body.dark-mode .icon-btn.delete-btn:hover { color: #f87171; background-color: rgba(239, 68, 68, 0.15); }

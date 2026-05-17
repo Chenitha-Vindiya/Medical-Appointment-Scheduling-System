@@ -39,6 +39,9 @@ public class HistoryService {
         history.setAppointment(appointment);
         history.setPatient(appointment.getPatient());
         history.setStatus(status);
+        history.setHistoricalDate(appointment.getAppointmentDate());
+        history.setHistoricalTime(appointment.getStartTime());
+        history.setHistoricalReason(appointment.getReason());
         historyRepository.save(history);
     }
 
