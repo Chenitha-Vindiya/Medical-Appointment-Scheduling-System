@@ -51,18 +51,18 @@
                                 <span class="record-id" th:text="'#REC-' + ${record.id}"></span>
                             </div>
 
-                            <h3 class="record-title" th:text="${record.appointment.reason}">Reason</h3>
+                            <h3 class="record-title" th:text="${record.historicalReason}">Reason</h3>
 
                             <p class="record-subtitle" th:text="'Dr. ' + ${record.appointment.doctor.firstName} + ' ' + ${record.appointment.doctor.lastName} + (${record.status == 'COMPLETED'} ? ' • ' + ${record.appointment.location} : '')"></p>
 
                             <div class="record-meta">
                                     <span>
                                         <span class="material-symbols-outlined meta-icon">calendar_today</span>
-                                        <span th:text="${#temporals.format(record.appointment.appointmentDate, 'MMM dd, yyyy')}"></span>
+                                        <span th:text="${#temporals.format(record.historicalDate, 'MMM dd, yyyy')}"></span>
                                     </span>
                                 <span>
                                         <span class="material-symbols-outlined meta-icon">schedule</span>
-                                        <span th:text="${#temporals.format(record.appointment.startTime, 'hh:mm a')}"></span>
+                                        <span th:text="${#temporals.format(record.historicalTime, 'hh:mm a')}"></span>
                                     </span>
                             </div>
                         </div>

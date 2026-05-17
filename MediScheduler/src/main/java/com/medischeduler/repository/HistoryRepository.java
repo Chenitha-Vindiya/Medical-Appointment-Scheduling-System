@@ -14,4 +14,6 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
     List<History> findByAppointmentDoctorIdOrderByCreatedAtDesc(Long doctorId);
 
     Optional<History> findTopByAppointmentIdOrderByCreatedAtDesc(Long appointmentId);
+
+    Optional<History> findByAppointmentId(Long appointmentId);
 }
