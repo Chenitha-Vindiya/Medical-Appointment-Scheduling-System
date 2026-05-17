@@ -1,135 +1,153 @@
-# SE1020 – Object Oriented Programing
+# 🏥 MediScheduler - Healthcare Appointment & Clinical Management System
 
-## Project Title: Medical Appointment System
+![Java](https://img.shields.io/badge/Java-17-orange?logo=java)
+![Spring Boot](https://img.shields.io/badge/Spring--Boot-3.x-brightgreen?logo=springboot)
+![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue?logo=mysql)
+![Maven](https://img.shields.io/badge/Build-Maven-red?logo=apachemaven)
+![License](https://img.shields.io/badge/License-Proprietary-red)
+![Status](https://img.shields.io/badge/Status-Finished-brightgreen)
+![Build](https://img.shields.io/badge/Build-Passing-blue)
 
-## Component 01: Patient Management
 
-```
-Description: Handles registration and personal health records for patients.
-```
-```
-CRUD Operations:
-```
-- **Create:** Register a new patient and save data to patients.txt.
-- **Read:** Search for patients by ID or National Identity number.
-- **Update:** Edit contact information or emergency contact details.
-- **Deactivate:** Deactivate a patient profile if they are no longer active.
+**MediScheduler** is a comprehensive, full-stack Spring Boot web application designed to bridge the gap between healthcare professionals and patients. It provides a highly responsive, app-like experience for patients to book and manage medical appointments, while offering doctors a powerful clinical dashboard to manage their daily timelines, write clinical notes, and seamlessly interact with patient feedback.
 
-```
-OOP Concept: Encapsulation using a Patient class with private attributes and public
-getters/setters.
-```
-```
-UI Pages: Patient Registration, Patient Login, Patient Dashboard, Patient Profile.
-```
-## Component 02 : Doctor & Staff Management
+## ✨ Key Features
 
-```
-Description: Manages the directory of medical professionals and their specialties.
-```
-```
-CRUD Operations:
-```
-- **Create:** Add a new doctor profile (specialty, experience, room number) to
-    doctors.txt.
-- **Read:** View doctor profiles filtered by department (e.g., Cardiology, ENT).
-- **Update:** Change a doctor’s consultation hours or room assignment.
-- **Delete:** Remove a doctor from the system upon resignation.
+### 👨‍⚕️ Doctor Workspace
 
-```
-OOP Concept: Inheritance where Doctor and Nurse classes inherit common properties
-from a base Staff class.
-```
-```
-UI Pages: Add Staff Form, Doctor Directory, Edit Staff Details.
-```
+* **Smart Daily Timeline:** An intuitive, chronological day-view of appointments with visual status markers and real-time locking for past events.
+* **Clinical Notes & Audit Logging:** Write, edit, and delete post-consultation clinical notes. All changes are securely snapshotted in a historical audit table.
+* **Feedback Administration:** A dedicated dashboard to view patient evaluations. Doctors can officially acknowledge reviews, write threaded clinical replies, or escalate administrative concerns.
+* **Automated Schedule Management:** Background chron jobs automatically cancel unpaid expired appointments and auto-complete finished consultations.
+* **Dynamic Analytics:** Real-time tracking of daily consultation hours, upcoming patient counts, and average satisfaction scores.
 
-## Component 03 : Appointment Scheduling
+### 🤒 Patient Portal
 
-```
-Description: The core module for managing the time slots between patients and
-doctors.
-```
-```
-CRUD Operations:
-```
-- **Create:** Book a new appointment and save to appointments.txt.
-- **Read:** View upcoming appointments for a specific date or doctor.
-- **Update:** Reschedule an appointment to a different time or date.
-- **Delete:** Cancel an appointment and free up the slot.
+* **Seamless Booking:** Schedule, reschedule, or cancel medical appointments with strict validation rules tied to payment statuses.
+* **Financial Tracking:** Monitor pending invoices, view past payments, and manage consultation fees securely.
+* **Interactive Feedback:** Rate appointments and provide categorized feedback (Clinical Inquiry, Service Appreciation, etc.) with a dynamic UI.
+* **Doctor Communications:** View direct replies, acknowledgments, and clinical instructions from doctors straight from the feedback dashboard.
 
-```
-OOP Concept: Polymorphism to calculate different appointment durations or fees
-based on the check-up type (e.g., General vs. Specialist).
-```
-```
-UI Pages: Appointment Booking Form, Daily Schedule View, Cancellation Page.
-```
-## Component 04 : Medical Record & History Management
+### 🎨 UI/UX Highlights
 
-```
-Description: Tracks the medical history, previous diagnoses, and prescriptions.
-```
-```
-CRUD Operations:
-```
-- **Create:** Add a new entry after a consultation (symptoms, diagnosis) to
-    records.txt.
-- **Read:** Retrieve the full medical history of a specific patient.
-- **Update:** Correct or add follow-up notes to an existing medical record.
-- **Delete:** Archive or remove old records (following medical data retention
-    policies).
+* **Native Dark Mode:** Fully integrated, user-toggled dark mode with persistent local storage.
+* **Glassmorphism & Micro-interactions:** Premium, modern UI featuring smooth CSS grid animations, seamless inline-editing, and intelligent state-swapping without page reloads (via AJAX).
+* **Fully Responsive:** Optimized for both desktop workspaces and mobile devices.
 
-```
-OOP Concept: Composition where a MedicalRecord object contains multiple
-Prescription objects.
-```
-```
-UI Pages: New Diagnosis Entry, Patient History Viewer, Record Modification Page.
-```
+---
 
-## Component 05 : Billing and Payment Management
+## 🛠️ Tech Stack
 
-```
-Description: Handles the financial transactions, insurance claims, and receipts.
-```
-```
-CRUD Operations:
-```
-- **Create:** Generate a new invoice after a consultation and save to billing.txt.
-- **Read:** Search for payment history by patient ID or Invoice number.
-- **Update:** Mark a payment status as "Paid," "Pending," or "Refunded."
-- **Delete:** Void a mistakenly generated invoice.
+* **Backend:** Java 17, Spring Boot 3.x, Spring MVC, Spring Scheduling (`@Scheduled`)
+* **Database:** MySQL, Spring Data JPA / Hibernate
+* **Frontend:** Thymeleaf, HTML5, CSS3 (Custom modular architecture), Vanilla JavaScript (AJAX/Fetch API)
+* **Icons & Fonts:** Google Material Symbols, Inter Font Family
+* **Build Tool:** Maven
 
-```
-OOP Concept: Method Overloading for different payment types (e.g.,
-processPayment(double amount) for cash vs processPayment(double amount, String
-cardNum) for cards).
-```
-```
-UI Pages: Generate Invoice, Billing Dashboard, Payment Status Update.
-```
-## Component 06 : Feedback & Inquiry Management
+---
 
-```
-Description: A simple module for patients to leave reviews or ask questions regarding
-services.
-```
-```
-CRUD Operations:
-```
-- **Create:** Submit a new feedback or support ticket to feedback.txt.
-- **Read:** Admin views a list of all submitted feedback and inquiries.
-- **Update:** Mark a support inquiry as "Resolved" once addressed.
-- **Delete:** Remove old or irrelevant feedback/spam entries.
+## 🚀 Getting Started
 
-```
-OOP Concepts: Encapsulation to secure feedback data and Polymorphism for different
-views (Patient sees "Submit," Admin sees "Moderate").
-```
-```
-UI Pages: Feedback Submission Form, Contact Support Page, Admin Feedback
-Dashboard.
+### Prerequisites
+
+Ensure you have the following installed on your local development environment:
+
+* [Java Development Kit (JDK) 17 or higher](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+* [Maven](https://maven.apache.org/download.cgi)
+* [MySQL Server](https://dev.mysql.com/downloads/mysql/)
+* An IDE such as IntelliJ IDEA, Eclipse, or VS Code
+
+### Installation & Setup
+
+1. **Clone the repository:**
+```bash
+git clone https://github.com/Chenitha-Vindiya/Medical-Appointment-Scheduling-System.git
+cd medischeduler
+
 ```
 
 
+2. **Configure the Database:**
+* Open your MySQL client and create the database:
+```sql
+CREATE DATABASE medischeduler;
+
+```
+
+
+* Open `src/main/resources/application.properties` and configure your credentials:
+```properties
+# Database Connection
+spring.datasource.url=jdbc:mysql://localhost:3306/medischeduler?createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=YOUR_MYSQL_PASSWORD
+
+# Hibernate Settings
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+```
+
+
+
+
+3. **Run the Application:**
+* Open your terminal in the project root and execute:
+```bash
+mvn spring-boot:run
+
+```
+
+
+* Or simply run `MediSchedulerApplication.java` from your IDE.
+
+
+4. **Access the Application:**
+* The server will launch on port `8080`.
+* Open your browser and navigate to: [http://localhost:8080](http://localhost:8080)
+
+
+
+---
+
+## 📁 Project Structure
+
+MediScheduler utilizes a clean, role-based MVC architecture:
+
+```text
+medischeduler/
+├── src/main/java/com/medischeduler/
+│   ├── controller/      # Route handling for /doctor and /patient endpoints
+│   ├── model/           # JPA Entities (Doctor, Patient, Appointment, History, Payment, Feedback)
+│   ├── repository/      # Spring Data JPA interfaces for SQL execution
+│   └── service/         # Business logic & background Scheduled Tasks
+├── src/main/resources/
+│   ├── static/          # Assets
+│   │   ├── css/         # Modular stylesheets (split by doctor/patient/fragments)
+│   │   └── js/          # Vanilla JavaScript logic
+│   ├── templates/       # Thymeleaf HTML views
+│   │   ├── doctor/      # Doctor dashboard, appointments, feedback
+│   │   └── patient/     # Patient booking, history, reviews
+│   └── application.properties # Spring Boot configurations
+└── pom.xml              # Maven dependencies
+
+```
+
+---
+
+## 🔮 Future Enhancements
+
+* **Payment Gateway Integration:** Direct integration with Stripe API for processing online invoices.
+* **Spring Security Implementation:** Role-based access control (RBAC) with BCrypt password hashing and JWT session management.
+* **E-Prescriptions:** Allow doctors to generate and export PDF prescriptions attached to clinical notes.
+* **SMS/Email Notifications:** Automated reminders for upcoming appointments via Twilio or SendGrid.
+
+---
+
+## 📝 License
+
+**Copyright © 2026 MediScheduler. All Rights Reserved.**
+
+This repository and its contents are proprietary and confidential. No part of this software, including but not limited to source code, compiled binaries, and design assets, may be reproduced, distributed, modified, or transmitted in any form or by any means without the prior written permission of the copyright owner.
+
+This is **not** an open-source project. Unauthorized copying, cloning, or distribution of this project, via any medium, is strictly prohibited.
