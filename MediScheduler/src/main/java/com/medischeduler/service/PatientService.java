@@ -26,10 +26,6 @@ public class PatientService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    /**
-     * Fetches a specific patient's details and calculates their
-     * last and next visit for the modal overview.
-     */
     public Map<String, Object> getPatientModalDetails(Long patientId, Long doctorId) {
         Map<String, Object> response = new HashMap<>();
 
