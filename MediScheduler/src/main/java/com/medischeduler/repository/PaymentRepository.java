@@ -17,4 +17,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> { // Cha
     Optional<Payment> findByAppointmentId(Long appointmentId);
 
     List<Payment> findByAppointmentDoctorIdOrderByCreatedAtDesc(Long doctorId);
+
+    long countByPatientIdAndStatus(Long id, String pending);
 }

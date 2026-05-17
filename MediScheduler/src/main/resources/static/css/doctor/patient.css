@@ -816,7 +816,7 @@ body.dark-mode {
 body.dark-mode .navbar,
 body.dark-mode .card,
 body.dark-mode .modal-content {
-    background-color: var(--surface-container-lowest);
+    background-color: var(--surface-container-low);
     color: var(--on-surface);
 }
 

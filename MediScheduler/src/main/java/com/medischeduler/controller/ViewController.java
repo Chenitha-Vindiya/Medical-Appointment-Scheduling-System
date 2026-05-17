@@ -70,7 +70,6 @@ public class ViewController {
                 .findByPatientIdAndAppointmentDateGreaterThanEqualOrderByAppointmentDateAsc(patient.getId(), today);
 
         // 3. Filter precisely by Time
-        // This ensures we exclude appointments that were at 10:00 AM if it's currently 2:00 PM
         List<Appointment> filteredUpcoming = allUpcoming.stream()
                 .filter(app -> {
                     LocalDateTime appDateTime = LocalDateTime.of(app.getAppointmentDate(), app.getStartTime());
@@ -78,12 +77,12 @@ public class ViewController {
                 })
                 .collect(Collectors.toList());
 
-        // 4. Set "Next Appointment" Card (The single soonest one)
+        // 4. Set "Next Appointment" Card
         if (!filteredUpcoming.isEmpty()) {
             model.addAttribute("nextAppointment", filteredUpcoming.get(0));
         }
 
-        // 5. Set "Upcoming Appointments" Table (Top 5 items)
+        // 5. Set "Upcoming Appointments" Table
         List<Appointment> tableData = filteredUpcoming.stream()
                 .limit(5)
                 .collect(Collectors.toList());
@@ -91,9 +90,16 @@ public class ViewController {
         // --- FETCH COMPLETED VISITS COUNT ---
         long totalVisits = appointmentRepository.countByPatientIdAndStatus(patient.getId(), "COMPLETED");
 
+        // --- NEW: FETCH PENDING INVOICES COUNT ---
+        // Make sure "PENDING" or "UNPAID" matches the exact string/enum you use in your database
+        long pendingInvoicesCount = paymentRepository.countByPatientIdAndStatus(patient.getId(), "NOT PAID");
+
         model.addAttribute("upcomingAppointments", tableData);
         model.addAttribute("patientName", patient.getFirstName());
         model.addAttribute("totalVisits", totalVisits);
+
+        // Add the pending invoices count to the model
+        model.addAttribute("pendingInvoicesCount", pendingInvoicesCount);
 
         return "patient/dashboard";
     }
@@ -188,7 +194,7 @@ public class ViewController {
         return "deactivated";
     }
 
-    //Doctor Dashboard
+    // Update your doctorDashboard method in the Controller
     @GetMapping("/doctor/dashboard")
     public String doctorDashboard(HttpSession session, Model model) {
         Doctor sessionDoc = (Doctor) session.getAttribute("loggedInDoctor");
@@ -222,16 +228,22 @@ public class ViewController {
             totalHours = minutes / 60.0;
         }
 
-        // 2. Filter today's appointments for ONLY those starting from now onwards
+        // Filter today's appointments for ONLY those starting from now onwards
         List<Appointment> futureAppointments = todayAppointments.stream()
-                .filter(app -> !app.getStartTime().isBefore(now)) // same as isAfter or isEqual
+                .filter(app -> !app.getStartTime().isBefore(now))
                 .collect(Collectors.toList());
+
+        // --- NEW: Fetch Total Unique Patients ---
+        long totalPatients = appointmentRepository.countUniquePatientsByDoctorAndStatus(doctor.getId());
 
         model.addAttribute("upcomingTable", futureAppointments);
         model.addAttribute("todayCount", todayAppointments.size());
         model.addAttribute("nextTime", nextTime);
         model.addAttribute("consultationHours", totalHours);
-        model.addAttribute("isWorkingToday", todayShift != null); // New flag for the UI
+        model.addAttribute("isWorkingToday", todayShift != null);
+
+        // Pass the new variable to the UI
+        model.addAttribute("totalPatients", totalPatients);
 
         return "doctor/dashboard";
     }

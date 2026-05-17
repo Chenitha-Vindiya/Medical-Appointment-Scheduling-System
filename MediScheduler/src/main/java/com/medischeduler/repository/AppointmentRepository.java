@@ -2,6 +2,8 @@ package com.medischeduler.repository;
 
 import com.medischeduler.model.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -33,6 +35,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     long countByPatientIdAndStatus(Long patientId, String status);
 
     List<Appointment> findByDoctorIdAndStatus(Long doctorId, String status);
+
+    // Add this to your AppointmentRepository.java
+    @Query("SELECT COUNT(DISTINCT a.patient.id) FROM Appointment a WHERE a.doctor.id = :doctorId AND a.status IN ('COMPLETED', 'CONFIRMED')")
+    long countUniquePatientsByDoctorAndStatus(@Param("doctorId") Long doctorId);
 
 
 }
