@@ -5,13 +5,14 @@ import com.medischeduler.repository.FeedbackRepository;
 import com.medischeduler.service.FeedbackService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/patient/feedback")
+@RequestMapping
 public class FeedbackController {
 
     @Autowired
@@ -20,7 +21,7 @@ public class FeedbackController {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    @PostMapping("/submit")
+    @PostMapping("/patient/feedback/submit")
     public String submitFeedback(@ModelAttribute Feedback feedback,
                                  @RequestParam Long appointmentId,
                                  @RequestParam(required = false) String[] feedbackTypes,
@@ -49,7 +50,7 @@ public class FeedbackController {
         return "redirect:/patient/feedback";
     }
 
-    @PostMapping("/delete")
+    @PostMapping("/patient/feedback/delete")
     public String deleteFeedback(@RequestParam Long feedbackId,
                                  HttpSession session,
                                  RedirectAttributes redirectAttributes) {
@@ -63,7 +64,7 @@ public class FeedbackController {
         return "redirect:/patient/feedback";
     }
 
-    @PostMapping("/update")
+    @PostMapping("/patient/feedback/update")
     public String updateFeedback(@RequestParam Long id,
                                  @RequestParam(required = false) String[] feedbackTypes,
                                  @RequestParam String content,
@@ -81,5 +82,57 @@ public class FeedbackController {
         }
 
         return "redirect:/patient/feedback";
+    }
+
+    @PostMapping("/doctor/feedback/respond")
+    @ResponseBody
+    public ResponseEntity<?> respondToFeedback(@RequestParam Long feedbackId,
+                                               @RequestParam String responseContent,
+                                               HttpSession session) {
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (doctor == null) return ResponseEntity.status(401).build();
+
+        feedbackService.respondToFeedback(feedbackId, responseContent, doctor.getId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/doctor/feedback/acknowledge")
+    @ResponseBody
+    public ResponseEntity<?> acknowledgeFeedback(@RequestParam Long feedbackId,
+                                                 @RequestParam boolean status,
+                                                 HttpSession session) {
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (doctor == null) return ResponseEntity.status(401).build();
+
+        feedbackService.toggleAcknowledgment(feedbackId, status, doctor.getId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/doctor/feedback/escalate")
+    @ResponseBody
+    public ResponseEntity<?> escalateFeedback(@RequestParam Long feedbackId,
+                                              @RequestParam boolean status, // NEW
+                                              HttpSession session) {
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (doctor == null) return ResponseEntity.status(401).build();
+
+        feedbackService.escalateFeedback(feedbackId, status, doctor.getId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/doctor/feedback/delete-reply")
+    @ResponseBody
+    public ResponseEntity<?> deleteReply(@RequestParam Long feedbackId, HttpSession session) {
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (doctor == null) return ResponseEntity.status(401).build();
+
+        Feedback feedback = feedbackRepository.findById(feedbackId).orElse(null);
+        if (feedback != null && feedback.getAppointment().getDoctor().getId().equals(doctor.getId())) {
+            feedback.setResponseContent(null);
+            feedback.setRespondedAt(null);
+            feedbackRepository.save(feedback);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(400).build();
     }
 }

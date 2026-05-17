@@ -169,10 +169,11 @@
     letter-spacing: 0.05em;
 }
 
-.badge-question { background-color: rgba(3, 105, 161, 0.1); color: #0369a1; }
-.badge-compliment { background-color: rgba(21, 128, 61, 0.1); color: #15803d; }
-.badge-concern { background-color: rgba(185, 28, 28, 0.1); color: #b91c1c; }
-.badge-suggestion { background-color: rgba(180, 83, 9, 0.1); color: #b45309; }
+/* Specific Category Theme Mappings */
+.badge-clinical-inquiry       { background-color: rgba(2, 132, 199, 0.1); color: #0284c7; } /* Professional Blue */
+.badge-service-appreciation   { background-color: rgba(5, 150, 105, 0.1); color: #059669; } /* Emerald Trust */
+.badge-administrative-concern { background-color: rgba(186, 26, 26, 0.1); color: #ba1a1a; } /* Distinct Warning Red */
+.badge-system-suggestion      { background-color: rgba(234, 88, 12, 0.1); color: #ea580c; } /* Warm Orange Accent */
 
 /* Static Display Stars */
 .rating-display-row {
@@ -675,3 +676,71 @@ body.dark-mode .btn-secondary:hover {
 
     .btn-secondary, .btn-submit { width: 100%; }
 }
+
+/* ==========================================================================
+   DOCTOR RESPONSE TRAY (PATIENT VIEW)
+   ========================================================================== */
+.doctor-response-tray {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-top: 1px dashed var(--outline-variant);
+    padding-top: 1.25rem;
+}
+
+.response-note {
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    background-color: var(--surface-container-low);
+    border: 1px solid var(--outline-variant);
+}
+
+.note-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.note-header .material-symbols-outlined { font-size: 1.15rem; }
+.note-header strong { font-size: 0.85rem; font-weight: 700; color: var(--on-surface); }
+.note-date { font-size: 0.75rem; color: var(--secondary); margin-left: auto; font-style: italic; }
+
+.response-note p {
+    margin: 0.25rem 0 0 1.65rem; /* Indents text underneath the icon */
+    font-size: 0.9rem;
+    color: var(--on-surface-variant);
+    line-height: 1.5;
+}
+
+/* Specific Note Themes */
+.reply-note { border-left: 3px solid var(--primary); }
+.icon-blue { color: var(--primary); }
+
+.success-note {
+    background-color: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
+    border-left: 3px solid #10b981;
+}
+.icon-green { color: #10b981; }
+.heart-fill { font-variation-settings: 'FILL' 1; }
+
+.warning-note {
+    background-color: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.2);
+    border-left: 3px solid #ef4444;
+}
+.icon-red { color: #ef4444; }
+
+/* --- DARK MODE OVERRIDES --- */
+body.dark-mode .doctor-response-tray { border-top-color: var(--outline-variant); }
+body.dark-mode .response-note { background-color: var(--surface-container-lowest); border-color: var(--outline-variant); }
+body.dark-mode .note-header strong { color: #ffffff; }
+body.dark-mode .note-date { color: var(--slate-400); }
+body.dark-mode .response-note p { color: var(--slate-300); }
+
+/* Dark mode theme tints */
+body.dark-mode .reply-note { background-color: rgba(43, 173, 238, 0.05); }
+body.dark-mode .success-note { background-color: rgba(16, 185, 129, 0.05); }
+body.dark-mode .warning-note { background-color: rgba(239, 68, 68, 0.05); }

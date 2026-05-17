@@ -62,7 +62,7 @@
                 <div class="badge-row">
                     <span th:each="type : ${#strings.arraySplit(f.feedbackType, ',')}"
                           class="badge"
-                          th:classappend="${'badge-' + #strings.toLowerCase(#strings.trim(type))}"
+                          th:classappend="${'badge-' + #strings.replace(#strings.toLowerCase(#strings.trim(type)), ' ', '-')}"
                           th:text="${type}">Type</span>
                 </div>
 
@@ -79,11 +79,41 @@
 
                 <h3 class="card-subject" th:text="${f.subject}">Subject</h3>
                 <p class="card-text" th:text="${f.content}">Feedback content goes here.</p>
+
+                <div class="doctor-response-tray"
+                     th:if="${f.acknowledged or f.escalated or (f.responseContent != null and !#strings.isEmpty(f.responseContent))}">
+
+                    <div class="response-note reply-note" th:if="${f.responseContent != null and !#strings.isEmpty(f.responseContent)}">
+                        <div class="note-header">
+                            <span class="material-symbols-outlined icon-blue">medical_information</span>
+                            <strong>Response from Dr. <span th:text="${f.appointment.doctor.lastName}">Name</span></strong>
+                            <span class="note-date" th:text="${f.respondedAt != null ? #temporals.format(f.respondedAt, 'MMM dd, yyyy') : 'Recently'}">Date</span>
+                        </div>
+                        <p th:text="${f.responseContent}">The doctor's message appears here.</p>
+                    </div>
+
+                    <div class="response-note success-note" th:if="${f.acknowledged}">
+                        <div class="note-header">
+                            <span class="material-symbols-outlined icon-green heart-fill">favorite</span>
+                            <strong>Dr. <span th:text="${f.appointment.doctor.lastName}">Name</span> acknowledged your feedback.</strong>
+                        </div>
+                    </div>
+
+                    <div class="response-note warning-note" th:if="${f.escalated}">
+                        <div class="note-header">
+                            <span class="material-symbols-outlined icon-red">assignment_late</span>
+                            <strong>Your concern has been forwarded to clinic administration.</strong>
+                        </div>
+                        <p>Our support staff will review this record and contact you if further resolution is required.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="card-footer">
                 <div class="card-actions">
+
                     <button class="btn-action btn-edit"
+                            th:if="${f.acknowledged != true and f.escalated != true and (f.responseContent == null or #strings.isEmpty(f.responseContent))}"
                             th:data-id="${f.id}"
                             th:data-appointment="${f.appointment.reason}"
                             th:data-subject="${f.subject}"
@@ -100,6 +130,7 @@
                             <span class="material-symbols-outlined">delete</span> Delete
                         </button>
                     </form>
+
                 </div>
             </div>
 
@@ -142,12 +173,20 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Feedback Type</label>
+                    <label class="form-label">Feedback Category</label>
                     <div class="checkbox-grid">
-                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Question"/> Question</label>
-                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Compliment"/> Compliment</label>
-                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Concern"/> Concern</label>
-                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Suggestion"/> Suggestion</label>
+                        <label class="checkbox-item">
+                            <input name="feedbackTypes" type="checkbox" value="Clinical Inquiry"/> Clinical Inquiry
+                        </label>
+                        <label class="checkbox-item">
+                            <input name="feedbackTypes" type="checkbox" value="Service Appreciation"/> Service Appreciation
+                        </label>
+                        <label class="checkbox-item">
+                            <input name="feedbackTypes" type="checkbox" value="Administrative Concern"/> Administrative Concern
+                        </label>
+                        <label class="checkbox-item">
+                            <input name="feedbackTypes" type="checkbox" value="System Suggestion"/> System Suggestion
+                        </label>
                     </div>
                 </div>
 
@@ -205,12 +244,20 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Feedback Type</label>
+                    <label class="form-label">Feedback Category</label>
                     <div class="checkbox-grid">
-                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Question"/> Question</label>
-                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Compliment"/> Compliment</label>
-                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Concern"/> Concern</label>
-                        <label class="checkbox-item"><input name="feedbackTypes" type="checkbox" value="Suggestion"/> Suggestion</label>
+                        <label class="checkbox-item">
+                            <input name="feedbackTypes" type="checkbox" value="Clinical Inquiry"/> Clinical Inquiry
+                        </label>
+                        <label class="checkbox-item">
+                            <input name="feedbackTypes" type="checkbox" value="Service Appreciation"/> Service Appreciation
+                        </label>
+                        <label class="checkbox-item">
+                            <input name="feedbackTypes" type="checkbox" value="Administrative Concern"/> Administrative Concern
+                        </label>
+                        <label class="checkbox-item">
+                            <input name="feedbackTypes" type="checkbox" value="System Suggestion"/> System Suggestion
+                        </label>
                     </div>
                 </div>
 

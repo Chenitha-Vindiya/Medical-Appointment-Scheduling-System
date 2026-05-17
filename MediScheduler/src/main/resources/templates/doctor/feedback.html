@@ -39,10 +39,10 @@
     <div class="filter-row">
         <div class="filter-group">
             <button class="filter-btn active" onclick="filterReviews('ALL', this)">All Feedback</button>
-            <button class="filter-btn inactive" onclick="filterReviews('Question', this)">Questions</button>
-            <button class="filter-btn inactive" onclick="filterReviews('Compliment', this)">Compliments</button>
-            <button class="filter-btn inactive" onclick="filterReviews('Concern', this)">Concerns</button>
-            <button class="filter-btn inactive" onclick="filterReviews('Suggestion', this)">Suggestion</button>
+            <button class="filter-btn inactive" onclick="filterReviews('Clinical Inquiry', this)">Clinical Inquiries</button>
+            <button class="filter-btn inactive" onclick="filterReviews('Service Appreciation', this)">Appreciation</button>
+            <button class="filter-btn inactive" onclick="filterReviews('Administrative Concern', this)">Concerns</button>
+            <button class="filter-btn inactive" onclick="filterReviews('System Suggestion', this)">Suggestions</button>
         </div>
     </div>
 
@@ -54,256 +54,345 @@
             <p>Patient evaluations submitted post-consultation will populate directly within this workspace interface.</p>
         </div>
 
-        <div th:each="f : ${feedbackList}" class="feedback-item editorial-shadow" th:data-category="${f.feedbackType}">
+        <div th:each="f : ${feedbackList}" class="feedback-card"
+             th:data-id="${f.id}"
+             th:data-category="${f.feedbackType}"
+             th:style="${f.escalated} ? 'border-left: 4px solid var(--danger);' : (${f.responseContent != null and !#strings.isEmpty(f.responseContent)} ? 'border-left: 4px solid #10b981;' : '')">
 
-            <div class="feedback-header">
-                <div class="patient-info">
-                    <div class="avatar" th:text="${#strings.substring(f.patient.firstName, 0, 1) + #strings.substring(f.patient.lastName, 0, 1)}">AB</div>
+            <div class="card-context">
+                <div class="context-left">
+                    <div class="info-group">
+                        <div class="avatar-mini" th:text="${#strings.substring(f.patient.firstName, 0, 1) + #strings.substring(f.patient.lastName, 0, 1)}">AB</div>
+                        <strong th:text="${f.patient.firstName + ' ' + f.patient.lastName}">Patient Name</strong>
+                    </div>
+                    <span class="dot-separator">•</span>
+                    <div class="info-group">
+                        <span class="material-symbols-outlined icon-small">confirmation_number</span>
+                        <span th:text="'REC-' + ${f.appointment.id}">REC-0</span>
+                    </div>
+                    <span class="dot-separator">•</span>
+                    <div class="info-group">
+                        <span class="material-symbols-outlined icon-small">event_note</span>
+                        <span th:text="${f.appointment.reason}">Reason</span>
+                    </div>
+                </div>
+                <div class="context-right">
+                    <span class="posted-date" th:text="'Posted ' + ${#temporals.format(f.createdAt, 'MMM dd, yyyy')}">Date</span>
+                </div>
+            </div>
 
-                    <div class="feedback-content">
-                        <h4>
-                            <span th:text="${f.patient.firstName + ' ' + f.patient.lastName}">Patient Name</span>
-                            <span class="badge badge-patient" th:text="'REC-' + ${f.appointment.id}">REC-0</span>
-                        </h4>
+            <div class="card-body">
+                <div class="badge-row">
+                    <span th:each="type : ${#strings.arraySplit(f.feedbackType, ',')}"
+                          class="badge"
+                          th:classappend="${'badge-' + #strings.replace(#strings.toLowerCase(#strings.trim(type)), ' ', '-')}"
+                          th:text="${#strings.trim(type)}">Type</span>
+                </div>
 
-                        <div class="mini-stars">
-                            <div class="star-nodes-inline">
-                            <span class="material-symbols-outlined"
-                                  th:each="i : ${#numbers.sequence(1, 5)}"
-                                  th:classappend="${i <= (f.rating != null ? f.rating : 5)} ? 'star-filled' : 'star-empty'">
-                                star
-                            </span>
+                <div class="rating-display-row">
+                    <div class="stars-static">
+                        <span class="material-symbols-outlined"
+                              th:each="i : ${#numbers.sequence(1, 5)}"
+                              th:classappend="${i <= (f.rating != null ? f.rating : 5)} ? 'star-filled' : 'star-empty'">
+                            star
+                        </span>
+                    </div>
+                    <span class="rating-number" th:text="${(f.rating != null ? f.rating : 5) + '.0'}">5.0</span>
+                </div>
+
+                <h3 class="card-subject" th:text="${f.subject}">Subject</h3>
+                <p class="card-text" th:text="${f.content}">Review content copy populated dynamically.</p>
+
+                <div class="doctor-reply-box" th:if="${#strings.contains(f.feedbackType, 'Clinical Inquiry') or #strings.contains(f.feedbackType, 'System Suggestion')}">
+
+                    <div class="reply-view-state" th:style="${f.responseContent != null and !#strings.isEmpty(f.responseContent)} ? 'display: block;' : 'display: none;'">
+                        <div class="reply-box-header">
+                            <div class="reply-box-title">
+                                <span class="material-symbols-outlined">medical_information</span>
+                                <strong>Your Clinical Note</strong>
                             </div>
-                            <span class="rating-number" th:text="${(f.rating != null ? f.rating : 5) + '.0'}">5.0</span>
+                            <span class="reply-time" th:text="${f.respondedAt != null ? #temporals.format(f.respondedAt, 'MMM dd, yyyy - hh:mm a') : 'Just now'}">Date</span>
+                        </div>
+                        <div class="reply-box-body">
+                            <p class="rendered-response-text" th:text="${f.responseContent}"></p>
                         </div>
 
-                        <div class="category-badges">
-                        <span th:each="type : ${#strings.arraySplit(f.feedbackType, ',')}"
-                              class="type-badge"
-                              th:classappend="${'badge-' + #strings.toLowerCase(#strings.trim(type))}"
-                              th:text="${#strings.trim(type)}">Type</span>
+                        <div class="reply-box-footer">
+                            <button type="button" class="btn-delete-reply" onclick="deleteInlineReply(this)">
+                                <span class="material-symbols-outlined">delete</span> Delete
+                            </button>
+                            <button type="button" class="btn-edit-inline" onclick="toggleEditMode(this)">
+                                <span class="material-symbols-outlined">edit</span> Edit Reply
+                            </button>
                         </div>
-
-                        <p class="comment" th:text="${f.content}">Review content copy populated dynamically.</p>
                     </div>
-                </div>
 
-                <div class="meta-info">
-                    <span class="time-ago" th:text="${#temporals.format(f.createdAt, 'MMM dd, yyyy')}">Date</span>
-                    <span class="status-pill" th:text="${f.subject}">Subject</span>
+                    <div class="reply-edit-state" th:style="${f.responseContent == null or #strings.isEmpty(f.responseContent)} ? 'display: block;' : 'display: none;'">
+                        <form th:action="@{/doctor/feedback/respond}" method="post" class="minimal-reply-form" onsubmit="submitInlineReply(event, this)">
+                            <input type="hidden" name="feedbackId" th:value="${f.id}" />
+
+                            <textarea name="responseContent" class="minimal-textarea" required rows="2"
+                                      placeholder="Type your clinical response here..."
+                                      th:text="${f.responseContent}"></textarea>
+
+                            <div class="minimal-form-actions">
+                                <button type="button" class="btn-cancel-inline"
+                                        th:if="${f.responseContent != null and !#strings.isEmpty(f.responseContent)}"
+                                        onclick="cancelEditMode(this)">Cancel</button>
+
+                                <button type="submit" class="btn-save-inline">
+                                    <span class="material-symbols-outlined">Reply</span> <span class="save-text">Reply</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
-            <div class="feedback-footer">
+            <div class="card-footer" th:if="${#strings.contains(f.feedbackType, 'Service Appreciation') or #strings.contains(f.feedbackType, 'Administrative Concern')}">
+                <div class="card-actions-doctor">
 
-                <div class="action-links">
-                    <button type="button" class="action-btn primary trigger-reply"
-                            th:if="${#strings.contains(f.feedbackType, 'Question') or #strings.contains(f.feedbackType, 'Suggestion')}"
-                            onclick="toggleInlineDrawer(this)">
-                        <span class="material-symbols-outlined icon-vector">reply</span>
-                        <span class="action-text">Respond to Inquiry</span>
-                    </button>
-
-                    <button type="button" class="action-btn react-btn"
-                            th:if="${#strings.contains(f.feedbackType, 'Compliment') and !#strings.contains(f.feedbackType, 'Question')}"
+                    <button type="button" class="btn-action react-btn"
+                            th:if="${#strings.contains(f.feedbackType, 'Service Appreciation') and !#strings.contains(f.feedbackType, 'Clinical Inquiry')}"
+                            th:style="${f.acknowledged} ? 'color: #10b981;' : ''"
                             onclick="toggleReaction(this)" title="Acknowledge with appreciation">
-                        <span class="material-symbols-outlined heart-icon">favorite</span>
-                        <span class="react-label">Acknowledge</span>
+                        <span class="material-symbols-outlined heart-icon"
+                              th:classappend="${f.acknowledged} ? 'active-heart' : ''"
+                              th:style="${f.acknowledged} ? 'font-variation-settings: \'FILL\' 1;' : ''">favorite</span>
+                        <span class="react-label" th:text="${f.acknowledged} ? 'Acknowledged' : 'Acknowledge'">Acknowledge</span>
                     </button>
 
-                    <button type="button" class="action-btn escalate-btn"
-                            th:if="${#strings.contains(f.feedbackType, 'Concern')}"
+                    <button type="button" class="btn-action escalate-btn"
+                            th:if="${#strings.contains(f.feedbackType, 'Administrative Concern')}"
+                            th:classappend="${f.escalated} ? 'escalated-state' : ''"
                             onclick="triggerEscalation(this)" title="Route securely to administrative resolution paths">
-                        <span class="material-symbols-outlined icon-vector">assignment_late</span>
-                        <span class="action-text">Route Escalation</span>
+                        <span class="material-symbols-outlined" th:text="${f.escalated} ? 'flag' : 'assignment_late'">assignment_late</span>
+                        <span class="action-text" th:text="${f.escalated} ? 'Escalated Systematically' : 'Route Escalation'">Route Escalation</span>
                     </button>
                 </div>
-
-                <div class="reply-note" style="display: none;">
-                    <div class="check-circle">
-                        <span class="material-symbols-outlined icon-done">done_all</span>
-                    </div>
-                    <span class="reply-text">Response logged successfully into auditing trails.</span>
-                </div>
-
             </div>
-
-            <div class="inline-reply-drawer" th:if="${#strings.contains(f.feedbackType, 'Question') or #strings.contains(f.feedbackType, 'Suggestion')}">
-                <form th:action="@{/doctor/feedback/respond}" method="post" class="drawer-form" onsubmit="handleInlineReplySubmit(event, this)">
-                    <input type="hidden" name="feedbackId" th:value="${f.id}" />
-
-                    <div class="drawer-header-strip">
-                        <span class="drawer-title" th:text="'Replying to ' + ${f.patient.firstName}">Replying to Patient</span>
-                        <button type="button" class="drawer-dismiss-btn" onclick="closeInlineDrawer(this)" title="Dismiss Drawer">
-                            <span class="material-symbols-outlined">close</span>
-                        </button>
-                    </div>
-
-                    <div class="form-group-inline">
-                    <textarea name="responseContent" class="form-textarea-drawer" required rows="3"
-                              placeholder="Compose direct clinical guidance or administrative scheduling instructions here..."></textarea>
-                    </div>
-
-                    <div class="drawer-footer-actions">
-                        <button type="button" class="btn-drawer-secondary" onclick="closeInlineDrawer(this)">Cancel</button>
-                        <button type="submit" class="btn-drawer-primary">Dispatch Reply</button>
-                    </div>
-                </form>
-            </div>
-
         </div>
     </div>
 </main>
 
-
 <script>
-    // ==========================================================================
-    // DIALOG MAPPING SUBSYSTEM
-    // ==========================================================================
-    // ==========================================================================
-    // INLINE DIALOG REVEAL MODULE
-    // ==========================================================================
-    function toggleInlineDrawer(btnNode) {
-        const parentCard = btnNode.closest('.feedback-item');
-        const targetDrawer = parentCard.querySelector('.inline-reply-drawer');
-        const isCurrentlyActive = targetDrawer.classList.contains('open');
+    // --- INLINE REPLY ENGINE ---
+    function toggleEditMode(btnNode) {
+        const replyBox = btnNode.closest('.doctor-reply-box');
+        replyBox.querySelector('.reply-view-state').style.display = 'none';
 
-        // Close any sibling drawer entities first to maintain a clean workspace layout
-        document.querySelectorAll('.inline-reply-drawer.open').forEach(openDrawer => {
-            if (openDrawer !== targetDrawer) {
-                openDrawer.classList.remove('open');
-                const correspondingTrigger = openDrawer.closest('.feedback-item').querySelector('.trigger-reply');
-                if (correspondingTrigger) {
-                    correspondingTrigger.classList.remove('active-trigger');
-                    correspondingTrigger.style.backgroundColor = "";
-                }
-            }
-        });
+        const editState = replyBox.querySelector('.reply-edit-state');
+        editState.style.display = 'block';
 
-        if (!isCurrentlyActive) {
-            targetDrawer.classList.add('open');
-            btnNode.classList.add('active-trigger');
-            // Visual indicator active styling
-            btnNode.style.backgroundColor = "rgba(14, 165, 233, 0.12)";
-            // Shift direct keyboard cursor inputs naturally down into targeted sub-canvas nodes
-            setTimeout(() => {
-                const textarea = targetDrawer.querySelector('.form-textarea-drawer');
-                if (textarea) textarea.focus();
-            }, 310);
-        } else {
-            targetDrawer.classList.remove('open');
-            btnNode.classList.remove('active-trigger');
-            btnNode.style.backgroundColor = "";
-        }
+        setTimeout(() => editState.querySelector('.minimal-textarea').focus(), 50);
     }
 
-    function closeInlineDrawer(childNode) {
-        const parentCard = childNode.closest('.feedback-item');
-        const targetDrawer = parentCard.querySelector('.inline-reply-drawer');
-        const triggerBtn = parentCard.querySelector('.trigger-reply');
-
-        if (targetDrawer) targetDrawer.classList.remove('open');
-        if (triggerBtn) {
-            triggerBtn.classList.remove('active-trigger');
-            triggerBtn.style.backgroundColor = "";
-        }
-
-        // Reset forms smoothly post structural retraction logic
-        setTimeout(() => {
-            const form = targetDrawer.querySelector('form');
-            if (form) form.reset();
-        }, 300);
+    function cancelEditMode(btnNode) {
+        const replyBox = btnNode.closest('.doctor-reply-box');
+        replyBox.querySelector('.reply-edit-state').style.display = 'none';
+        replyBox.querySelector('.reply-view-state').style.display = 'block';
     }
 
-    // ==========================================================================
-    // ASYNCHRONOUS FORM DISPATCH INTERCEPTOR
-    // ==========================================================================
-    function handleInlineReplySubmit(e, formNode) {
+    function submitInlineReply(e, formNode) {
         e.preventDefault();
 
-        const parentCard = formNode.closest('.feedback-item');
-        const submitBtn = formNode.querySelector('.btn-drawer-primary');
-        const originalText = submitBtn.innerText;
+        const submitBtn = formNode.querySelector('.btn-save-inline');
+        const saveTextSpan = submitBtn.querySelector('.save-text');
+        const originalText = saveTextSpan.innerText;
+        const iconSpan = submitBtn.querySelector('.material-symbols-outlined');
 
-        // Form processing lock states
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="material-symbols-outlined pulse" style="font-size: 1rem;">sync</span> Sending...';
+        saveTextSpan.innerText = 'Saving...';
+        iconSpan.innerText = 'sync';
+        iconSpan.classList.add('pulse');
 
-        const formData = new FormData(formNode);
+        const formData = new URLSearchParams(new FormData(formNode));
+        const newText = formNode.querySelector('.minimal-textarea').value;
 
-        // Native Asynchronous Dispatch hooks resolving post operations cleanly via Spring Server
         fetch(formNode.action, {
             method: 'POST',
             body: formData,
             headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
             .then(response => {
                 if (response.ok) {
-                    // Dismiss operational drawing framework layouts
-                    closeInlineDrawer(formNode);
+                    const replyBox = formNode.closest('.doctor-reply-box');
+                    const viewState = replyBox.querySelector('.reply-view-state');
+                    const editState = replyBox.querySelector('.reply-edit-state');
+                    const parentCard = formNode.closest('.feedback-card');
 
-                    // Display confirmation tags directly inline
-                    const footer = parentCard.querySelector('.feedback-footer');
-                    const traceMarker = footer.querySelector('.reply-note');
-                    if (traceMarker) {
-                        traceMarker.style.display = "flex";
-                        traceMarker.querySelector('.reply-text').innerText = "Direct reply logged successfully.";
+                    viewState.querySelector('.rendered-response-text').innerText = newText;
+                    viewState.querySelector('.reply-time').innerText = "Just now";
+
+                    let cancelBtn = editState.querySelector('.btn-cancel-inline');
+                    if (!cancelBtn) {
+                        const actionDiv = editState.querySelector('.minimal-form-actions');
+                        cancelBtn = document.createElement('button');
+                        cancelBtn.type = 'button';
+                        cancelBtn.className = 'btn-cancel-inline';
+                        cancelBtn.innerText = 'Cancel';
+                        cancelBtn.onclick = function() { cancelEditMode(this); };
+                        actionDiv.insertBefore(cancelBtn, submitBtn);
                     }
 
-                    // Append visual state highlight parameters cleanly
-                    parentCard.style.borderLeft = "4px solid var(--success)";
+                    editState.style.display = 'none';
+                    viewState.style.display = 'block';
+                    parentCard.style.borderLeft = "4px solid #10b981";
                 } else {
                     throw new Error("Server transmission failed");
                 }
             })
             .catch(err => {
-                alert("Failed to deliver payload response securely. Please verify connectivity layers.");
+                alert("Failed to save response. Please try again.");
                 console.error(err);
             })
             .finally(() => {
                 submitBtn.disabled = false;
-                submitBtn.innerText = originalText;
+                saveTextSpan.innerText = originalText;
+                iconSpan.innerText = 'send';
+                iconSpan.classList.remove('pulse');
             });
     }
 
-    // ==========================================================================
-    // MICRO-INTERACTIONS FUNCTION ENGINE
-    // ==========================================================================
+    // --- DELETE REPLY ENGINE ---
+    function deleteInlineReply(btnNode) {
+        if (!confirm("Are you sure you want to permanently delete this clinical note?")) return;
+
+        const parentCard = btnNode.closest('.feedback-card');
+        const feedbackId = parentCard.getAttribute('data-id');
+        const originalText = btnNode.innerHTML;
+
+        btnNode.disabled = true;
+        btnNode.innerHTML = '<span class="material-symbols-outlined pulse">sync</span> Deleting...';
+        btnNode.style.color = "var(--danger)";
+
+        const formData = new URLSearchParams();
+        formData.append('feedbackId', feedbackId);
+
+        fetch('/doctor/feedback/delete-reply', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    const replyBox = parentCard.querySelector('.doctor-reply-box');
+                    const viewState = replyBox.querySelector('.reply-view-state');
+                    const editState = replyBox.querySelector('.reply-edit-state');
+
+                    viewState.style.display = 'none';
+                    editState.style.display = 'block';
+                    editState.querySelector('.minimal-textarea').value = '';
+
+                    const cancelBtn = editState.querySelector('.btn-cancel-inline');
+                    if (cancelBtn) cancelBtn.style.display = 'none';
+
+                    parentCard.style.borderLeft = ""; // Correctly unsets inline style, falling back to CSS default
+
+                    btnNode.disabled = false;
+                    btnNode.innerHTML = originalText;
+                    btnNode.style.color = "";
+                } else {
+                    throw new Error("Server transmission failed");
+                }
+            })
+            .catch(err => {
+                alert("Failed to delete response. Please try again.");
+                console.error(err);
+                btnNode.disabled = false;
+                btnNode.innerHTML = originalText;
+                btnNode.style.color = "";
+            });
+    }
+
+    // --- MICRO-INTERACTIONS ---
     function toggleReaction(btnNode) {
+        const cardItem = btnNode.closest('.feedback-card');
+        const feedbackId = cardItem.getAttribute('data-id');
+
         const heartIcon = btnNode.querySelector('.heart-icon');
         const labelNode = btnNode.querySelector('.react-label');
         const isAppreciated = heartIcon.classList.contains('active-heart');
+        const targetStatus = !isAppreciated;
 
-        if (!isAppreciated) {
-            heartIcon.classList.add('active-heart');
-            heartIcon.style.fontVariationSettings = '"FILL" 1';
-            labelNode.innerText = "Acknowledged";
-            btnNode.style.color = "var(--success)";
+        const formData = new URLSearchParams();
+        formData.append('feedbackId', feedbackId);
+        formData.append('status', targetStatus);
 
-            // Render internal log updates
-            const parentFooter = btnNode.closest('.feedback-footer');
-            const logNote = parentFooter.querySelector('.reply-note');
-            if (logNote) {
-                logNote.style.display = "flex";
-                logNote.querySelector('.reply-text').innerText = "Appreciation tag successfully attached.";
+        fetch('/doctor/feedback/acknowledge', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
             }
-        } else {
-            heartIcon.classList.remove('active-heart');
-            heartIcon.style.fontVariationSettings = '"FILL" 0';
-            labelNode.innerText = "Acknowledge";
-            btnNode.style.color = "var(--on-surface-variant)";
-        }
+        }).then(res => {
+            if (res.ok) {
+                if (targetStatus) {
+                    heartIcon.classList.add('active-heart');
+                    heartIcon.style.fontVariationSettings = '"FILL" 1';
+                    labelNode.innerText = "Acknowledged";
+                    btnNode.style.color = "#10b981";
+                } else {
+                    heartIcon.classList.remove('active-heart');
+                    heartIcon.style.fontVariationSettings = '"FILL" 0';
+                    labelNode.innerText = "Acknowledge";
+                    btnNode.style.color = "var(--on-surface-variant)";
+                }
+            }
+        });
     }
 
+    function triggerEscalation(btnNode) {
+        const cardItem = btnNode.closest('.feedback-card');
+        const feedbackId = cardItem.getAttribute('data-id');
 
+        const isCurrentlyEscalated = btnNode.classList.contains('escalated-state');
+        const targetStatus = !isCurrentlyEscalated;
+        const actionMessage = targetStatus
+            ? "Escalate this clinical evaluation record directly to operational support?"
+            : "Revert this escalation and remove it from the operational support queue?";
 
-    // ==========================================================================
-    // FILTER INTERFACE ENGINE
-    // ==========================================================================
+        if (!confirm(actionMessage)) return;
+
+        const formData = new URLSearchParams();
+        formData.append('feedbackId', feedbackId);
+        formData.append('status', targetStatus);
+
+        fetch('/doctor/feedback/escalate', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            if (res.ok) {
+                if (targetStatus) {
+                    cardItem.style.borderLeft = "4px solid var(--danger)";
+                    btnNode.innerHTML = '<span class="material-symbols-outlined">flag</span> <span class="action-text">Escalated Systematically</span>';
+                    btnNode.classList.add('escalated-state');
+                } else {
+                    btnNode.innerHTML = '<span class="material-symbols-outlined">assignment_late</span> <span class="action-text">Route Escalation</span>';
+                    btnNode.classList.remove('escalated-state');
+
+                    const viewState = cardItem.querySelector('.reply-view-state');
+                    const hasActiveReply = viewState && viewState.style.display !== 'none';
+                    cardItem.style.borderLeft = hasActiveReply ? "4px solid #10b981" : "";
+                }
+            } else {
+                alert("Failed to update escalation status. Please try again.");
+            }
+        }).catch(err => console.error(err));
+    }
+
     function filterReviews(targetCategory, btnTrigger) {
-        // Toggle dynamic workspace tab layouts cleanly
         const buttons = document.querySelectorAll('.filter-btn');
         buttons.forEach(b => {
             b.classList.remove('active');
@@ -312,8 +401,7 @@
         btnTrigger.classList.add('active');
         btnTrigger.classList.remove('inactive');
 
-        // Apply strict logical filters to display cards
-        const reviews = document.querySelectorAll('.feedback-item');
+        const reviews = document.querySelectorAll('.feedback-card');
         reviews.forEach(card => {
             const categories = card.getAttribute('data-category') || '';
             if (targetCategory === 'ALL' || categories.includes(targetCategory)) {

@@ -4,6 +4,8 @@ import com.medischeduler.model.*;
 import com.medischeduler.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,6 +93,40 @@ public class FeedbackService {
             feedback.setRating(rating);
         }
 
+        feedbackRepository.save(feedback);
+    }
+
+    public void respondToFeedback(Long feedbackId, String responseContent, Long doctorId) {
+        Feedback feedback = feedbackRepository.findById(feedbackId)
+                .orElseThrow(() -> new RuntimeException("Feedback not found"));
+
+        if (!feedback.getAppointment().getDoctor().getId().equals(doctorId)) {
+            throw new RuntimeException("Unauthorized action");
+        }
+
+        feedback.setResponseContent(responseContent);
+        feedback.setRespondedAt(LocalDateTime.now());
+        feedbackRepository.save(feedback);
+    }
+
+    public void toggleAcknowledgment(Long feedbackId, boolean status, Long doctorId) {
+        Feedback feedback = feedbackRepository.findById(feedbackId)
+                .orElseThrow(() -> new RuntimeException("Feedback not found"));
+
+        if (!feedback.getAppointment().getDoctor().getId().equals(doctorId)) return;
+
+        feedback.setAcknowledged(status);
+        if (status) feedback.setRespondedAt(LocalDateTime.now());
+        feedbackRepository.save(feedback);
+    }
+
+    public void escalateFeedback(Long feedbackId, boolean status, Long doctorId) {
+        Feedback feedback = feedbackRepository.findById(feedbackId)
+                .orElseThrow(() -> new RuntimeException("Feedback not found"));
+
+        if (!feedback.getAppointment().getDoctor().getId().equals(doctorId)) return;
+
+        feedback.setEscalated(status); // Set to true (escalate) or false (revert)
         feedbackRepository.save(feedback);
     }
 }
